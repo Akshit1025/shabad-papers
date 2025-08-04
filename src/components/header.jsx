@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Menu, Paperclip } from "lucide-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars, faPaperclip } from "@fortawesome/free-solid-svg-icons";
+
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -11,7 +13,7 @@ const navLinks = [
 
 const Logo = () => (
     <Link href="/" className="flex items-center gap-2 font-headline text-xl font-bold text-primary">
-        <Paperclip className="h-6 w-6" />
+        <FontAwesomeIcon icon={faPaperclip} className="h-6 w-6" />
         <span>Shabad Papers</span>
     </Link>
 );
@@ -37,7 +39,7 @@ export function Header() {
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6" />
+                <FontAwesomeIcon icon={faBars} className="h-6 w-6" />
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>

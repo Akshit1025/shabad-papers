@@ -11,7 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2 } from "lucide-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
@@ -110,7 +111,7 @@ export function InquiryForm() {
               )}
             />
             <Button type="submit" disabled={loading} className="w-full">
-              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {loading && <FontAwesomeIcon icon={faSpinner} className="mr-2 h-4 w-4 animate-spin" />}
               Send Message
             </Button>
           </form>

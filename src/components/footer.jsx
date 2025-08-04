@@ -1,5 +1,6 @@
 import { companyInfo, socialLinks } from "@/lib/data";
-import { Paperclip, MapPin, Mail, Phone } from "lucide-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperclip, faMapPin, faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 
 export function Footer() {
@@ -13,7 +14,7 @@ export function Footer() {
           {/* Company Info */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2 font-headline text-xl font-bold">
-              <Paperclip className="h-6 w-6" />
+              <FontAwesomeIcon icon={faPaperclip} className="h-6 w-6" />
               <span>{companyInfo.tradeName}</span>
             </Link>
             <p className="text-sm text-muted-foreground pr-4">
@@ -29,7 +30,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  <link.icon className="h-6 w-6" />
+                  <FontAwesomeIcon icon={link.icon} className="h-6 w-6" />
                 </a>
               ))}
             </div>
@@ -56,15 +57,15 @@ export function Footer() {
             </h4>
             <div className="space-y-3 text-sm text-muted-foreground">
                 <div className="flex items-start gap-3">
-                    <MapPin className="h-4 w-4 mt-1 shrink-0 text-primary" />
+                    <FontAwesomeIcon icon={faMapPin} className="h-4 w-4 mt-1 shrink-0 text-primary" />
                     <span>{companyInfo.address}</span>
                 </div>
                  <div className="flex items-center gap-3">
-                    <Mail className="h-4 w-4 shrink-0 text-primary" />
+                    <FontAwesomeIcon icon={faEnvelope} className="h-4 w-4 shrink-0 text-primary" />
                     <a href="mailto:dineshgupta@shabadpapers.co.in" className="hover:text-primary transition-colors">dineshgupta@shabadpapers.co.in</a>
                 </div>
                  <div className="flex items-center gap-3">
-                    <Phone className="h-4 w-4 shrink-0 text-primary" />
+                    <FontAwesomeIcon icon={faPhone} className="h-4 w-4 shrink-0 text-primary" />
                     <span>+91 95555 09507 | +91 98100 87126</span>
                 </div>
             </div>
