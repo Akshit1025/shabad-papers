@@ -4,9 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Menu, Paperclip } from "lucide-react";
 
 const navLinks = [
+  { href: "/", label: "Home" },
   { href: "/about", label: "About" },
-  { href: "/products", label: "Products" },
-  { href: "/certifications", label: "Certifications" },
   { href: "/contact", label: "Contact" },
 ];
 
