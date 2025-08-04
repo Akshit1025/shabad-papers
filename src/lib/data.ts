@@ -82,12 +82,3 @@ export const socialLinks = [
     { name: "LinkedIn", url: "#", icon: Linkedin },
     { name: "Twitter", url: "#", icon: Twitter },
 ];
-
-export const productCatalogForAI = `
-- Premium Glossy Art Paper (130-300 GSM): Ideal for high-quality magazines, brochures, and photo prints. High brightness and smooth surface.
-- Coated Matte Finish Board (200-400 GSM): Perfect for premium packaging, business cards, and book covers. Offers a non-glare, elegant finish.
-- 100% Recycled Kraft Paper (60-180 GSM): Eco-friendly option for bags, wrapping, and void-fill. Made from post-consumer waste. FSC Certified.
-- Uncoated Woodfree Paper (70-120 GSM): Excellent for notebooks, letterheads, and general office printing. Good writability and printability.
-- Thermal Paper Rolls (55-80 GSM): For POS receipts and labels. BPA-free options available for enhanced safety.
-- Specialty Paper (Custom): Custom solutions for unique needs, including water-resistant, tear-proof, and food-grade papers.
-`;

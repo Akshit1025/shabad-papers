@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Menu, Paperclip } from "lucide-react";
 
 const navLinks = [
-  { href: "#about", label: "About" },
-  { href: "#products", label: "Products" },
-  { href: "#ai-suggester", label: "AI Suggester" },
-  { href: "#contact", label: "Contact" },
+  { href: "/about", label: "About" },
+  { href: "/products", label: "Products" },
+  { href: "/certifications", label: "Certifications" },
+  { href: "/contact", label: "Contact" },
 ];
 
 const Logo = () => (
@@ -43,7 +43,9 @@ export function Header() {
             </SheetTrigger>
             <SheetContent side="right">
               <nav className="grid gap-6 text-lg font-medium mt-8">
-                <Logo />
+                <div className="flex items-center justify-between">
+                  <Logo />
+                </div>
                 {navLinks.map((link) => (
                   <Link
                     key={link.href}
