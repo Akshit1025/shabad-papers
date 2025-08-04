@@ -21,12 +21,12 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
         <Logo />
-        <nav className="hidden flex-1 items-center justify-end space-x-6 text-sm font-medium md:flex">
+        <nav className="hidden flex-1 items-center justify-end space-x-8 md:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="transition-colors hover:text-primary"
+              className="text-lg font-semibold text-foreground/80 transition-all hover:text-primary hover:scale-110"
             >
               {link.label}
             </Link>
