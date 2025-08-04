@@ -26,9 +26,10 @@ export function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-lg font-semibold text-foreground/80 transition-all hover:text-primary hover:scale-110"
+              className="group text-lg font-semibold text-foreground/80 transition-all hover:text-primary"
             >
               {link.label}
+              <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-primary"></span>
             </Link>
           ))}
         </nav>
