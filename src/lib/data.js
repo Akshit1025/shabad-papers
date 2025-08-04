@@ -1,5 +1,5 @@
-import { Briefcase, Building2, Calendar, Users } from "lucide-react";
 import { faLinkedin, faGithub, faWhatsapp, faGooglePlus } from "@fortawesome/free-brands-svg-icons";
+import { faBriefcase, faBuilding, faCalendar, faUsers } from "@fortawesome/free-solid-svg-icons";
 
 export const companyInfo = {
   legalName: "Shabad Papers LLP",
@@ -15,10 +15,10 @@ export const companyInfo = {
 };
 
 export const aboutItems = [
-    { icon: Building2, label: "Trade Name", value: companyInfo.tradeName },
-    { icon: Briefcase, label: "Legal Status", value: companyInfo.status },
-    { icon: Calendar, label: "Established", value: companyInfo.establishmentYear },
-    { icon: Users, label: "Partners", value: companyInfo.partners },
+    { icon: faBuilding, label: "Trade Name", value: companyInfo.tradeName },
+    { icon: faBriefcase, label: "Legal Status", value: companyInfo.status },
+    { icon: faCalendar, label: "Established", value: companyInfo.establishmentYear },
+    { icon: faUsers, label: "Partners", value: companyInfo.partners },
 ];
 
 export const socialLinks = [
