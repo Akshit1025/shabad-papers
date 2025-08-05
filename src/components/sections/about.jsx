@@ -1,12 +1,25 @@
+"use client"
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export function About() {
+  const variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
   return (
-    <section id="about" className="py-16 md:py-24 bg-secondary">
+    <motion.section 
+      id="about" 
+      className="py-16 md:py-24 bg-secondary"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ staggerChildren: 0.2 }}
+    >
       <div className="container px-4">
         <div className="max-w-3xl mx-auto text-center">
-            <div className="space-y-4 animate-fade-in-up">
+            <motion.div className="space-y-4" variants={variants}>
                 <h2 className="text-3xl font-headline font-bold md:text-5xl text-primary">Welcome to Shabad Papers</h2>
                 <p className="text-muted-foreground text-lg">
                     Founded in 2022, Shabad Papers has grown into a trusted name in the import and wholesale trade of premium carbonless papers and food-grade papers. We are proud to be recognised for our consistent quality, reliability, and service excellence.
@@ -17,9 +30,9 @@ export function About() {
                  <Button asChild>
                     <Link href="/about">Learn More</Link>
                 </Button>
-            </div>
+            </motion.div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

@@ -1,13 +1,34 @@
+"use client"
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuoteLeft } from "@fortawesome/free-solid-svg-icons";
+import { motion } from "framer-motion";
+
 
 export function Leadership() {
+    const imageVariants = {
+        hidden: { opacity: 0, scale: 0.8 },
+        visible: { opacity: 1, scale: 1, transition: { duration: 0.6 } }
+    };
+    const contentVariants = {
+        hidden: { opacity: 0, x: 50 },
+        visible: { opacity: 1, x: 0, transition: { duration: 0.6, staggerChildren: 0.2 } }
+    };
+     const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 }
+    };
+
   return (
-    <section className="py-16 md:py-24 bg-background">
+    <motion.section 
+        className="py-16 md:py-24 bg-background"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.4 }}
+    >
       <div className="container">
         <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="animate-fade-in-up">
+            <motion.div variants={imageVariants}>
                  <Image
                     src="https://placehold.co/500x500.png"
                     alt="Shabad Papers Logo Graphic"
@@ -16,24 +37,24 @@ export function Leadership() {
                     height={500}
                     className="rounded-lg shadow-2xl object-cover mx-auto"
                   />
-            </div>
-            <div className="animate-fade-in-up animation-delay-300">
-                <h2 className="text-3xl font-headline font-bold md:text-4xl text-primary mb-6">
+            </motion.div>
+            <motion.div variants={contentVariants}>
+                <motion.h2 variants={itemVariants} className="text-3xl font-headline font-bold md:text-4xl text-primary mb-6">
                   Our Leadership
-                </h2>
-                <div className="relative bg-secondary p-6 rounded-lg mb-6">
+                </motion.h2>
+                <motion.div variants={itemVariants} className="relative bg-secondary p-6 rounded-lg mb-6">
                     <FontAwesomeIcon icon={faQuoteLeft} className="absolute -top-3 -left-3 h-10 w-10 text-primary/20" />
                     <blockquote className="text-lg text-foreground italic">
                         "It's not about how many years you've worked - it's about how much those years have taught you."
                     </blockquote>
                     <p className="text-right mt-2 text-muted-foreground">- Dinesh Gupta</p>
-                </div>
-                <p className="text-muted-foreground text-lg">
+                </motion.div>
+                <motion.p variants={itemVariants} className="text-muted-foreground text-lg">
                     Our leadership's insightful experience in the financial, trading, and export-import sectors, combined with a passion for excellence, drives us to deliver products that consistently shape our core business in quality, trust, and long-term vision.
-                </p>
-            </div>
+                </motion.p>
+            </motion.div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

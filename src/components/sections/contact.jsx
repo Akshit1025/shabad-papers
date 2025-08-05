@@ -1,16 +1,37 @@
+"use client"
 import { InquiryForm } from "@/components/inquiry-form";
 import { companyInfo } from "@/lib/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapPin, faEnvelope, faPhone, faBuilding } from "@fortawesome/free-solid-svg-icons";
 import { BusinessHours } from "../business-hours";
+import { motion } from "framer-motion";
 
 export function Contact() {
   const phoneNumbers = ["+919555509507", "+919810087126"];
+  const formVariants = {
+    hidden: { opacity: 0, x: -50 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.6 }}
+  };
+  const detailsVariants = {
+    hidden: { opacity: 0, x: 50 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.6, staggerChildren: 0.2 } }
+  };
+   const itemVariants = {
+      hidden: { opacity: 0, y: 20 },
+      visible: { opacity: 1, y: 0 }
+  };
+
   return (
     <section id="contact" className="py-16 md:py-24 bg-background">
       <div className="container px-4">
         {/* Section Header */}
-        <div className="max-w-3xl mx-auto text-center mb-12">
+        <motion.div 
+          className="max-w-3xl mx-auto text-center mb-12"
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
           <h2 className="text-3xl font-headline font-bold md:text-5xl text-primary">
             Contact Us
           </h2>
@@ -18,21 +39,33 @@ export function Contact() {
             We're here to help! Reach out to us for any inquiries.
           </p>
           <div className="mt-4 w-24 h-1 bg-primary mx-auto"></div>
-        </div>
+        </motion.div>
 
         {/* Main Content Grid */}
         <div className="grid lg:grid-cols-2 gap-12 items-start">
 
           {/* Left Column: Form */}
-          <div className="w-full animate-fade-in-up">
+          <motion.div 
+            className="w-full"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={formVariants}
+          >
             <h3 className="text-2xl font-headline font-bold mb-6 text-foreground">Send Us a Message</h3>
             <InquiryForm />
-          </div>
+          </motion.div>
 
           {/* Right Column: Details, Hours, Map */}
-          <div className="space-y-12 animate-fade-in-up animation-delay-300">
+          <motion.div 
+            className="space-y-12"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={detailsVariants}
+          >
             {/* Our Details */}
-            <div>
+            <motion.div variants={itemVariants}>
               <h3 className="text-2xl font-headline font-bold mb-6 text-foreground">Our Details</h3>
               <div className="space-y-6 text-muted-foreground">
                   <div className="flex items-start gap-4">
@@ -66,16 +99,16 @@ export function Contact() {
                       </div>
                   </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Business Hours */}
-            <div>
+            <motion.div variants={itemVariants}>
                 <h3 className="text-2xl font-headline font-bold mb-6 text-foreground">Business Hours</h3>
                 <BusinessHours />
-            </div>
+            </motion.div>
 
             {/* Find Us Here */}
-            <div>
+            <motion.div variants={itemVariants}>
               <h3 className="text-2xl font-headline font-bold mb-6 text-foreground">Find Us Here</h3>
               <div className="aspect-video w-full rounded-lg overflow-hidden border border-border">
                 <iframe
@@ -89,8 +122,8 @@ export function Contact() {
                   title="Google Maps view of Shabad Papers LLP Sales Office"
                 ></iframe>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </section>

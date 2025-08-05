@@ -1,8 +1,9 @@
+"use client"
 import Image from "next/image";
 import { companyInfo } from "@/lib/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faIdCard, faGavel, faCalendarCheck, faUsers, faBuilding, faUserTie, faFileInvoiceDollar } from "@fortawesome/free-solid-svg-icons";
-
+import { motion } from "framer-motion";
 
 const profileItems = [
     { icon: faIdCard, label: "Nature of Business", value: companyInfo.businessNature },
@@ -16,18 +17,43 @@ const profileItems = [
 ];
 
 export function CompanyProfile() {
+    const containerVariants = {
+        hidden: {},
+        visible: { transition: { staggerChildren: 0.1 } }
+    };
+    const itemVariants = {
+        hidden: { opacity: 0, x: -30 },
+        visible: { opacity: 1, x: 0 }
+    };
+
     return (
-        <section className="py-16 md:py-24 bg-secondary">
+        <motion.section 
+            className="py-16 md:py-24 bg-secondary"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+        >
             <div className="container">
-                <div className="max-w-3xl mx-auto text-center mb-12">
+                <motion.div 
+                    className="max-w-3xl mx-auto text-center mb-12"
+                    initial={{ opacity: 0, y: -20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5 }}
+                >
                     <h2 className="text-3xl font-headline font-bold md:text-4xl text-primary">
                         Company Profile
                     </h2>
                     <div className="mt-4 w-24 h-1 bg-primary mx-auto"></div>
-                </div>
+                </motion.div>
 
                 <div className="grid md:grid-cols-2 gap-12 items-center">
-                    <div className="animate-fade-in-up">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                    >
                         <Image
                             src="https://placehold.co/600x450.png"
                             alt="Paper rolls"
@@ -36,22 +62,27 @@ export function CompanyProfile() {
                             height={450}
                             className="rounded-lg shadow-2xl object-cover"
                         />
-                    </div>
-                    <div className="animate-fade-in-up animation-delay-300">
-                        <ul className="space-y-4">
-                            {profileItems.map((item, index) => (
-                                <li key={index} className="flex items-start gap-4">
-                                    <FontAwesomeIcon icon={item.icon} className="h-6 w-6 text-primary mt-1" />
-                                    <div>
-                                        <p className="font-semibold text-foreground">{item.label}</p>
-                                        <p className="text-muted-foreground">{item.value}</p>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                    </motion.div>
+                    <motion.ul 
+                        className="space-y-4"
+                        variants={containerVariants}
+                    >
+                        {profileItems.map((item) => (
+                            <motion.li 
+                                key={item.label} 
+                                className="flex items-start gap-4"
+                                variants={itemVariants}
+                            >
+                                <FontAwesomeIcon icon={item.icon} className="h-6 w-6 text-primary mt-1" />
+                                <div>
+                                    <p className="font-semibold text-foreground">{item.label}</p>
+                                    <p className="text-muted-foreground">{item.value}</p>
+                                </div>
+                            </motion.li>
+                        ))}
+                    </motion.ul>
                 </div>
             </div>
-        </section>
+        </motion.section>
     );
 }

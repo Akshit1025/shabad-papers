@@ -1,11 +1,26 @@
+"use client"
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 export function Glance() {
+    const textVariants = {
+        hidden: { opacity: 0, x: -50 },
+        visible: { opacity: 1, x: 0, transition: { duration: 0.6 } }
+    };
+    const imageVariants = {
+        hidden: { opacity: 0, x: 50 },
+        visible: { opacity: 1, x: 0, transition: { duration: 0.6 } }
+    };
   return (
-    <section className="py-16 md:py-24 bg-background">
+    <motion.section 
+        className="py-16 md:py-24 bg-background"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.4 }}
+    >
       <div className="container">
         <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="animate-fade-in-up">
+          <motion.div variants={textVariants}>
             <h2 className="text-3xl font-headline font-bold md:text-4xl text-primary mb-6">
               A Glance at Shabad Papers
             </h2>
@@ -17,8 +32,8 @@ export function Glance() {
                     Our success is built on strong, long-term relationships with clients. A mark of our success, our customer retention is really good. From inception, we have carefully sourced and selected the best to meet our customers' varied requirements, main procurement being high-grade products in the whole range of colors.
                 </p>
             </div>
-          </div>
-          <div className="animate-fade-in-up animation-delay-300">
+          </motion.div>
+          <motion.div variants={imageVariants}>
              <Image
                 src="https://placehold.co/600x400.png"
                 alt="Close up of a notebook"
@@ -27,9 +42,9 @@ export function Glance() {
                 height={400}
                 className="rounded-lg shadow-2xl object-cover"
               />
-          </div>
+          </motion.div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
