@@ -2,6 +2,7 @@ import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { Hero } from '@/components/sections/hero';
 import { About } from '@/components/sections/about';
+import { CoreStrengths } from '@/components/sections/core-strengths';
 import { Contact } from '@/components/sections/contact';
 
 export default function HomePage() {
@@ -11,6 +12,7 @@ export default function HomePage() {
       <main>
         <Hero />
         <About />
+        <CoreStrengths />
         <Contact />
       </main>
       <Footer />
