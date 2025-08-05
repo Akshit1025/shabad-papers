@@ -3,7 +3,6 @@ import { Footer } from '@/components/footer';
 import { Hero } from '@/components/sections/hero';
 import { About } from '@/components/sections/about';
 import { CoreStrengths } from '@/components/sections/core-strengths';
-import { HomepageContact } from '@/components/sections/homepage-contact';
 
 export default function HomePage() {
   return (
@@ -13,7 +12,6 @@ export default function HomePage() {
         <Hero />
         <About />
         <CoreStrengths />
-        <HomepageContact />
       </main>
       <Footer />
     </div>
