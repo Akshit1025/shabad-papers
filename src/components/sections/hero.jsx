@@ -23,10 +23,10 @@ export function Hero() {
         </p>
         <div className="space-x-4 animate-fade-in-up animation-delay-600">
           <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-            <Link href="/products">Explore Products</Link>
+            <Link href="/contact">Get a Quote</Link>
           </Button>
           <Button asChild size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary">
-            <Link href="/contact">Contact Us</Link>
+            <Link href="/about">Learn More</Link>
           </Button>
         </div>
       </div>
