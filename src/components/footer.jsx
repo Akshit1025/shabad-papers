@@ -58,11 +58,7 @@ export function Footer() {
             <div className="space-y-3 text-sm text-muted-foreground">
                 <div className="flex items-start gap-3">
                     <FontAwesomeIcon icon={faBuilding} className="h-4 w-4 mt-1 shrink-0 text-primary" />
-                    <p><strong>Registered:</strong> {companyInfo.registeredAddress}</p>
-                </div>
-                 <div className="flex items-start gap-3">
-                    <FontAwesomeIcon icon={faMapPin} className="h-4 w-4 mt-1 shrink-0 text-primary" />
-                    <p><strong>Sales:</strong> {companyInfo.salesOfficeAddress}</p>
+                    <p>{companyInfo.registeredAddress}</p>
                 </div>
                  <div className="flex items-center gap-3">
                     <FontAwesomeIcon icon={faEnvelope} className="h-4 w-4 shrink-0 text-primary" />
