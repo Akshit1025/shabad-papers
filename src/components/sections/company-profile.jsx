@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { companyInfo } from "@/lib/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faIdCard, faGavel, faCalendarCheck, faUsers, faBuilding, faUserTie, faFileInvoiceDollar } from "@fortawesome/free-solid-svg-icons";
+import { faIdCard, faGavel, faCalendarCheck, faUsers, faBuilding, faUserTie, faFileInvoiceDollar, faMapPin } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 
 const profileItems = [
@@ -10,9 +10,11 @@ const profileItems = [
     { icon: faGavel, label: "Legal Status of Firm", value: companyInfo.status },
     { icon: faCalendarCheck, label: "Year of Establishment", value: companyInfo.establishmentYear },
     { icon: faUsers, label: "Total Number of Employees", value: "2 to 11" },
-    { icon: faBuilding, label: "Legal Name of Firm", value: companyInfo.legalName },
+    { icon: faIdCard, label: "Legal Name of Firm", value: companyInfo.legalName },
     { icon: faUserTie, label: "Partners", value: companyInfo.partners },
     { icon: faFileInvoiceDollar, label: "GSTN", value: companyInfo.gstin },
+    { icon: faBuilding, label: "Registered/Corporate Office", value: companyInfo.registeredAddress, link: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(companyInfo.registeredAddress)}` },
+    { icon: faMapPin, label: "Sales Office", value: companyInfo.salesOfficeAddress, link: companyInfo.googleMapsUrl },
 
 ];
 
@@ -76,7 +78,13 @@ export function CompanyProfile() {
                                 <FontAwesomeIcon icon={item.icon} className="h-6 w-6 text-primary mt-1" />
                                 <div>
                                     <p className="font-semibold text-foreground">{item.label}</p>
-                                    <p className="text-muted-foreground">{item.value}</p>
+                                    {item.link ? (
+                                        <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                                            {item.value}
+                                        </a>
+                                    ) : (
+                                        <p className="text-muted-foreground">{item.value}</p>
+                                    )}
                                 </div>
                             </motion.li>
                         ))}
