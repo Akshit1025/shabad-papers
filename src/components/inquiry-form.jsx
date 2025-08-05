@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { submitInquiry } from "@/app/actions";
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -63,12 +63,8 @@ export function InquiryForm() {
   }
 
   return (
-    <Card className="shadow-lg">
-      <CardHeader>
-        <CardTitle className="font-headline">Contact Us</CardTitle>
-        <CardDescription>We'll get back to you as soon as possible.</CardDescription>
-      </CardHeader>
-      <CardContent>
+    <Card className="shadow-lg bg-secondary/50 border-0">
+      <CardContent className="p-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField

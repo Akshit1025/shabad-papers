@@ -6,19 +6,16 @@ const strengths = [
     icon: faLeaf,
     title: "Sustainable Sourcing",
     description: "Committed to eco-friendly practices and responsible paper sourcing.",
-    color: "text-green-600",
   },
   {
     icon: faTruckFast,
     title: "Efficient Supply Chain",
     description: "Streamlining global logistics for timely paper product delivery.",
-    color: "text-blue-600",
   },
   {
     icon: faHandshake,
     title: "Customer-Centric Approach",
     description: "Building strong relationships through exceptional service and support.",
-    color: "text-sky-500",
   },
 ];
 
@@ -36,12 +33,12 @@ export function CoreStrengths() {
           {strengths.map((strength, index) => (
             <div
               key={strength.title}
-              className="group bg-card p-8 rounded-lg shadow-lg text-center transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 animate-fade-in-up"
+              className="group bg-card p-8 rounded-lg shadow-lg text-center transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 animate-fade-in-up border border-border/20"
               style={{ animationDelay: `${index * 200}ms` }}
             >
-              <div className="flex justify-center mb-4">
-                <div className={`bg-primary/10 rounded-full p-4 transition-colors duration-300 group-hover:bg-primary/20`}>
-                  <FontAwesomeIcon icon={strength.icon} className={`h-10 w-10 ${strength.color} transition-colors duration-300`} />
+              <div className="flex justify-center mb-6">
+                <div className={`bg-primary/10 rounded-full p-5 transition-all duration-300 group-hover:bg-primary/20 group-hover:scale-110`}>
+                  <FontAwesomeIcon icon={strength.icon} className={`h-12 w-12 text-primary transition-colors duration-300`} />
                 </div>
               </div>
               <h3 className="text-xl font-headline font-bold mb-2 text-foreground">

@@ -1,19 +1,76 @@
 import { InquiryForm } from "@/components/inquiry-form";
+import { companyInfo } from "@/lib/data";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMapPin, faEnvelope, faPhone, faClock } from "@fortawesome/free-solid-svg-icons";
+import { BusinessHours } from "../business-hours";
 
 export function Contact() {
   return (
-    <section id="contact" className="py-16 md:py-24">
+    <section id="contact" className="py-16 md:py-24 bg-background">
       <div className="container px-4">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-4 animate-fade-in-up">
-            <h2 className="text-3xl font-headline font-bold md:text-4xl text-primary">Get in Touch</h2>
-            <p className="text-muted-foreground text-lg">
-              Have a question or need a custom quote? Our team is here to help.
-              Fill out the form, and we'll get back to you shortly.
-            </p>
-          </div>
-          <div className="w-full animate-fade-in-up animation-delay-300">
+        {/* Section Header */}
+        <div className="max-w-3xl mx-auto text-center mb-12">
+          <h2 className="text-3xl font-headline font-bold md:text-5xl text-primary">
+            Contact Us
+          </h2>
+          <p className="mt-4 text-lg text-muted-foreground">
+            We're here to help! Reach out to us for any inquiries.
+          </p>
+          <div className="mt-4 w-24 h-1 bg-primary mx-auto"></div>
+        </div>
+
+        {/* Main Content Grid */}
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+
+          {/* Left Column: Form */}
+          <div className="w-full animate-fade-in-up">
+            <h3 className="text-2xl font-headline font-bold mb-6 text-foreground">Send Us a Message</h3>
             <InquiryForm />
+          </div>
+
+          {/* Right Column: Details, Hours, Map */}
+          <div className="space-y-12 animate-fade-in-up animation-delay-300">
+            {/* Our Details */}
+            <div>
+              <h3 className="text-2xl font-headline font-bold mb-6 text-foreground">Our Details</h3>
+              <div className="space-y-4 text-muted-foreground">
+                  <div className="flex items-start gap-4">
+                      <FontAwesomeIcon icon={faMapPin} className="h-5 w-5 mt-1 shrink-0 text-primary" />
+                      <p>{companyInfo.address}</p>
+                  </div>
+                   <div className="flex items-center gap-4">
+                      <FontAwesomeIcon icon={faEnvelope} className="h-5 w-5 shrink-0 text-primary" />
+                      <a href="mailto:dineshgupta@shabadpapers.co.in" className="hover:text-primary transition-colors">dineshgupta@shabadpapers.co.in</a>
+                  </div>
+                   <div className="flex items-center gap-4">
+                      <FontAwesomeIcon icon={faPhone} className="h-5 w-5 shrink-0 text-primary" />
+                      <span>+91 95555 09507 | +91 98100 87126</span>
+                  </div>
+              </div>
+            </div>
+
+            {/* Business Hours */}
+            <div>
+                <h3 className="text-2xl font-headline font-bold mb-6 text-foreground">Business Hours</h3>
+                <BusinessHours />
+            </div>
+
+            {/* Find Us Here */}
+            <div>
+              <h3 className="text-2xl font-headline font-bold mb-6 text-foreground">Find Us Here</h3>
+              <div className="aspect-video w-full rounded-lg overflow-hidden border border-border">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3501.990423235955!2d72.88019587529124!3d19.12151618210677!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c9bc905f4b69%3A0x64243a8b6e61f18b!2sMistry%20Industrial%20Complex!5e0!3m2!1sen!2sin!4v1721387693596!5m2!1sen!2sin"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Google Maps view of Shabad Papers LLP"
+                ></iframe>
+              </div>
+            </div>
           </div>
         </div>
       </div>
