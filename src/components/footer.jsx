@@ -5,6 +5,7 @@ import Link from "next/link";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const phoneNumbers = ["+919555509507", "+919810087126"];
 
   return (
     <footer className="bg-secondary text-secondary-foreground border-t border-border/40">
@@ -58,7 +59,9 @@ export function Footer() {
             <div className="space-y-3 text-sm text-muted-foreground">
                 <div className="flex items-start gap-3">
                     <FontAwesomeIcon icon={faBuilding} className="h-4 w-4 mt-1 shrink-0 text-primary" />
-                    <p>{companyInfo.registeredAddress}</p>
+                    <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(companyInfo.registeredAddress)}`} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                      {companyInfo.registeredAddress}
+                    </a>
                 </div>
                  <div className="flex items-center gap-3">
                     <FontAwesomeIcon icon={faEnvelope} className="h-4 w-4 shrink-0 text-primary" />
@@ -66,7 +69,11 @@ export function Footer() {
                 </div>
                  <div className="flex items-center gap-3">
                     <FontAwesomeIcon icon={faPhone} className="h-4 w-4 shrink-0 text-primary" />
-                    <span>+91 95555 09507 | +91 98100 87126</span>
+                    <div>
+                      <a href={`tel:${phoneNumbers[0]}`} className="hover:text-primary transition-colors">{phoneNumbers[0].replace('+91', '+91 ')}</a>
+                      {' | '}
+                      <a href={`tel:${phoneNumbers[1]}`} className="hover:text-primary transition-colors">{phoneNumbers[1].replace('+91', '+91 ')}</a>
+                    </div>
                 </div>
             </div>
           </div>

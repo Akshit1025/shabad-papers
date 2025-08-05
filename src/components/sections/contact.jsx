@@ -5,6 +5,7 @@ import { faMapPin, faEnvelope, faPhone, faBuilding } from "@fortawesome/free-sol
 import { BusinessHours } from "../business-hours";
 
 export function Contact() {
+  const phoneNumbers = ["+919555509507", "+919810087126"];
   return (
     <section id="contact" className="py-16 md:py-24 bg-background">
       <div className="container px-4">
@@ -38,14 +39,18 @@ export function Contact() {
                       <FontAwesomeIcon icon={faBuilding} className="h-5 w-5 mt-1 shrink-0 text-primary" />
                       <div>
                           <p className="font-semibold text-foreground">Registered/Corporate Office</p>
-                          <p>{companyInfo.registeredAddress}</p>
+                          <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(companyInfo.registeredAddress)}`} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                            <p>{companyInfo.registeredAddress}</p>
+                          </a>
                       </div>
                   </div>
                   <div className="flex items-start gap-4">
                       <FontAwesomeIcon icon={faMapPin} className="h-5 w-5 mt-1 shrink-0 text-primary" />
                       <div>
                           <p className="font-semibold text-foreground">Sales Office</p>
-                          <p>{companyInfo.salesOfficeAddress}</p>
+                          <a href={companyInfo.googleMapsUrl} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                            <p>{companyInfo.salesOfficeAddress}</p>
+                          </a>
                       </div>
                   </div>
                    <div className="flex items-center gap-4">
@@ -54,7 +59,11 @@ export function Contact() {
                   </div>
                    <div className="flex items-center gap-4">
                       <FontAwesomeIcon icon={faPhone} className="h-5 w-5 shrink-0 text-primary" />
-                      <span>+91 95555 09507 | +91 98100 87126</span>
+                      <div>
+                        <a href={`tel:${phoneNumbers[0]}`} className="hover:text-primary transition-colors">{phoneNumbers[0].replace('+91', '+91 ')}</a>
+                        {' | '}
+                        <a href={`tel:${phoneNumbers[1]}`} className="hover:text-primary transition-colors">{phoneNumbers[1].replace('+91', '+91 ')}</a>
+                      </div>
                   </div>
               </div>
             </div>
