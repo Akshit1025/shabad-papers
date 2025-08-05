@@ -11,7 +11,9 @@ export const companyInfo = {
   partners: "Dinesh Gupta and Ritu Gupta",
   employeeCount: "2-11",
   address: "Gala No 5, Mistry Industrial Complex, MIDC Cross Rd, A, Marol, Andheri East, Mumbai, Maharashtra 400093, India",
-  googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Shabad+Papers+LLP+Mumbai",
+  registeredAddress: "Flat no. 102, The Bhartiya CGHS, Plot No. 4, Sector 19, Dwarka, Delhi - 110075, India",
+  salesOfficeAddress: "Shop no. 87, Lower Ground floor, Eaze Zone Mall, Goregaon West, Mumbai, Maharashtra - 400104",
+  googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Eaze+Zone+Mall+Goregaon+West+Mumbai",
 };
 
 export const aboutItems = [

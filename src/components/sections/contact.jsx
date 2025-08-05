@@ -1,7 +1,7 @@
 import { InquiryForm } from "@/components/inquiry-form";
 import { companyInfo } from "@/lib/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapPin, faEnvelope, faPhone, faClock } from "@fortawesome/free-solid-svg-icons";
+import { faMapPin, faEnvelope, faPhone, faBuilding } from "@fortawesome/free-solid-svg-icons";
 import { BusinessHours } from "../business-hours";
 
 export function Contact() {
@@ -33,10 +33,20 @@ export function Contact() {
             {/* Our Details */}
             <div>
               <h3 className="text-2xl font-headline font-bold mb-6 text-foreground">Our Details</h3>
-              <div className="space-y-4 text-muted-foreground">
+              <div className="space-y-6 text-muted-foreground">
+                  <div className="flex items-start gap-4">
+                      <FontAwesomeIcon icon={faBuilding} className="h-5 w-5 mt-1 shrink-0 text-primary" />
+                      <div>
+                          <p className="font-semibold text-foreground">Registered/Corporate Office</p>
+                          <p>{companyInfo.registeredAddress}</p>
+                      </div>
+                  </div>
                   <div className="flex items-start gap-4">
                       <FontAwesomeIcon icon={faMapPin} className="h-5 w-5 mt-1 shrink-0 text-primary" />
-                      <p>{companyInfo.address}</p>
+                      <div>
+                          <p className="font-semibold text-foreground">Sales Office</p>
+                          <p>{companyInfo.salesOfficeAddress}</p>
+                      </div>
                   </div>
                    <div className="flex items-center gap-4">
                       <FontAwesomeIcon icon={faEnvelope} className="h-5 w-5 shrink-0 text-primary" />
@@ -60,14 +70,14 @@ export function Contact() {
               <h3 className="text-2xl font-headline font-bold mb-6 text-foreground">Find Us Here</h3>
               <div className="aspect-video w-full rounded-lg overflow-hidden border border-border">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3501.990423235955!2d72.88019587529124!3d19.12151618210677!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c9bc905f4b69%3A0x64243a8b6e61f18b!2sMistry%20Industrial%20Complex!5e0!3m2!1sen!2sin!4v1721387693596!5m2!1sen!2sin"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3769.213215284794!2d72.84499877520038!3d19.142144382076296!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b6139366e543%3A0x74964f4344795361!2sEaze%20Zone!5e0!3m2!1sen!2sin!4v1722421338604!5m2!1sen!2sin"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
                   allowFullScreen=""
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="Google Maps view of Shabad Papers LLP"
+                  title="Google Maps view of Shabad Papers LLP Sales Office"
                 ></iframe>
               </div>
             </div>
