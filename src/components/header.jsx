@@ -16,7 +16,7 @@ const navLinks = [
 ];
 
 const Logo = ({ className }) => (
-    <Link href="/" className={cn("flex items-center gap-2 font-headline text-xl font-bold text-primary", className)}>
+    <Link href="/" className={cn("flex items-center gap-2 font-headline text-xl font-bold", className)}>
         <FontAwesomeIcon icon={faPaperclip} className="h-6 w-6" />
         <span>Shabad Papers</span>
     </Link>
@@ -34,24 +34,32 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const headerTextColor = scrolled ? "text-primary" : "text-white";
+  const navLinkTextColor = scrolled ? "text-foreground/80" : "text-white/80";
+  const navLinkHoverBg = scrolled ? "hover:bg-secondary" : "hover:bg-white/10";
+  const mobileButtonTextColor = scrolled ? "text-foreground" : "text-white";
+  const mobileButtonHoverClasses = scrolled ? "" : "hover:text-white hover:bg-white/10";
+
+
   return (
     <header className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
-        scrolled ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border/40" : "bg-transparent"
+        scrolled ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border/40" : "bg-black/20"
     )}>
       <div className="container flex h-20 items-center justify-between">
-        <Logo className={scrolled ? 'text-primary' : 'text-white'}/>
+        <Logo className={headerTextColor}/>
         
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center justify-center">
-          <ul className="flex items-center gap-2 rounded-full bg-black/20 p-1 border border-white/20">
+          <ul className={cn("flex items-center gap-2 rounded-full p-1", scrolled ? "bg-transparent" : "bg-black/20 border border-white/20")}>
             {navLinks.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
                   className={cn(
                       "rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300",
-                      scrolled ? "text-foreground/80 hover:bg-secondary" : "text-white/80 hover:bg-white/10"
+                      navLinkTextColor,
+                      navLinkHoverBg
                   )}
                 >
                   {link.label}
@@ -68,7 +76,7 @@ export function Header() {
         <div className="flex items-center md:hidden">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className={cn(scrolled ? 'text-foreground' : 'text-white hover:text-white hover:bg-white/10')}>
+              <Button variant="ghost" size="icon" className={cn(mobileButtonTextColor, mobileButtonHoverClasses)}>
                 <FontAwesomeIcon icon={faBars} className="h-6 w-6" />
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
@@ -76,7 +84,7 @@ export function Header() {
             <SheetContent side="right" className="w-[80vw] bg-background/95 backdrop-blur-lg">
                <div className="flex flex-col h-full">
                 <div className="p-6">
-                    <Logo />
+                    <Logo className="text-primary"/>
                 </div>
                 <nav className="flex-1 grid gap-4 p-6 text-lg font-medium">
                   {navLinks.map((link, i) => (
