@@ -37,8 +37,8 @@ export function Header() {
   }, []);
 
   const navLinkTextColor = scrolled ? "text-foreground/80" : "text-white/80";
-  const mobileButtonTextColor = scrolled ? "text-foreground" : "text-white";
-  const mobileButtonHoverClasses = scrolled ? "" : "hover:text-white hover:bg-white/10";
+  const mobileButtonTextColor = "text-foreground";
+  const mobileButtonHoverClasses = "hover:bg-accent";
   
   const handleMouseEnter = (index, e) => {
     const linkEl = e.currentTarget;
@@ -91,7 +91,7 @@ export function Header() {
                     exit={{ opacity: 0 }}
                     className={cn(
                       "absolute inset-0 rounded-full",
-                      scrolled ? "bg-secondary" : "bg-white/20"
+                      scrolled ? "bg-secondary" : "bg-primary/30"
                     )}
                     transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                   />
@@ -121,7 +121,7 @@ export function Header() {
         <div className="flex items-center md:hidden">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className={cn(mobileButtonTextColor, mobileButtonHoverClasses)}>
+              <Button variant="ghost" size="icon" className={cn(mobileButtonTextColor, mobileButtonHoverClasses, scrolled ? "" : "text-white hover:text-white hover:bg-white/10")}>
                 <FontAwesomeIcon icon={faBars} className="h-6 w-6" />
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
