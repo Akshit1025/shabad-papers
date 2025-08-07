@@ -103,7 +103,7 @@ export function Header() {
                 <Link
                   href={link.href}
                   className={cn(
-                      "relative rounded-full px-4 py-2 text-sm transition-colors duration-300",
+                      "relative rounded-full px-4 py-2 text-base transition-colors duration-300",
                       navLinkTextColor,
                       hoveredLink?.index === index 
                         ? (scrolled ? 'text-primary font-bold' : 'text-white font-bold') 
