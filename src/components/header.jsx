@@ -1,9 +1,13 @@
+"use client";
+
+import { useState, useEffect } from 'react';
 import Link from "next/link";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faPaperclip } from "@fortawesome/free-solid-svg-icons";
-
+import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from 'framer-motion';
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -11,53 +15,93 @@ const navLinks = [
   { href: "/contact", label: "Contact" },
 ];
 
-const Logo = () => (
-    <Link href="/" className="flex items-center gap-2 font-headline text-xl font-bold text-primary">
+const Logo = ({ className }) => (
+    <Link href="/" className={cn("flex items-center gap-2 font-headline text-xl font-bold text-primary", className)}>
         <FontAwesomeIcon icon={faPaperclip} className="h-6 w-6" />
         <span>Shabad Papers</span>
     </Link>
 );
 
 export function Header() {
+  const [scrolled, setScrolled] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center">
-        <Logo />
-        <nav className="hidden flex-1 items-center justify-end space-x-8 md:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="group text-lg font-semibold text-foreground/80 transition-all hover:text-primary"
-            >
-              {link.label}
-              <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-primary"></span>
-            </Link>
-          ))}
+    <header className={cn(
+        "sticky top-0 z-50 w-full transition-all duration-300",
+        scrolled ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border/40" : "bg-transparent"
+    )}>
+      <div className="container flex h-20 items-center justify-between">
+        <Logo className={scrolled ? 'text-primary' : 'text-white'}/>
+        
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center justify-center">
+          <ul className="flex items-center gap-2 rounded-full bg-black/20 p-1 border border-white/20">
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className={cn(
+                      "rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300",
+                      scrolled ? "text-foreground/80 hover:bg-secondary" : "text-white/80 hover:bg-white/10"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </nav>
-        <div className="flex flex-1 items-center justify-end md:hidden">
-          <Sheet>
+        <Button asChild className="hidden md:inline-flex" variant={scrolled ? 'default' : 'secondary'}>
+            <Link href="/contact">Get a Quote</Link>
+        </Button>
+
+        {/* Mobile Navigation */}
+        <div className="flex items-center md:hidden">
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className={cn(scrolled ? 'text-foreground' : 'text-white hover:text-white hover:bg-white/10')}>
                 <FontAwesomeIcon icon={faBars} className="h-6 w-6" />
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right">
-              <nav className="grid gap-6 text-lg font-medium mt-8">
-                <div className="flex items-center justify-between">
-                  <Logo />
+            <SheetContent side="right" className="w-[80vw] bg-background/95 backdrop-blur-lg">
+               <div className="flex flex-col h-full">
+                <div className="p-6">
+                    <Logo />
                 </div>
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </nav>
+                <nav className="flex-1 grid gap-4 p-6 text-lg font-medium">
+                  {navLinks.map((link, i) => (
+                    <motion.div
+                      key={link.href}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 * i, duration: 0.3 }}
+                    >
+                      <Link
+                        href={link.href}
+                        className="block py-2 text-muted-foreground transition-colors hover:text-primary"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    </motion.div>
+                  ))}
+                </nav>
+                <div className="p-6 mt-auto">
+                    <Button asChild className="w-full">
+                        <Link href="/contact" onClick={() => setIsOpen(false)}>Get a Quote</Link>
+                    </Button>
+                </div>
+              </div>
             </SheetContent>
           </Sheet>
         </div>
