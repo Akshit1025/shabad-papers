@@ -16,7 +16,7 @@ const navLinks = [
 ];
 
 const Logo = ({ className }) => (
-    <Link href="/" className={cn("flex items-center gap-2 font-headline text-xl font-bold", className)}>
+    <Link href="/" className={cn("flex items-center gap-2 font-headline text-xl font-bold text-primary", className)}>
         <FontAwesomeIcon icon={faPaperclip} className="h-6 w-6" />
         <span>Shabad Papers</span>
     </Link>
@@ -36,7 +36,6 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const headerTextColor = scrolled ? "text-primary" : "text-white";
   const navLinkTextColor = scrolled ? "text-foreground/80" : "text-white/80";
   const mobileButtonTextColor = scrolled ? "text-foreground" : "text-white";
   const mobileButtonHoverClasses = scrolled ? "" : "hover:text-white hover:bg-white/10";
@@ -67,7 +66,7 @@ export function Header() {
         scrolled ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border/40" : "bg-black/20"
     )}>
       <div className="container flex h-20 items-center justify-between">
-        <Logo className={headerTextColor}/>
+        <Logo />
         
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center justify-center">
@@ -92,7 +91,7 @@ export function Header() {
                     exit={{ opacity: 0 }}
                     className={cn(
                       "absolute inset-0 rounded-full",
-                      scrolled ? "bg-secondary" : "bg-white/10"
+                      scrolled ? "bg-secondary" : "bg-white/20"
                     )}
                     transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                   />
@@ -114,7 +113,7 @@ export function Header() {
             ))}
           </ul>
         </nav>
-        <Button asChild className="hidden md:inline-flex" variant={scrolled ? 'default' : 'secondary'}>
+        <Button asChild className="hidden md:inline-flex">
             <Link href="/contact">Get a Quote</Link>
         </Button>
 
@@ -130,7 +129,7 @@ export function Header() {
             <SheetContent side="right" className="w-[80vw] bg-background/95 backdrop-blur-lg">
                <div className="flex flex-col h-full">
                 <div className="p-6">
-                    <Logo className="text-primary"/>
+                    <Logo />
                 </div>
                 <nav className="flex-1 grid gap-4 p-6 text-lg font-medium">
                   {navLinks.map((link, i) => (
