@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from "next/link";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,8 @@ const Logo = ({ className }) => (
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [hoveredLink, setHoveredLink] = useState(null);
+  const navRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,9 +38,27 @@ export function Header() {
 
   const headerTextColor = scrolled ? "text-primary" : "text-white";
   const navLinkTextColor = scrolled ? "text-foreground/80" : "text-white/80";
-  const navLinkHoverBg = scrolled ? "hover:bg-secondary" : "hover:bg-white/10";
   const mobileButtonTextColor = scrolled ? "text-foreground" : "text-white";
   const mobileButtonHoverClasses = scrolled ? "" : "hover:text-white hover:bg-white/10";
+  
+  const handleMouseEnter = (index, e) => {
+    const linkEl = e.currentTarget;
+    const navEl = navRef.current;
+    if (!navEl) return;
+    
+    const navRect = navEl.getBoundingClientRect();
+    const linkRect = linkEl.getBoundingClientRect();
+
+    setHoveredLink({
+      index,
+      width: linkRect.width,
+      left: linkRect.left - navRect.left,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredLink(null);
+  };
 
 
   return (
@@ -51,15 +71,41 @@ export function Header() {
         
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center justify-center">
-          <ul className={cn("flex items-center gap-2 rounded-full p-1", scrolled ? "bg-transparent" : "bg-black/20 border border-white/20")}>
-            {navLinks.map((link) => (
-              <li key={link.href}>
+          <ul 
+            ref={navRef}
+            onMouseLeave={handleMouseLeave}
+            className={cn(
+                "relative flex items-center gap-2 rounded-full p-1", 
+                scrolled ? "bg-transparent" : "bg-black/20 border border-white/20"
+            )}
+          >
+             <AnimatePresence>
+              {hoveredLink && (
+                  <motion.div
+                    layoutId="hover-background"
+                    initial={{ opacity: 0 }}
+                    animate={{ 
+                      opacity: 1, 
+                      x: hoveredLink.left,
+                      width: hoveredLink.width,
+                    }}
+                    exit={{ opacity: 0 }}
+                    className={cn(
+                      "absolute inset-0 rounded-full",
+                      scrolled ? "bg-secondary" : "bg-white/10"
+                    )}
+                    transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                  />
+              )}
+            </AnimatePresence>
+            {navLinks.map((link, index) => (
+              <li key={link.href} onMouseEnter={(e) => handleMouseEnter(index, e)}>
                 <Link
                   href={link.href}
                   className={cn(
-                      "rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300",
+                      "relative rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300",
                       navLinkTextColor,
-                      navLinkHoverBg
+                      hoveredLink?.index === index ? (scrolled ? 'text-primary' : 'text-white') : ''
                   )}
                 >
                   {link.label}
