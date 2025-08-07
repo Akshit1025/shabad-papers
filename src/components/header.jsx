@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
@@ -102,9 +103,11 @@ export function Header() {
                 <Link
                   href={link.href}
                   className={cn(
-                      "relative rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300",
+                      "relative rounded-full px-4 py-2 text-sm transition-colors duration-300",
                       navLinkTextColor,
-                      hoveredLink?.index === index ? (scrolled ? 'text-primary' : 'text-white') : ''
+                      hoveredLink?.index === index 
+                        ? (scrolled ? 'text-primary font-bold' : 'text-white font-bold') 
+                        : ''
                   )}
                 >
                   {link.label}
