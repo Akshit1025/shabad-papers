@@ -2,6 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
+import { FirebaseAuthProvider } from "@/components/firebase-auth-provider";
 config.autoAddCss = false
 
 export const metadata = {
@@ -20,7 +21,9 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        {children}
+        <FirebaseAuthProvider>
+          {children}
+        </FirebaseAuthProvider>
         <Toaster />
       </body>
     </html>
