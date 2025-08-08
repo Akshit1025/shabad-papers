@@ -90,10 +90,7 @@ export function Header() {
                       width: hoveredLink.width,
                     }}
                     exit={{ opacity: 0 }}
-                    className={cn(
-                      "absolute inset-0 rounded-full",
-                      scrolled ? "bg-secondary" : "bg-primary/30"
-                    )}
+                    className="absolute inset-0 rounded-full bg-primary"
                     transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                   />
               )}
@@ -106,7 +103,7 @@ export function Header() {
                       "relative rounded-full px-4 py-2 text-base transition-colors duration-300",
                       navLinkTextColor,
                       hoveredLink?.index === index 
-                        ? (scrolled ? 'text-primary font-bold' : 'text-white font-bold') 
+                        ? 'text-white font-bold' 
                         : ''
                   )}
                 >
