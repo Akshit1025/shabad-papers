@@ -55,12 +55,8 @@ export function Hero() {
           Shabad Papers: Your trusted partner in paper trading and wholesale supply.
         </motion.p>
         <motion.div 
-          className="space-x-4"
           variants={itemVariants}
         >
-          <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-            <Link href="/contact">Get a Quote</Link>
-          </Button>
           <Button asChild size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary">
             <Link href="/about">Learn More</Link>
           </Button>
