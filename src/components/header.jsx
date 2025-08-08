@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faPaperclip } from "@fortawesome/free-solid-svg-icons";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from 'framer-motion';
+import { socialLinks } from '@/lib/data';
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -64,7 +65,7 @@ export function Header() {
   return (
     <header className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
-        scrolled ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border/40" : "bg-black/20"
+        scrolled ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border/40" : "bg-transparent"
     )}>
       <div className="container flex h-20 items-center justify-between">
         <Logo />
@@ -76,7 +77,7 @@ export function Header() {
             onMouseLeave={handleMouseLeave}
             className={cn(
                 "relative flex items-center gap-2 rounded-full p-1", 
-                scrolled ? "bg-transparent" : "bg-black/20 border border-white/20"
+                scrolled ? "" : "bg-black/20 border border-white/20"
             )}
           >
              <AnimatePresence>
@@ -113,9 +114,21 @@ export function Header() {
             ))}
           </ul>
         </nav>
-        <Button asChild className="hidden md:inline-flex">
-            <Link href="/contact">Get a Quote</Link>
-        </Button>
+        <div className="hidden md:flex items-center space-x-4">
+          {socialLinks.map((link) => (
+            <a
+              key={link.name}
+              href={link.url}
+              aria-label={link.name}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn("transition-colors", scrolled ? "text-muted-foreground hover:text-primary" : "text-white/80 hover:text-white")}
+            >
+              <FontAwesomeIcon icon={link.icon} className="h-5 w-5" />
+            </a>
+          ))}
+        </div>
+
 
         {/* Mobile Navigation */}
         <div className="flex items-center md:hidden">
