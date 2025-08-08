@@ -18,6 +18,11 @@ import { signInAnonymously } from "firebase/auth";
 export function FirebaseAuthProvider({ children }) {
   useEffect(() => {
     const signIn = async () => {
+      // Ensure Firebase is configured before trying to sign in.
+      if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+        console.warn("Firebase API key is not configured. Skipping anonymous sign-in. Please check your .env.local file.");
+        return;
+      }
       try {
         await signInAnonymously(auth);
         console.log("User signed in anonymously");
