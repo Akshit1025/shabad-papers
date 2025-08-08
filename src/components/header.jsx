@@ -38,7 +38,7 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navLinkTextColor = scrolled ? "text-foreground/80" : "text-white/80";
+  const navLinkTextColor = scrolled ? "text-foreground/80" : "text-foreground/80";
   const mobileButtonTextColor = "text-foreground";
   const mobileButtonHoverClasses = "hover:bg-accent";
   
@@ -77,7 +77,7 @@ export function Header() {
             onMouseLeave={handleMouseLeave}
             className={cn(
                 "relative flex items-center gap-2 rounded-full p-1", 
-                scrolled ? "" : "bg-black/20 border border-white/20"
+                scrolled ? "" : "bg-black/10 border border-black/20"
             )}
           >
              <AnimatePresence>
@@ -122,7 +122,7 @@ export function Header() {
               aria-label={link.name}
               target="_blank"
               rel="noopener noreferrer"
-              className={cn("transition-colors", scrolled ? "text-muted-foreground hover:text-primary" : "text-white/80 hover:text-white")}
+              className={cn("transition-colors", scrolled ? "text-muted-foreground hover:text-primary" : "text-foreground/80 hover:text-primary")}
             >
               <FontAwesomeIcon icon={link.icon} className="h-5 w-5" />
             </a>
@@ -134,7 +134,7 @@ export function Header() {
         <div className="flex items-center md:hidden">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className={cn(mobileButtonTextColor, mobileButtonHoverClasses, scrolled ? "" : "text-white hover:text-white hover:bg-white/10")}>
+              <Button variant="ghost" size="icon" className={cn(mobileButtonTextColor, mobileButtonHoverClasses, scrolled ? "" : "text-foreground hover:text-foreground/80 hover:bg-black/10")}>
                 <FontAwesomeIcon icon={faBars} className="h-6 w-6" />
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
