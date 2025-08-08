@@ -1,3 +1,7 @@
+/**
+ * @fileOverview The "Core Strengths" section component.
+ * It highlights the key strengths of the company, such as sustainable sourcing and customer service.
+ */
 "use client"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLeaf, faTruckFast, faHandshake } from "@fortawesome/free-solid-svg-icons";
@@ -22,6 +26,10 @@ const strengths = [
   },
 ];
 
+/**
+ * The Core Strengths section component.
+ * @returns {JSX.Element} The rendered Core Strengths section.
+ */
 export function CoreStrengths() {
     const cardVariants = {
         hidden: { opacity: 0, y: 50 },

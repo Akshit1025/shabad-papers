@@ -1,6 +1,14 @@
+/**
+ * @fileOverview Displays the company's business hours.
+ * It highlights the current day of the week.
+ */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
 
+/**
+ * A component that displays the business hours for the company.
+ * @returns {JSX.Element} The rendered business hours component.
+ */
 export function BusinessHours() {
     const today = new Date().toLocaleString('en-us', {  weekday: 'long' });
     const businessHours = [

@@ -1,9 +1,17 @@
+/**
+ * @fileOverview The Hero section component for the homepage.
+ * It features a full-width background image with a title, subtitle, and call-to-action button.
+ */
 "use client"
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
+/**
+ * The Hero section of the homepage.
+ * @returns {JSX.Element} The rendered hero section.
+ */
 export function Hero() {
   const containerVariants = {
     hidden: { opacity: 0 },

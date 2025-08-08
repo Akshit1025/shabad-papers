@@ -1,10 +1,17 @@
+/**
+ * @fileOverview The "Our Leadership" section for the About Us page.
+ * It features a quote and a brief description of the company's leadership.
+ */
 "use client"
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuoteLeft } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 
-
+/**
+ * A section dedicated to the company's leadership.
+ * @returns {JSX.Element} The rendered leadership section component.
+ */
 export function Leadership() {
     const imageVariants = {
         hidden: { opacity: 0, scale: 0.8 },

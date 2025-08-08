@@ -1,3 +1,8 @@
+/**
+ * @fileOverview A form component for users to submit inquiries.
+ * This component uses react-hook-form for form state management and zod for validation.
+ * It handles form submission, loading states, and displays success or error toasts.
+ */
 "use client";
 
 import { useState } from "react";
@@ -21,6 +26,10 @@ const formSchema = z.object({
   message: z.string().min(10, { message: "Message must be at least 10 characters." }),
 });
 
+/**
+ * A form for submitting inquiries.
+ * @returns {JSX.Element} The rendered form component.
+ */
 export function InquiryForm() {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();

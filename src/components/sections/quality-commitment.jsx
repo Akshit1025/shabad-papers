@@ -1,7 +1,15 @@
+/**
+ * @fileOverview The "Our Commitment to Quality" section for the About Us page.
+ * It describes the company's focus on providing high-quality paper products.
+ */
 "use client"
 import Image from "next/image";
 import { motion } from "framer-motion";
 
+/**
+ * A section detailing the company's commitment to quality.
+ * @returns {JSX.Element} The rendered quality commitment section.
+ */
 export function QualityCommitment() {
   const imageVariants = {
     hidden: { opacity: 0, scale: 0.8, rotate: -15 },

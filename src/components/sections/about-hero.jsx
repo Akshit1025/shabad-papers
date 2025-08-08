@@ -1,8 +1,15 @@
+/**
+ * @fileOverview The hero section for the "About Us" page.
+ * Displays a large heading and a brief tagline.
+ */
 "use client"
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-
+/**
+ * The hero section for the About page.
+ * @returns {JSX.Element} The rendered hero section component.
+ */
 export function AboutHero() {
   return (
     <section className="relative bg-secondary py-20 md:py-32 overflow-hidden">

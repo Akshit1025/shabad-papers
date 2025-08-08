@@ -1,3 +1,8 @@
+/**
+ * @fileOverview The root layout for the entire application.
+ * It sets up the HTML structure, includes global stylesheets, fonts,
+ * and wraps the content with necessary providers like Firebase Auth.
+ */
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import { config } from '@fortawesome/fontawesome-svg-core'
@@ -10,6 +15,12 @@ export const metadata = {
   description: "Your trusted partner in paper trading and wholesale supply. Discover quality paper solutions with Shabad Papers LLP.",
 };
 
+/**
+ * The root layout component that wraps all pages.
+ * @param {object} props - The component props.
+ * @param {React.ReactNode} props.children - The child components to be rendered within the layout.
+ * @returns {JSX.Element} The root layout element.
+ */
 export default function RootLayout({
   children,
 }) {

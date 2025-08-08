@@ -1,3 +1,7 @@
+/**
+ * @fileOverview The main "Contact" section for the contact page.
+ * It includes an inquiry form, company contact details, business hours, and an embedded map.
+ */
 "use client"
 import { InquiryForm } from "@/components/inquiry-form";
 import { companyInfo } from "@/lib/data";
@@ -6,6 +10,10 @@ import { faMapPin, faEnvelope, faPhone, faBuilding } from "@fortawesome/free-sol
 import { BusinessHours } from "../business-hours";
 import { motion } from "framer-motion";
 
+/**
+ * The Contact section component.
+ * @returns {JSX.Element} The rendered Contact section.
+ */
 export function Contact() {
   const phoneNumbers = ["+919555509507", "+919810087126"];
   const formVariants = {

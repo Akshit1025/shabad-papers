@@ -1,7 +1,15 @@
+/**
+ * @fileOverview "A Glance at Shabad Papers" section for the About Us page.
+ * Provides a brief overview of the company's history and mission.
+ */
 "use client"
 import Image from "next/image";
 import { motion } from "framer-motion";
 
+/**
+ * A section giving a quick glance at the company.
+ * @returns {JSX.Element} The rendered glance section component.
+ */
 export function Glance() {
     const textVariants = {
         hidden: { opacity: 0, x: -50 },

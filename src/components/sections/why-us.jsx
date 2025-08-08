@@ -1,3 +1,7 @@
+/**
+ * @fileOverview The "Why Us?" section for the About Us page.
+ * It lists the key reasons why customers should choose the company.
+ */
 "use client"
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,6 +17,10 @@ const whyUsPoints = [
     { icon: faUsersCog, text: "Consultant-backed, quality-assured firm with skilled employees" },
 ];
 
+/**
+ * A section outlining the reasons to choose the company.
+ * @returns {JSX.Element} The rendered "Why Us?" section.
+ */
 export function WhyUs() {
     const containerVariants = {
         hidden: {},

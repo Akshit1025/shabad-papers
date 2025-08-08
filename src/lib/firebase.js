@@ -1,14 +1,19 @@
+/**
+ * @fileOverview Firebase configuration and initialization.
+ * This file initializes the Firebase app using credentials from environment variables.
+ * It exports the initialized app and auth instances for use throughout the application.
+ */
 import { initializeApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  "projectId": "shabad-papers-official",
-  "appId": "1:326433016259:web:21cef8ec5fb7340e081576",
-  "storageBucket": "shabad-papers-official.firebasestorage.app",
-  "apiKey": "AIzaSyAZyufFPb8FhqY-xL9jpxCwGpDPCNNpzSM",
-  "authDomain": "shabad-papers-official.firebaseapp.com",
-  "measurementId": "",
-  "messagingSenderId": "326433016259"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase

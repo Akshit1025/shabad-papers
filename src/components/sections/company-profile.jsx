@@ -1,3 +1,7 @@
+/**
+ * @fileOverview The "Company Profile" section for the About Us page.
+ * It displays key details about the company in a list format.
+ */
 "use client"
 import Image from "next/image";
 import { companyInfo } from "@/lib/data";
@@ -18,6 +22,10 @@ const profileItems = [
 
 ];
 
+/**
+ * A section displaying the company's profile information.
+ * @returns {JSX.Element} The rendered company profile section.
+ */
 export function CompanyProfile() {
     const containerVariants = {
         hidden: {},

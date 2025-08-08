@@ -1,8 +1,16 @@
+/**
+ * @fileOverview A brief "About" section for the homepage.
+ * It provides a short introduction to the company and a link to the full about page.
+ */
 "use client"
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
+/**
+ * The About section component.
+ * @returns {JSX.Element} The rendered About section.
+ */
 export function About() {
   const variants = {
     hidden: { opacity: 0, y: 20 },

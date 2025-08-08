@@ -1,6 +1,14 @@
+/**
+ * @fileOverview Centralized data for the application.
+ * This file exports various constants and data structures, such as company information
+ * and social media links, to be used across different components.
+ */
 import { faLinkedin, faGithub, faWhatsapp, faGooglePlus } from "@fortawesome/free-brands-svg-icons";
 import { faBriefcase, faBuilding, faCalendar, faUsers } from "@fortawesome/free-solid-svg-icons";
 
+/**
+ * @property {object} companyInfo - Contains detailed information about the company.
+ */
 export const companyInfo = {
   legalName: "Shabad Papers LLP",
   tradeName: "Shabad Papers",
@@ -16,6 +24,9 @@ export const companyInfo = {
   googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Eaze+Zone+Mall+Goregaon+West+Mumbai",
 };
 
+/**
+ * @property {Array<object>} aboutItems - A simplified list for displaying key company info.
+ */
 export const aboutItems = [
     { icon: faBuilding, label: "Trade Name", value: companyInfo.tradeName },
     { icon: faBriefcase, label: "Legal Status", value: companyInfo.status },
@@ -23,6 +34,9 @@ export const aboutItems = [
     { icon: faUsers, label: "Partners", value: companyInfo.partners },
 ];
 
+/**
+ * @property {Array<object>} socialLinks - A list of social media links with names, URLs, and icons.
+ */
 export const socialLinks = [
     { name: "LinkedIn", url: "#", icon: faLinkedin },
     { name: "Github", url: "#", icon: faGithub },

@@ -1,3 +1,8 @@
+/**
+ * @fileOverview A custom hook for showing toast notifications.
+ * Inspired by react-hot-toast, it provides a simple API to create,
+ * update, and dismiss toasts.
+ */
 "use client"
 
 // Inspired by react-hot-toast library
@@ -104,6 +109,11 @@ function dispatch(action) {
   })
 }
 
+/**
+ * Displays a toast notification.
+ * @param {object} props - The toast properties.
+ * @returns {{id: string, dismiss: function, update: function}} An object with functions to control the toast.
+ */
 function toast({ ...props }) {
   const id = genId()
 
@@ -133,6 +143,10 @@ function toast({ ...props }) {
   }
 }
 
+/**
+ * The `useToast` hook provides access to the toast state and functions.
+ * @returns {{toasts: Array, toast: function, dismiss: function}} The toast context.
+ */
 function useToast() {
   const [state, setState] = React.useState(memoryState)
 

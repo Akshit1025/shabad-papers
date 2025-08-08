@@ -1,9 +1,16 @@
+/**
+ * @fileOverview The "Paper Supply Philosophy" section for the About Us page.
+ * It describes the company's core beliefs regarding its products and services.
+ */
 "use client"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 
-
+/**
+ * A section describing the company's paper supply philosophy.
+ * @returns {JSX.Element} The rendered philosophy section component.
+ */
 export function Philosophy() {
   return (
     <motion.section 

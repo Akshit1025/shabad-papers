@@ -1,4 +1,8 @@
-
+/**
+ * @fileOverview The main header component for the website.
+ * It includes the logo, navigation links, and social media icons.
+ * The header has a transparent state at the top of the page and a solid state on scroll.
+ */
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
@@ -17,6 +21,12 @@ const navLinks = [
   { href: "/contact", label: "Contact" },
 ];
 
+/**
+ * The Logo component.
+ * @param {object} props - Component props.
+ * @param {string} props.className - Additional CSS classes.
+ * @returns {JSX.Element} The rendered logo component.
+ */
 const Logo = ({ className }) => (
     <Link href="/" className={cn("flex items-center gap-2 font-headline text-xl font-bold text-primary", className)}>
         <FontAwesomeIcon icon={faPaperclip} className="h-6 w-6" />
@@ -24,6 +34,10 @@ const Logo = ({ className }) => (
     </Link>
 );
 
+/**
+ * The main Header component for the application.
+ * @returns {JSX.Element} The rendered header component.
+ */
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -38,7 +52,8 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navLinkTextColor = scrolled ? "text-foreground/80" : "text-foreground/80";
+  const navLinkTextColor = scrolled ? "text-foreground/80" : "text-black";
+  const socialIconColor = scrolled ? "text-muted-foreground hover:text-primary" : "text-black hover:text-primary";
   const mobileButtonTextColor = "text-foreground";
   const mobileButtonHoverClasses = "hover:bg-accent";
   
@@ -77,7 +92,7 @@ export function Header() {
             onMouseLeave={handleMouseLeave}
             className={cn(
                 "relative flex items-center gap-2 rounded-full p-1", 
-                scrolled ? "" : "bg-black/10 border border-black/20"
+                scrolled ? "" : ""
             )}
           >
              <AnimatePresence>
@@ -122,7 +137,7 @@ export function Header() {
               aria-label={link.name}
               target="_blank"
               rel="noopener noreferrer"
-              className={cn("transition-colors", scrolled ? "text-muted-foreground hover:text-primary" : "text-foreground/80 hover:text-primary")}
+              className={cn("transition-colors", socialIconColor)}
             >
               <FontAwesomeIcon icon={link.icon} className="h-5 w-5" />
             </a>
@@ -134,7 +149,7 @@ export function Header() {
         <div className="flex items-center md:hidden">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className={cn(mobileButtonTextColor, mobileButtonHoverClasses, scrolled ? "" : "text-foreground hover:text-foreground/80 hover:bg-black/10")}>
+              <Button variant="ghost" size="icon" className={cn(mobileButtonTextColor, mobileButtonHoverClasses, scrolled ? "" : "text-foreground hover:text-foreground/80")}>
                 <FontAwesomeIcon icon={faBars} className="h-6 w-6" />
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>

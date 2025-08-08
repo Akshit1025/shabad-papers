@@ -1,8 +1,16 @@
+/**
+ * @fileOverview The main footer component for the website.
+ * It contains company information, quick links, contact details, and social media links.
+ */
 import { companyInfo, socialLinks } from "@/lib/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperclip, faMapPin, faEnvelope, faPhone, faBuilding } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 
+/**
+ * The main Footer component for the application.
+ * @returns {JSX.Element} The rendered footer component.
+ */
 export function Footer() {
   const currentYear = new Date().getFullYear();
   const phoneNumbers = ["+919555509507", "+919810087126"];
