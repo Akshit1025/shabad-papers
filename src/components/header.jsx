@@ -163,9 +163,21 @@ export function Header() {
                   ))}
                 </nav>
                 <div className="p-6 mt-auto">
-                    <Button asChild className="w-full">
-                        <Link href="/contact" onClick={() => setIsOpen(false)}>Get a Quote</Link>
-                    </Button>
+                    <div className="flex justify-center space-x-4">
+                      {socialLinks.map((link) => (
+                        <a
+                          key={link.name}
+                          href={link.url}
+                          aria-label={link.name}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-muted-foreground hover:text-primary transition-colors"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          <FontAwesomeIcon icon={link.icon} className="h-6 w-6" />
+                        </a>
+                      ))}
+                    </div>
                 </div>
               </div>
             </SheetContent>
