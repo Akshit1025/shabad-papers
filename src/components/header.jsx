@@ -150,7 +150,7 @@ export function Header() {
         <div className="flex items-center md:hidden">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className={cn(mobileButtonTextColor, mobileButtonHoverClasses, scrolled ? "" : "text-foreground hover:text-foreground/80")}>
+              <Button variant="ghost" size="icon" className={cn(mobileButtonTextColor, mobileButtonHoverClasses, scrolled ? "" : "text-black hover:text-black/80")}>
                 <FontAwesomeIcon icon={faBars} className="h-6 w-6" />
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
@@ -160,17 +160,18 @@ export function Header() {
                 <div className="p-6">
                     <Logo />
                 </div>
-                <nav className="flex-1 grid gap-4 p-6 text-lg font-medium">
+                <nav className="flex flex-col items-center justify-center flex-1 text-center">
                   {navLinks.map((link, i) => (
                     <motion.div
                       key={link.href}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.1 * i, duration: 0.3 }}
+                      className="w-full"
                     >
                       <Link
                         href={link.href}
-                        className="block py-2 text-muted-foreground transition-colors hover:text-primary"
+                        className="block py-4 text-2xl font-semibold text-muted-foreground transition-colors hover:text-primary"
                         onClick={() => setIsOpen(false)}
                       >
                         {link.label}
