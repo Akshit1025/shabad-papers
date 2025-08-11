@@ -21,7 +21,8 @@ export const companyInfo = {
   address: "Gala No 5, Mistry Industrial Complex, MIDC Cross Rd, A, Marol, Andheri East, Mumbai, Maharashtra 400093, India",
   registeredAddress: "Flat no. 102, The Bhartiya CGHS, Plot No. 4, Sector 19, Dwarka, Delhi - 110075, India",
   salesOfficeAddress: "Shop no. 87, Lower Ground floor, Eaze Zone Mall, Goregaon West, Mumbai, Maharashtra - 400104",
-  googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Eaze+Zone+Mall+Goregaon+West+Mumbai",
+  salesUrl: "https://maps.app.goo.gl/JNxFaNtHary6Dg3M9",
+  registeredUrl: "https://maps.app.goo.gl/w894uXub63RwzNcX7",
 };
 
 /**
@@ -38,8 +39,8 @@ export const aboutItems = [
  * @property {Array<object>} socialLinks - A list of social media links with names, URLs, and icons.
  */
 export const socialLinks = [
-    { name: "LinkedIn", url: "#", icon: faLinkedin },
-    { name: "Github", url: "#", icon: faGithub },
-    { name: "Whatsapp", url: "#", icon: faWhatsapp },
-    { name: "Google+", url: "#", icon: faGooglePlus },
+    { name: "LinkedIn", url: "https://www.linkedin.com/in/dinesh-gupta-57b513374/", icon: faLinkedin },
+    { name: "Github", url: "https://github.com/Akshit1025/shabad-papers", icon: faGithub },
+    { name: "Whatsapp", url: "https://wa.me/919810087126", icon: faWhatsapp },
+    { name: "Google+", url: "https://g.co/kgs/WDyBz11", icon: faGooglePlus },
 ];

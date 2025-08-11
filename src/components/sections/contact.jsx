@@ -80,7 +80,7 @@ export function Contact() {
                       <FontAwesomeIcon icon={faBuilding} className="h-5 w-5 mt-1 shrink-0 text-primary" />
                       <div>
                           <p className="font-semibold text-foreground">Registered/Corporate Office</p>
-                          <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(companyInfo.registeredAddress)}`} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                          <a href={companyInfo.registeredUrl} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
                             <p>{companyInfo.registeredAddress}</p>
                           </a>
                       </div>
@@ -89,14 +89,14 @@ export function Contact() {
                       <FontAwesomeIcon icon={faMapPin} className="h-5 w-5 mt-1 shrink-0 text-primary" />
                       <div>
                           <p className="font-semibold text-foreground">Sales Office</p>
-                          <a href={companyInfo.googleMapsUrl} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                          <a href={companyInfo.salesUrl} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
                             <p>{companyInfo.salesOfficeAddress}</p>
                           </a>
                       </div>
                   </div>
                    <div className="flex items-center gap-4">
                       <FontAwesomeIcon icon={faEnvelope} className="h-5 w-5 shrink-0 text-primary" />
-                      <a href="mailto:dineshgupta@shabadpapers.co.in" className="hover:text-primary transition-colors">dineshgupta@shabadpapers.co.in</a>
+                      <a href="mailto:shabadpapersllp@gmail.com" className="hover:text-primary transition-colors">shabadpapersllp@gmail.com</a>
                   </div>
                    <div className="flex items-center gap-4">
                       <FontAwesomeIcon icon={faPhone} className="h-5 w-5 shrink-0 text-primary" />
@@ -120,7 +120,7 @@ export function Contact() {
               <h3 className="text-2xl font-headline font-bold mb-6 text-foreground">Find Us Here</h3>
               <div className="aspect-video w-full rounded-lg overflow-hidden border border-border">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3769.213215284794!2d72.84499877520038!3d19.142144382076296!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b6139366e543%3A0x74964f4344795361!2sEaze%20Zone!5e0!3m2!1sen!2sin!4v1722421338604!5m2!1sen!2sin"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15073.90640224007!2d72.8310540366848!3d19.174374930236958!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b6f86d7048f5%3A0xdf26405fc17d3b34!2sEaze%20Zone%20Mall%2C%205078%2C%20Malad%2C%20Sunder%20Nagar%2C%20Malad%20West%2C%20Mumbai%2C%20Maharashtra%20400064!5e0!3m2!1sen!2sin!4v1754905439098!5m2!1sen!2sin"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}

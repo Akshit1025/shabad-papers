@@ -17,8 +17,8 @@ const profileItems = [
     { icon: faIdCard, label: "Legal Name of Firm", value: companyInfo.legalName },
     { icon: faUserTie, label: "Partners", value: companyInfo.partners },
     { icon: faFileInvoiceDollar, label: "GSTN", value: companyInfo.gstin },
-    { icon: faBuilding, label: "Registered/Corporate Office", value: companyInfo.registeredAddress, link: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(companyInfo.registeredAddress)}` },
-    { icon: faMapPin, label: "Sales Office", value: companyInfo.salesOfficeAddress, link: companyInfo.googleMapsUrl },
+    { icon: faBuilding, label: "Registered/Corporate Office", value: companyInfo.registeredAddress, link: companyInfo.registeredUrl },
+    { icon: faMapPin, label: "Sales Office", value: companyInfo.salesOfficeAddress, link: companyInfo.salesUrl },
 
 ];
 

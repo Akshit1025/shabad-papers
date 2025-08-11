@@ -68,13 +68,13 @@ export function Footer() {
             <div className="space-y-3 text-sm text-muted-foreground">
                 <div className="flex items-start gap-3">
                     <FontAwesomeIcon icon={faBuilding} className="h-4 w-4 mt-1 shrink-0 text-primary" />
-                    <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(companyInfo.registeredAddress)}`} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                    <a href={companyInfo.registeredUrl} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
                       {companyInfo.registeredAddress}
                     </a>
                 </div>
                  <div className="flex items-center gap-3">
                     <FontAwesomeIcon icon={faEnvelope} className="h-4 w-4 shrink-0 text-primary" />
-                    <a href="mailto:dineshgupta@shabadpapers.co.in" className="hover:text-primary transition-colors">dineshgupta@shabadpapers.co.in</a>
+                    <a href="mailto:shabadpapersllp@gmail.com" className="hover:text-primary transition-colors">shabadpapersllp@gmail.com</a>
                 </div>
                  <div className="flex items-center gap-3">
                     <FontAwesomeIcon icon={faPhone} className="h-4 w-4 shrink-0 text-primary" />
