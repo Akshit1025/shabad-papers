@@ -24,7 +24,7 @@ export function Footer() {
           {/* Company Info */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2 font-headline text-xl font-bold">
-               <Image src="/images/sp-logo.png" alt="Shabad Papers Logo" width={40} height={40} />
+               <Image src="/images/sp-logo-no-bg.png" alt="Shabad Papers Logo" width={40} height={40} />
               <span>{companyInfo.tradeName}</span>
             </Link>
             <p className="text-sm text-muted-foreground pr-4">
