@@ -7,10 +7,11 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from "next/link";
+import Image from "next/image";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faPaperclip } from "@fortawesome/free-solid-svg-icons";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from 'framer-motion';
 import { socialLinks } from '@/lib/data';
@@ -29,7 +30,7 @@ const navLinks = [
  */
 const Logo = ({ className }) => (
     <Link href="/" className={cn("flex items-center gap-2 font-headline text-xl font-bold text-primary", className)}>
-        <FontAwesomeIcon icon={faPaperclip} className="h-6 w-6" />
+        <Image src="/images/sp-logo-no-bg.png" alt="Shabad Papers Logo" width={40} height={40} />
         <span>Shabad Papers</span>
     </Link>
 );

@@ -4,8 +4,9 @@
  */
 import { companyInfo, socialLinks } from "@/lib/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaperclip, faMapPin, faEnvelope, faPhone, faBuilding } from "@fortawesome/free-solid-svg-icons";
+import { faMapPin, faEnvelope, faPhone, faBuilding } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
+import Image from "next/image";
 
 /**
  * The main Footer component for the application.
@@ -23,7 +24,7 @@ export function Footer() {
           {/* Company Info */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2 font-headline text-xl font-bold">
-              <FontAwesomeIcon icon={faPaperclip} className="h-6 w-6" />
+               <Image src="/images/sp-logo.png" alt="Shabad Papers Logo" width={40} height={40} />
               <span>{companyInfo.tradeName}</span>
             </Link>
             <p className="text-sm text-muted-foreground pr-4">

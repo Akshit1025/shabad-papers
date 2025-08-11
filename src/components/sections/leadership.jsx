@@ -37,9 +37,9 @@ export function Leadership() {
         <div className="grid md:grid-cols-2 gap-12 items-center">
             <motion.div variants={imageVariants}>
                  <Image
-                    src="https://placehold.co/500x500.png"
+                    src="/images/sp-logo.png"
                     alt="Shabad Papers Logo Graphic"
-                    data-ai-hint="abstract logo"
+                    data-ai-hint="company logo"
                     width={500}
                     height={500}
                     className="rounded-lg shadow-2xl object-cover mx-auto"
