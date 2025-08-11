@@ -8,7 +8,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from "next/link";
 import Image from "next/image";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
@@ -117,10 +117,10 @@ export function Header() {
                 <Link
                   href={link.href}
                   className={cn(
-                      "relative rounded-full px-4 py-2 text-base transition-colors duration-300",
+                      "relative rounded-full px-4 py-2 text-base font-semibold transition-colors duration-300",
                       navLinkTextColor,
                       hoveredLink?.index === index 
-                        ? 'text-white font-bold' 
+                        ? 'text-white' 
                         : ''
                   )}
                 >
@@ -156,6 +156,7 @@ export function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[80vw] bg-background/95 backdrop-blur-lg">
+                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                <div className="flex flex-col h-full">
                 <div className="p-6">
                     <Logo />
