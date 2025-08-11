@@ -42,7 +42,7 @@ export function Leadership() {
                     data-ai-hint="company logo"
                     width={500}
                     height={500}
-                    className="rounded-lg shadow-2xl object-cover mx-auto"
+                    className="rounded-lg shadow-2xl object-contain mx-auto"
                   />
             </motion.div>
             <motion.div variants={contentVariants}>
