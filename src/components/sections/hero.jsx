@@ -36,7 +36,7 @@ export function Hero() {
         transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
       >
         <Image
-          src="https://placehold.co/1920x1080.png"
+          src="/images/home/product-banner.jpeg"
           alt="Paper factory background"
           data-ai-hint="paper texture"
           fill
