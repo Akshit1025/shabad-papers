@@ -3,7 +3,7 @@
  * This file exports various constants and data structures, such as company information
  * and social media links, to be used across different components.
  */
-import { faLinkedin, faGithub, faWhatsapp, faGooglePlus } from "@fortawesome/free-brands-svg-icons";
+import { faLinkedin, faGithub, faWhatsapp, faGooglePlus, faInstagram } from "@fortawesome/free-brands-svg-icons";
 import { faBriefcase, faBuilding, faCalendar, faUsers } from "@fortawesome/free-solid-svg-icons";
 
 /**
@@ -43,4 +43,5 @@ export const socialLinks = [
     { name: "Github", url: "https://github.com/Akshit1025/shabad-papers", icon: faGithub },
     { name: "Whatsapp", url: "https://wa.me/919810087126", icon: faWhatsapp },
     { name: "Google+", url: "https://g.co/kgs/WDyBz11", icon: faGooglePlus },
+    { name: "Instagram", url: "https://instagram.com/akshitthecoder", icon: faInstagram },
 ];

@@ -4,7 +4,7 @@
  */
 import { companyInfo, socialLinks } from "@/lib/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapPin, faEnvelope, faPhone, faBuilding } from "@fortawesome/free-solid-svg-icons";
+import { faMapPin, faEnvelope, faPhone, faBuilding, faHeart } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -89,12 +89,14 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-border/40">
-        <div className="container py-4 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
+        <div className="container py-4 flex flex-col sm:flex-row justify-between items-center text-sm text-muted-foreground space-y-2 sm:space-y-0">
             <p>&copy; {currentYear} {companyInfo.tradeName}. All Rights Reserved.</p>
-            <div className="flex gap-4 mt-2 md:mt-0">
-                <Link href="#" className="hover:text-primary transition-colors">Privacy Policy</Link>
-                <Link href="#" className="hover:text-primary transition-colors">Terms & Conditions</Link>
-            </div>
+            <p className="flex items-center gap-1">
+                Made by
+                <a href="https://instagram.com/akshitthecoder" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">
+                    Akshit Gupta
+                </a>
+            </p>
         </div>
       </div>
     </footer>
