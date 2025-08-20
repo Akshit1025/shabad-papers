@@ -35,7 +35,7 @@ export function QualityCommitment() {
         <div className="grid md:grid-cols-2 gap-12 items-center">
             <motion.div className="flex justify-center" variants={imageVariants}>
                  <Image
-                    src="https://placehold.co/400x400.png"
+                    src="/images/about/about-quality-img.png"
                     alt="Quality seal"
                     data-ai-hint="quality guarantee badge"
                     width={400}

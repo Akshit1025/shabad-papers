@@ -36,7 +36,7 @@ export function Hero() {
         transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
       >
         <Image
-          src="/images/home/product-banner.jpeg"
+          src="/images/home/product-banner.jpg"
           alt="Paper factory background"
           data-ai-hint="paper texture"
           fill

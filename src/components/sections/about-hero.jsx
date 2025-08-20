@@ -13,9 +13,9 @@ import { motion } from "framer-motion";
 export function AboutHero() {
   return (
     <section className="relative bg-secondary py-20 md:py-32 overflow-hidden">
-       <div className="absolute inset-0 opacity-5">
+       <div className="absolute inset-0 opacity">
          <Image 
-            src="https://placehold.co/1920x1080.png"
+            src="/images/about/about-us-banner.jpg"
             alt="Paper texture background"
             data-ai-hint="paper texture"
             fill
@@ -29,11 +29,8 @@ export function AboutHero() {
         transition={{ duration: 0.7 }}
       >
         <h1 className="text-4xl font-headline font-bold md:text-6xl text-primary">
-          About Shabad Papers
+          About Us
         </h1>
-        <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-          Your trusted partner in the paper trading industry since 2022.
-        </p>
       </motion.div>
     </section>
   );

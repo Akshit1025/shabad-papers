@@ -43,7 +43,7 @@ export function Glance() {
           </motion.div>
           <motion.div variants={imageVariants}>
              <Image
-                src="https://placehold.co/600x400.png"
+                src="/images/about/about-glance-img.jpeg"
                 alt="Close up of a notebook"
                 data-ai-hint="notebook paper"
                 width={600}

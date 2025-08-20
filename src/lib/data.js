@@ -40,8 +40,6 @@ export const aboutItems = [
  */
 export const socialLinks = [
     { name: "LinkedIn", url: "https://www.linkedin.com/in/dinesh-gupta-57b513374/", icon: faLinkedin },
-    { name: "Github", url: "https://github.com/Akshit1025/shabad-papers", icon: faGithub },
     { name: "Whatsapp", url: "https://wa.me/919810087126", icon: faWhatsapp },
     { name: "Google+", url: "https://g.co/kgs/WDyBz11", icon: faGooglePlus },
-    { name: "Instagram", url: "https://instagram.com/akshitthecoder", icon: faInstagram },
 ];
