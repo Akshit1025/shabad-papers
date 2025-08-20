@@ -116,7 +116,7 @@ export function Contact() {
             </motion.div>
 
             {/* Find Us Here */}
-            <motion.div variants={itemVariants}>
+            {/* <motion.div variants={itemVariants}>
               <h3 className="text-2xl font-headline font-bold mb-6 text-foreground">Find Us Here</h3>
               <div className="aspect-video w-full rounded-lg overflow-hidden border border-border">
                 <iframe
@@ -130,7 +130,7 @@ export function Contact() {
                   title="Google Maps view of Shabad Papers LLP Sales Office"
                 ></iframe>
               </div>
-            </motion.div>
+            </motion.div> */}
           </motion.div>
         </div>
       </div>
