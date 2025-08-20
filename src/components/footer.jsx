@@ -91,12 +91,16 @@ export function Footer() {
       <div className="border-t border-border/40">
         <div className="container py-4 flex flex-col sm:flex-row justify-between items-center text-sm text-muted-foreground space-y-2 sm:space-y-0">
             <p>&copy; {currentYear} {companyInfo.tradeName}. All Rights Reserved.</p>
-            <p className="flex items-center gap-1">
-                Made by
-                <a href="https://instagram.com/akshitthecoder" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">
-                    Akshit Gupta
-                </a>
-            </p>
+            <div className="flex items-center gap-x-4">
+                <Link href="#" className="hover:text-primary transition-colors">Privacy Policy</Link>
+                <Link href="#" className="hover:text-primary transition-colors">Terms & Conditions</Link>
+                <p className="flex items-center gap-1">
+                    Made by
+                    <a href="https://instagram.com/akshitthecoder" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">
+                        Akshit Gupta
+                    </a>
+                </p>
+            </div>
         </div>
       </div>
     </footer>
