@@ -6,13 +6,13 @@
 "use client";
 
 import dynamic from 'next/dynamic';
-
-const Header = dynamic(() => import ('@/components/header'), {ssr: false});
-const Footer = dynamic(() => import ('@/components/footer'), {ssr: false});
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Home } from 'lucide-react';
+
+const Header = dynamic(() => import('@/components/header').then(mod => mod.Header), { ssr: false });
+const Footer = dynamic(() => import('@/components/footer').then(mod => mod.Footer), { ssr: false });
 
 /**
  * Renders a custom 404 Not Found page.
