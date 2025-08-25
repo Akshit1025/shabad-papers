@@ -14,8 +14,6 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Home } from 'lucide-react';
 
-export const dynamic = "force-dynamic";
-
 /**
  * Renders a custom 404 Not Found page.
  * It provides a clear message to the user and a link to navigate back to the homepage.
