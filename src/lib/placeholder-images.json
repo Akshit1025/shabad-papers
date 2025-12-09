@@ -34,5 +34,23 @@
     "width": 800,
     "height": 450,
     "aiHint": "receipt book"
+  },
+  "coatedCarousel1": {
+    "url": "https://picsum.photos/seed/coated-c1/800/450",
+    "width": 800,
+    "height": 450,
+    "aiHint": "glossy magazine pages"
+  },
+  "coatedCarousel2": {
+    "url": "https://picsum.photos/seed/coated-c2/800/450",
+    "width": 800,
+    "height": 450,
+    "aiHint": "printing press paper"
+  },
+  "coatedCarousel3": {
+    "url": "https://picsum.photos/seed/coated-c3/800/450",
+    "width": 800,
+    "height": 450,
+    "aiHint": "brochure stack"
   }
 }
