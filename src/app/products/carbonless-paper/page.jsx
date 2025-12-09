@@ -48,7 +48,7 @@ export default function CarbonlessPaperPage() {
       <Header />
       <main>
         <section className="py-16 md:py-24 bg-secondary/50">
-          <div className="container px-4">
+          <div className="container max-w-7xl px-4">
             {/* Page Header */}
             <motion.div
               className="max-w-3xl mb-8"
