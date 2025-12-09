@@ -68,7 +68,7 @@ export default function CarbonlessPaperPage() {
             </motion.div>
 
             {/* Main Content Grid */}
-            <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
+            <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
               {/* Left Column: Carousel */}
               <motion.div 
                 initial={{ opacity: 0, x: -50 }}
