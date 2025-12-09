@@ -69,9 +69,8 @@ export default function CarbonlessPaperPage() {
 
             {/* Main Content Grid */}
             <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
-              {/* Left Column: Carousel & Description */}
+              {/* Left Column: Carousel */}
               <motion.div 
-                className="space-y-8"
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.7 }}
@@ -96,24 +95,32 @@ export default function CarbonlessPaperPage() {
                   <CarouselPrevious className="left-2" />
                   <CarouselNext className="right-2" />
                 </Carousel>
-                
-                <div>
-                    <h2 className="text-2xl font-headline font-bold text-foreground mb-4">What is Carbonless Paper About?</h2>
-                    <p className="text-muted-foreground text-lg">
-                        This is a speciality documentation paper used to create duplicate copies without carbon inserts. With surface-reactive coatings, it transfers written or printed information across sheets via applied pressure.
-                    </p>
-                </div>
               </motion.div>
 
-              {/* Right Column: Benefits & Applications */}
+              {/* Right Column: Description */}
               <motion.div 
                 className="space-y-8"
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.7, delay: 0.2 }}
               >
-                {/* Benefits */}
-                <div>
+                 <div>
+                    <h2 className="text-2xl font-headline font-bold text-foreground mb-4">What is Carbonless Paper About?</h2>
+                    <p className="text-muted-foreground text-lg">
+                        This is a speciality documentation paper used to create duplicate copies without carbon inserts. With surface-reactive coatings, it transfers written or printed information across sheets via applied pressure.
+                    </p>
+                </div>
+              </motion.div>
+            </div>
+            
+            {/* Benefits & Applications */}
+            <div className="grid md:grid-cols-2 gap-8 md:gap-12 mt-12">
+               {/* Benefits */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                >
                   <h3 className="text-2xl font-headline font-bold text-foreground mb-4">Benefits</h3>
                   <ul className="space-y-3">
                     {benefits.map((benefit, index) => (
@@ -123,10 +130,14 @@ export default function CarbonlessPaperPage() {
                       </li>
                     ))}
                   </ul>
-                </div>
+                </motion.div>
 
                 {/* Applications */}
-                <div>
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
+                >
                   <h3 className="text-2xl font-headline font-bold text-foreground mb-4">Applications</h3>
                   <div className="flex flex-wrap gap-3">
                     {applications.map((app, index) => (
@@ -135,10 +146,9 @@ export default function CarbonlessPaperPage() {
                       </div>
                     ))}
                   </div>
-                </div>
-              </motion.div>
+                </motion.div>
             </div>
-            
+
             {/* Action Buttons */}
             <motion.div 
               className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12"
