@@ -4,7 +4,7 @@ import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva } from "class-variance-authority"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faPanelEws } from "@fortawesome/free-solid-svg-icons"
+import { faGripVertical } from "@fortawesome/free-solid-svg-icons"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
@@ -252,7 +252,7 @@ const SidebarTrigger = React.forwardRef(({ className, onClick, ...props }, ref) 
       }}
       {...props}
     >
-      <FontAwesomeIcon icon={faPanelEws} />
+      <FontAwesomeIcon icon={faGripVertical} />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   )

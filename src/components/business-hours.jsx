@@ -2,6 +2,8 @@
  * @fileOverview Displays the company's business hours.
  * It highlights the current day of the week.
  */
+"use client";
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
 
@@ -10,7 +12,12 @@ import { faClock } from "@fortawesome/free-solid-svg-icons";
  * @returns {JSX.Element} The rendered business hours component.
  */
 export function BusinessHours() {
-    const today = new Date().toLocaleString('en-us', {  weekday: 'long' });
+    const [today, setToday] = useState('');
+
+    useEffect(() => {
+        setToday(new Date().toLocaleString('en-us', {  weekday: 'long' }));
+    }, []);
+
     const businessHours = [
         { day: "Monday", hours: "10:00 AM - 6:00 PM" },
         { day: "Tuesday", hours: "10:00 AM - 6:00 PM" },
