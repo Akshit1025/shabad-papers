@@ -16,5 +16,23 @@
     "width": 600,
     "height": 400,
     "aiHint": "glossy paper"
+  },
+  "carbonlessCarousel1": {
+    "url": "https://picsum.photos/seed/carbonless-c1/800/450",
+    "width": 800,
+    "height": 450,
+    "aiHint": "colored paper stack"
+  },
+  "carbonlessCarousel2": {
+    "url": "https://picsum.photos/seed/carbonless-c2/800/450",
+    "width": 800,
+    "height": 450,
+    "aiHint": "invoice forms"
+  },
+  "carbonlessCarousel3": {
+    "url": "https://picsum.photos/seed/carbonless-c3/800/450",
+    "width": 800,
+    "height": 450,
+    "aiHint": "receipt book"
   }
 }

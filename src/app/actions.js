@@ -11,6 +11,7 @@ const inquirySchema = z.object({
     name: z.string(),
     email: z.string().email(),
     message: z.string(),
+    product: z.string().optional(),
 });
 
 /**
@@ -20,6 +21,7 @@ const inquirySchema = z.object({
  * @param {string} input.name - The user's name.
  * @param {string} input.email - The user's email.
  * @param {string} input.message - The user's message.
+ * @param {string} [input.product] - The product being inquired about.
  * @returns {Promise<{success: boolean, error?: string}>} An object indicating success or failure.
  */
 export async function submitInquiry(input) {
