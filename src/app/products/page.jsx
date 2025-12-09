@@ -80,32 +80,32 @@ export default function ProductsPage() {
                   }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <div className="group bg-card h-full rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border border-border/20 flex flex-col">
-                    <div className="relative w-full h-56">
-                      <Image
-                        src={category.image.url}
-                        alt={category.name}
-                        data-ai-hint={category.image.aiHint}
-                        width={category.image.width}
-                        height={category.image.height}
-                        className="object-cover w-full h-full"
-                      />
-                    </div>
-                    <div className="p-6 flex flex-col flex-grow">
-                      <h3 className="text-xl font-headline font-bold mb-2 text-foreground">
-                        {category.name}
-                      </h3>
-                      <p className="text-muted-foreground text-sm flex-grow">
-                        {category.description}
-                      </p>
-                      <Button asChild variant="link" className="p-0 h-auto mt-4 self-start text-primary">
-                        <Link href={`/products/${category.slug}`}>
+                  <Link href={`/products/${category.slug}`} className="block h-full">
+                    <div className="group bg-card h-full rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border border-border/20 flex flex-col">
+                      <div className="relative w-full h-56">
+                        <Image
+                          src={category.image.url}
+                          alt={category.name}
+                          data-ai-hint={category.image.aiHint}
+                          width={category.image.width}
+                          height={category.image.height}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                      <div className="p-6 flex flex-col flex-grow">
+                        <h3 className="text-xl font-headline font-bold mb-2 text-foreground">
+                          {category.name}
+                        </h3>
+                        <p className="text-muted-foreground text-sm flex-grow">
+                          {category.description}
+                        </p>
+                        <div className="mt-4 text-primary font-semibold text-sm flex items-center">
                           {category.hasSubProducts ? 'View Products' : 'Learn More'}
                           <ArrowRight className="ml-2 h-4 w-4" />
-                        </Link>
-                      </Button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 </motion.div>
               ))}
             </motion.div>
