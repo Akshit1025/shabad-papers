@@ -52,5 +52,41 @@
     "width": 800,
     "height": 450,
     "aiHint": "brochure stack"
+  },
+  "bleachedKraft": {
+    "url": "https://picsum.photos/seed/bleached-kraft/600/400",
+    "width": 600,
+    "height": 400,
+    "aiHint": "white paper roll"
+  },
+  "unbleachedKraft": {
+    "url": "https://picsum.photos/seed/unbleached-kraft/600/400",
+    "width": 600,
+    "height": 400,
+    "aiHint": "brown paper roll"
+  },
+  "greaseproof": {
+    "url": "https://picsum.photos/seed/greaseproof/600/400",
+    "width": 600,
+    "height": 400,
+    "aiHint": "burger wrap"
+  },
+  "glassine": {
+    "url": "https://picsum.photos/seed/glassine/600/400",
+    "width": 600,
+    "height": 400,
+    "aiHint": "translucent envelopes"
+  },
+  "parchment": {
+    "url": "https://picsum.photos/seed/parchment/600/400",
+    "width": 600,
+    "height": 400,
+    "aiHint": "baking sheet"
+  },
+  "poster": {
+    "url": "https://picsum.photos/seed/poster-paper/600/400",
+    "width": 600,
+    "height": 400,
+    "aiHint": "colored sheets"
   }
 }
