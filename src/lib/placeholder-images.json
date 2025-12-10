@@ -53,6 +53,24 @@
     "height": 450,
     "aiHint": "brochure stack"
   },
+  "foodgradeCarousel1": {
+    "url": "https://picsum.photos/seed/foodgrade-c1/800/450",
+    "width": 800,
+    "height": 450,
+    "aiHint": "food packaging paper"
+  },
+  "foodgradeCarousel2": {
+    "url": "https://picsum.photos/seed/foodgrade-c2/800/450",
+    "width": 800,
+    "height": 450,
+    "aiHint": "sandwich wrap paper"
+  },
+  "foodgradeCarousel3": {
+    "url": "https://picsum.photos/seed/foodgrade-c3/800/450",
+    "width": 800,
+    "height": 450,
+    "aiHint": "baking paper"
+  },
   "bleachedKraft": {
     "url": "https://picsum.photos/seed/bleached-kraft/600/400",
     "width": 600,
