@@ -5,6 +5,7 @@
  */
 "use client";
 
+import React from 'react';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import Image from 'next/image';
@@ -15,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import placeholderImages from '@/lib/placeholder-images.json';
 import { ProductInquiryDialog } from '@/components/product-inquiry-dialog';
+import Autoplay from "embla-carousel-autoplay";
 
 const benefits = [
     "Creates instant, clean duplicates without messy carbon sheets.",
@@ -42,6 +44,10 @@ export default function CarbonlessPaperPage() {
     placeholderImages.carbonlessCarousel2,
     placeholderImages.carbonlessCarousel3,
   ];
+
+  const plugin = React.useRef(
+    Autoplay({ delay: 2000, stopOnInteraction: true })
+  );
 
   return (
     <div className="flex flex-col min-h-dvh bg-background">
@@ -75,7 +81,13 @@ export default function CarbonlessPaperPage() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.7 }}
               >
-                <Carousel className="w-full" opts={{ loop: true }}>
+                <Carousel 
+                  className="w-full" 
+                  opts={{ loop: true }}
+                  plugins={[plugin.current]}
+                  onMouseEnter={plugin.current.stop}
+                  onMouseLeave={plugin.current.reset}
+                >
                   <CarouselContent>
                     {media.map((item, index) => (
                       <CarouselItem key={index}>
