@@ -34,34 +34,40 @@ const applications = [
 
 const subProducts = [
   {
-    name: 'Bleached Kraft Paper',
-    description: 'A clean, white paper ideal for applications requiring strength and high-quality printing.',
-    image: placeholderImages.bleachedKraft,
-  },
-  {
-    name: 'Unbleached Kraft Paper',
-    description: 'A strong, brown paper known for its durability and natural look, perfect for heavy-duty packaging.',
-    image: placeholderImages.unbleachedKraft,
-  },
-  {
-    name: 'Greaseproof Paper',
-    description: 'Designed to prevent oil and grease from seeping through, ideal for wrapping fatty foods.',
-    image: placeholderImages.greaseproof,
+    name: 'Slip-Easy Cupcake Paper',
+    slug: 'slip-easy-cupcake-paper',
+    description: 'Specialty paper for cupcake liners, designed for easy release and baking performance.',
+    image: placeholderImages.cupcakePaper,
   },
   {
     name: 'Glassine Paper',
+    slug: 'glassine-paper',
     description: 'A smooth, glossy, and translucent paper that is air, water, and grease resistant.',
     image: placeholderImages.glassine,
   },
   {
-    name: 'Parchment Paper',
-    description: 'A cellulose-based paper with a non-stick surface, widely used in baking and cooking.',
-    image: placeholderImages.parchment,
+    name: 'Greaseproof Paper',
+    slug: 'greaseproof-paper',
+    description: 'Designed to prevent oil and grease from seeping through, ideal for wrapping fatty foods.',
+    image: placeholderImages.greaseproof,
   },
   {
-    name: 'Poster Paper',
-    description: 'A versatile paper with good printability, often used for food-safe posters and tray liners.',
-    image: placeholderImages.poster,
+    name: 'MG Kraft Paper',
+    slug: 'mg-kraft-paper',
+    description: 'Machine Glazed Kraft paper with a glossy, smooth finish on one side, great for printing and packaging.',
+    image: placeholderImages.mgKraft,
+  },
+  {
+    name: 'MF Kraft Paper',
+    slug: 'mf-kraft-paper',
+    description: 'Machine Finished Kraft paper with a smooth, natural finish on both sides, valued for its strength.',
+    image: placeholderImages.mfKraft,
+  },
+  {
+    name: 'Baking Paper',
+    slug: 'baking-paper',
+    description: 'A cellulose-based paper with a non-stick surface, widely used in baking and cooking.',
+    image: placeholderImages.bakingPaper,
   },
 ];
 
@@ -217,26 +223,28 @@ export default function FoodGradePapersPage() {
                             }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                         >
-                            <div className="group bg-card h-full rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-border/20 flex flex-col">
-                                <div className="relative w-full h-56">
-                                    <Image
-                                        src={product.image.url}
-                                        alt={product.name}
-                                        data-ai-hint={product.image.aiHint}
-                                        width={product.image.width}
-                                        height={product.image.height}
-                                        className="object-cover w-full h-full"
-                                    />
+                            <Link href={`/products/${product.slug}`} className="block h-full">
+                                <div className="group bg-card h-full rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-border/20 flex flex-col">
+                                    <div className="relative w-full h-56">
+                                        <Image
+                                            src={product.image.url}
+                                            alt={product.name}
+                                            data-ai-hint={product.image.aiHint}
+                                            width={product.image.width}
+                                            height={product.image.height}
+                                            className="object-cover w-full h-full"
+                                        />
+                                    </div>
+                                    <div className="p-6 flex flex-col flex-grow">
+                                        <h3 className="text-xl font-headline font-bold mb-2 text-foreground">
+                                            {product.name}
+                                        </h3>
+                                        <p className="text-muted-foreground text-sm flex-grow">
+                                            {product.description}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className="p-6 flex flex-col flex-grow">
-                                    <h3 className="text-xl font-headline font-bold mb-2 text-foreground">
-                                        {product.name}
-                                    </h3>
-                                    <p className="text-muted-foreground text-sm flex-grow">
-                                        {product.description}
-                                    </p>
-                                </div>
-                            </div>
+                            </Link>
                         </motion.div>
                     ))}
                 </motion.div>
@@ -265,5 +273,3 @@ export default function FoodGradePapersPage() {
     </div>
   );
 }
-
-    

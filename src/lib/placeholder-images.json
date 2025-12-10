@@ -71,23 +71,11 @@
     "height": 450,
     "aiHint": "baking paper"
   },
-  "bleachedKraft": {
-    "url": "https://picsum.photos/seed/bleached-kraft/600/400",
+  "cupcakePaper": {
+    "url": "https://picsum.photos/seed/cupcake-paper/600/400",
     "width": 600,
     "height": 400,
-    "aiHint": "white paper roll"
-  },
-  "unbleachedKraft": {
-    "url": "https://picsum.photos/seed/unbleached-kraft/600/400",
-    "width": 600,
-    "height": 400,
-    "aiHint": "brown paper roll"
-  },
-  "greaseproof": {
-    "url": "https://picsum.photos/seed/greaseproof/600/400",
-    "width": 600,
-    "height": 400,
-    "aiHint": "burger wrap"
+    "aiHint": "cupcake liners"
   },
   "glassine": {
     "url": "https://picsum.photos/seed/glassine/600/400",
@@ -95,16 +83,28 @@
     "height": 400,
     "aiHint": "translucent envelopes"
   },
-  "parchment": {
-    "url": "https://picsum.photos/seed/parchment/600/400",
+  "greaseproof": {
+    "url": "https://picsum.photos/seed/greaseproof/600/400",
+    "width": 600,
+    "height": 400,
+    "aiHint": "burger wrap"
+  },
+  "mgKraft": {
+    "url": "https://picsum.photos/seed/mg-kraft/600/400",
+    "width": 600,
+    "height": 400,
+    "aiHint": "glossy brown paper"
+  },
+  "mfKraft": {
+    "url": "https://picsum.photos/seed/mf-kraft/600/400",
+    "width": 600,
+    "height": 400,
+    "aiHint": "natural brown paper"
+  },
+  "bakingPaper": {
+    "url": "https://picsum.photos/seed/baking-paper/600/400",
     "width": 600,
     "height": 400,
     "aiHint": "baking sheet"
-  },
-  "poster": {
-    "url": "https://picsum.photos/seed/poster-paper/600/400",
-    "width": 600,
-    "height": 400,
-    "aiHint": "colored sheets"
   }
 }
