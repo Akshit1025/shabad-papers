@@ -1,7 +1,7 @@
 /**
  * @fileOverview The product detail page for Food Grade Papers.
  * This page showcases the product with a carousel, detailed descriptions,
- * benefits, applications, and an inquiry form.
+ * benefits, applications, and an inquiry form. It also lists the sub-products in this category.
  */
 "use client";
 
@@ -31,6 +31,40 @@ const applications = [
     "Quick Service Restaurant (QSR) Packaging",
     "Lining for Trays and Boxes"
 ];
+
+const subProducts = [
+  {
+    name: 'Bleached Kraft Paper',
+    description: 'A clean, white paper ideal for applications requiring strength and high-quality printing.',
+    image: placeholderImages.bleachedKraft,
+  },
+  {
+    name: 'Unbleached Kraft Paper',
+    description: 'A strong, brown paper known for its durability and natural look, perfect for heavy-duty packaging.',
+    image: placeholderImages.unbleachedKraft,
+  },
+  {
+    name: 'Greaseproof Paper',
+    description: 'Designed to prevent oil and grease from seeping through, ideal for wrapping fatty foods.',
+    image: placeholderImages.greaseproof,
+  },
+  {
+    name: 'Glassine Paper',
+    description: 'A smooth, glossy, and translucent paper that is air, water, and grease resistant.',
+    image: placeholderImages.glassine,
+  },
+  {
+    name: 'Parchment Paper',
+    description: 'A cellulose-based paper with a non-stick surface, widely used in baking and cooking.',
+    image: placeholderImages.parchment,
+  },
+  {
+    name: 'Poster Paper',
+    description: 'A versatile paper with good printability, often used for food-safe posters and tray liners.',
+    image: placeholderImages.poster,
+  },
+];
+
 
 /**
  * Renders the product detail page for Food Grade Papers.
@@ -148,6 +182,66 @@ export default function FoodGradePapersPage() {
                   </div>
                 </motion.div>
             </div>
+             
+             {/* Sub-products Grid */}
+            <div className="mt-16 md:mt-24">
+                <motion.div
+                    className="max-w-3xl mx-auto text-center mb-12"
+                    initial={{ opacity: 0, y: -20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <h2 className="text-3xl font-headline font-bold md:text-5xl text-primary">
+                        Our Food Grade Paper Products
+                    </h2>
+                    <p className="mt-4 text-lg text-muted-foreground">
+                        Explore our specialized range of papers, each designed for specific food packaging and handling needs.
+                    </p>
+                    <div className="mt-4 w-24 h-1 bg-primary mx-auto"></div>
+                </motion.div>
+
+                <motion.div 
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ staggerChildren: 0.2 }}
+                >
+                    {subProducts.map((product, index) => (
+                        <motion.div
+                            key={product.name}
+                            variants={{
+                                hidden: { opacity: 0, y: 50 },
+                                visible: { opacity: 1, y: 0 }
+                            }}
+                            transition={{ duration: 0.5, delay: index * 0.1 }}
+                        >
+                            <div className="group bg-card h-full rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-border/20 flex flex-col">
+                                <div className="relative w-full h-56">
+                                    <Image
+                                        src={product.image.url}
+                                        alt={product.name}
+                                        data-ai-hint={product.image.aiHint}
+                                        width={product.image.width}
+                                        height={product.image.height}
+                                        className="object-cover w-full h-full"
+                                    />
+                                </div>
+                                <div className="p-6 flex flex-col flex-grow">
+                                    <h3 className="text-xl font-headline font-bold mb-2 text-foreground">
+                                        {product.name}
+                                    </h3>
+                                    <p className="text-muted-foreground text-sm flex-grow">
+                                        {product.description}
+                                    </p>
+                                </div>
+                            </div>
+                        </motion.div>
+                    ))}
+                </motion.div>
+            </div>
+
 
             {/* Action Buttons */}
             <motion.div 
@@ -171,3 +265,5 @@ export default function FoodGradePapersPage() {
     </div>
   );
 }
+
+    
