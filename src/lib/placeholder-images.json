@@ -100,5 +100,35 @@
     "width": 800,
     "height": 500,
     "aiHint": "baked goods croissants"
+  },
+  "cupcakePaperHero": {
+    "url": "https://picsum.photos/seed/cupcake-hero/800/500",
+    "width": 800,
+    "height": 500,
+    "aiHint": "colorful cupcakes"
+  },
+  "glassinePaperHero": {
+    "url": "https://picsum.photos/seed/glassine-hero/800/500",
+    "width": 800,
+    "height": 500,
+    "aiHint": "stamp collection"
+  },
+  "greaseproofPaperHero": {
+    "url": "https://picsum.photos/seed/greaseproof-hero/800/500",
+    "width": 800,
+    "height": 500,
+    "aiHint": "deli sandwich"
+  },
+  "mgKraftPaperHero": {
+    "url": "https://picsum.photos/seed/mg-kraft-hero/800/500",
+    "width": 800,
+    "height": 500,
+    "aiHint": "shopping bag"
+  },
+  "mfKraftPaperHero": {
+    "url": "https://picsum.photos/seed/mf-kraft-hero/800/500",
+    "width": 800,
+    "height": 500,
+    "aiHint": "wrapped gift"
   }
 }
