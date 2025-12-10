@@ -75,7 +75,7 @@ export default function CarbonlessPaperPage() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.7 }}
               >
-                <Carousel className="w-full">
+                <Carousel className="w-full" opts={{ loop: true }}>
                   <CarouselContent>
                     {media.map((item, index) => (
                       <CarouselItem key={index}>

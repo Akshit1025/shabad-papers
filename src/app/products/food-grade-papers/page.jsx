@@ -12,7 +12,6 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import placeholderImages from '@/lib/placeholder-images.json';
 import { ProductInquiryDialog } from '@/components/product-inquiry-dialog';
 
@@ -77,11 +76,7 @@ const subProducts = [
  * @returns {JSX.Element} The Food Grade Papers page component.
  */
 export default function FoodGradePapersPage() {
-  const media = [
-    placeholderImages.foodgradeCarousel1,
-    placeholderImages.foodgradeCarousel2,
-    placeholderImages.foodgradeCarousel3,
-  ];
+  const media = placeholderImages.foodgradeCarousel1;
 
   return (
     <div className="flex flex-col min-h-dvh bg-background">
@@ -109,32 +104,22 @@ export default function FoodGradePapersPage() {
 
             {/* Main Content Grid */}
             <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
-              {/* Left Column: Carousel */}
+              {/* Left Column: Image */}
               <motion.div 
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.7 }}
               >
-                <Carousel className="w-full">
-                  <CarouselContent>
-                    {media.map((item, index) => (
-                      <CarouselItem key={index}>
-                        <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden border shadow-lg">
-                          <Image
-                            src={item.url}
-                            alt={`Food Grade Paper Image ${index + 1}`}
-                            data-ai-hint={item.aiHint}
-                            width={item.width}
-                            height={item.height}
-                            className="object-cover w-full h-full"
-                          />
-                        </div>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                  <CarouselPrevious className="left-2" />
-                  <CarouselNext className="right-2" />
-                </Carousel>
+                <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden border shadow-lg">
+                  <Image
+                    src={media.url}
+                    alt="Food Grade Paper Image"
+                    data-ai-hint={media.aiHint}
+                    width={media.width}
+                    height={media.height}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
               </motion.div>
 
               {/* Right Column: Description */}
