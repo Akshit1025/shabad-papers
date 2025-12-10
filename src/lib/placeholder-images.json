@@ -59,18 +59,6 @@
     "height": 450,
     "aiHint": "food packaging paper"
   },
-  "foodgradeCarousel2": {
-    "url": "https://picsum.photos/seed/foodgrade-c2/800/450",
-    "width": 800,
-    "height": 450,
-    "aiHint": "sandwich wrap paper"
-  },
-  "foodgradeCarousel3": {
-    "url": "https://picsum.photos/seed/foodgrade-c3/800/450",
-    "width": 800,
-    "height": 450,
-    "aiHint": "baking paper"
-  },
   "cupcakePaper": {
     "url": "https://picsum.photos/seed/cupcake-paper/600/400",
     "width": 600,
@@ -106,5 +94,11 @@
     "width": 600,
     "height": 400,
     "aiHint": "baking sheet"
+  },
+  "bakingPaperHero": {
+    "url": "https://picsum.photos/seed/baking-hero/800/500",
+    "width": 800,
+    "height": 500,
+    "aiHint": "baked goods croissants"
   }
 }
