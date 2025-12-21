@@ -12,30 +12,9 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import placeholderImages from '@/lib/placeholder-images.json';
+import categoriesData from '@/lib/categories.json';
 
-const categories = [
-  {
-    name: 'Carbonless Paper',
-    slug: 'carbonless-paper',
-    description: 'High-quality, multi-part forms that transfer information from the top sheet to the sheets below without the need for carbon.',
-    image: placeholderImages.carbonless,
-    hasSubProducts: false,
-  },
-  {
-    name: 'Food Grade Papers',
-    slug: 'food-grade-papers',
-    description: 'Safe for direct food contact, our papers are perfect for packaging, baking, and serving. Ensuring quality and safety for your culinary needs.',
-    image: placeholderImages.foodgrade,
-    hasSubProducts: true,
-  },
-  {
-    name: 'Coated Paper',
-    slug: 'coated-paper',
-    description: 'Ideal for high-quality printing, our coated papers provide a smooth, glossy surface for vibrant and sharp image reproduction.',
-    image: placeholderImages.coated,
-    hasSubProducts: false,
-  },
-];
+const { categories } = categoriesData;
 
 /**
  * Renders the Products page, showcasing the main product categories.
@@ -84,11 +63,11 @@ export default function ProductsPage() {
                     <div className="group bg-card h-full rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border border-border/20 flex flex-col">
                       <div className="relative w-full h-56">
                         <Image
-                          src={category.image.url}
+                          src={placeholderImages[category.image].url}
                           alt={category.name}
-                          data-ai-hint={category.image.aiHint}
-                          width={category.image.width}
-                          height={category.image.height}
+                          data-ai-hint={placeholderImages[category.image].aiHint}
+                          width={placeholderImages[category.image].width}
+                          height={placeholderImages[category.image].height}
                           className="object-cover w-full h-full"
                         />
                       </div>

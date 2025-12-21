@@ -1,0 +1,26 @@
+
+{
+  "categories": [
+    {
+      "name": "Carbonless Paper",
+      "slug": "carbonless-paper",
+      "description": "High-quality, multi-part forms that transfer information from the top sheet to the sheets below without the need for carbon.",
+      "image": "carbonless",
+      "hasSubProducts": false
+    },
+    {
+      "name": "Food Grade Papers",
+      "slug": "food-grade-papers",
+      "description": "Safe for direct food contact, our papers are perfect for packaging, baking, and serving. Ensuring quality and safety for your culinary needs.",
+      "image": "foodgrade",
+      "hasSubProducts": true
+    },
+    {
+      "name": "Coated Paper",
+      "slug": "coated-paper",
+      "description": "Ideal for high-quality printing, our coated papers provide a smooth, glossy surface for vibrant and sharp image reproduction.",
+      "image": "coated",
+      "hasSubProducts": false
+    }
+  ]
+}
