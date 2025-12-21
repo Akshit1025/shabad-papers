@@ -29,6 +29,8 @@ async function fetchCategories() {
     return categories;
   } catch (error) {
     console.error("Error fetching categories:", error);
+    // This error likely means a composite index is needed in Firestore.
+    // The console in the browser will have a link to create it.
     return []; // Return empty array on error
   }
 }
