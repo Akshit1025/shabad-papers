@@ -1,26 +1,54 @@
 /**
  * @fileOverview The "Products" page of the application.
- * This page displays the main categories of products offered by the company.
+ * This page displays the main categories of products offered by the company, fetched dynamically from Firestore.
  */
 "use client";
 
+import { useState, useEffect } from 'react';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { ArrowRight, Loader } from 'lucide-react';
 import placeholderImages from '@/lib/placeholder-images.json';
-import categoriesData from '@/lib/categories.json';
+import { db } from '@/lib/firebase';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 
-const { categories } = categoriesData;
+/**
+ * Fetches product categories from Firestore.
+ * @returns {Promise<Array<object>>} A promise that resolves to an array of category objects.
+ */
+async function fetchCategories() {
+  try {
+    const categoriesCollection = collection(db, 'categories');
+    const q = query(categoriesCollection, orderBy('order', 'asc'));
+    const querySnapshot = await getDocs(q);
+    const categories = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return categories;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    return []; // Return empty array on error
+  }
+}
 
 /**
  * Renders the Products page, showcasing the main product categories.
  * @returns {JSX.Element} The Products page component.
  */
 export default function ProductsPage() {
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadCategories() {
+      const fetchedCategories = await fetchCategories();
+      setCategories(fetchedCategories);
+      setLoading(false);
+    }
+    loadCategories();
+  }, []);
+
   return (
     <div className="flex flex-col min-h-dvh bg-background">
       <Header />
@@ -43,51 +71,66 @@ export default function ProductsPage() {
               <div className="mt-4 w-24 h-1 bg-primary mx-auto"></div>
             </motion.div>
 
-            <motion.div 
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ staggerChildren: 0.2 }}
-            >
-              {categories.map((category, index) => (
-                <motion.div
-                  key={category.slug}
-                  variants={{
-                    hidden: { opacity: 0, y: 50 },
-                    visible: { opacity: 1, y: 0 }
-                  }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                >
-                  <Link href={`/products/${category.slug}`} className="block h-full">
-                    <div className="group bg-card h-full rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border border-border/20 flex flex-col">
-                      <div className="relative w-full h-56">
-                        <Image
-                          src={placeholderImages[category.image].url}
-                          alt={category.name}
-                          data-ai-hint={placeholderImages[category.image].aiHint}
-                          width={placeholderImages[category.image].width}
-                          height={placeholderImages[category.image].height}
-                          className="object-cover w-full h-full"
-                        />
-                      </div>
-                      <div className="p-6 flex flex-col flex-grow">
-                        <h3 className="text-xl font-headline font-bold mb-2 text-foreground">
-                          {category.name}
-                        </h3>
-                        <p className="text-muted-foreground text-sm flex-grow">
-                          {category.description}
-                        </p>
-                        <div className="mt-4 text-primary font-semibold text-sm flex items-center">
-                          {category.hasSubProducts ? 'View Products' : 'Learn More'}
-                          <ArrowRight className="ml-2 h-4 w-4" />
+            {loading ? (
+              <div className="flex justify-center items-center h-64">
+                <Loader className="h-12 w-12 animate-spin text-primary" />
+              </div>
+            ) : categories.length > 0 ? (
+              <motion.div 
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ staggerChildren: 0.2 }}
+              >
+                {categories.map((category, index) => (
+                  <motion.div
+                    key={category.slug}
+                    variants={{
+                      hidden: { opacity: 0, y: 50 },
+                      visible: { opacity: 1, y: 0 }
+                    }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  >
+                    <Link href={`/products/${category.slug}`} className="block h-full">
+                      <div className="group bg-card h-full rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border border-border/20 flex flex-col">
+                        <div className="relative w-full h-56">
+                          {placeholderImages[category.image] && (
+                             <Image
+                                src={placeholderImages[category.image].url}
+                                alt={category.name}
+                                data-ai-hint={placeholderImages[category.image].aiHint}
+                                width={placeholderImages[category.image].width}
+                                height={placeholderImages[category.image].height}
+                                className="object-cover w-full h-full"
+                              />
+                          )}
+                        </div>
+                        <div className="p-6 flex flex-col flex-grow">
+                          <h3 className="text-xl font-headline font-bold mb-2 text-foreground">
+                            {category.name}
+                          </h3>
+                          <p className="text-muted-foreground text-sm flex-grow">
+                            {category.description}
+                          </p>
+                          <div className="mt-4 text-primary font-semibold text-sm flex items-center">
+                            {category.hasSubProducts ? 'View Products' : 'Learn More'}
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </motion.div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </motion.div>
+            ) : (
+              <div className="text-center py-16">
+                <h2 className="text-2xl font-semibold text-muted-foreground">No Categories Found</h2>
+                <p className="mt-2 text-foreground">
+                  We couldn't retrieve any product categories at the moment. Please check back later.
+                </p>
+              </div>
+            )}
           </div>
         </section>
       </main>
