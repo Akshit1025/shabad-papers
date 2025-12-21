@@ -152,18 +152,20 @@ export default function CategoryDetailPage() {
                   >
                     <CarouselContent>
                       {category.media.map((itemKey) => (
-                        <CarouselItem key={itemKey}>
-                          <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden border shadow-lg">
-                            <Image
-                              src={placeholderImages[itemKey].url}
-                              alt={`${category.name} Image`}
-                              data-ai-hint={placeholderImages[itemKey].aiHint}
-                              width={placeholderImages[itemKey].width}
-                              height={placeholderImages[itemKey].height}
-                              className="object-cover w-full h-full"
-                            />
-                          </div>
-                        </CarouselItem>
+                        placeholderImages[itemKey] && (
+                          <CarouselItem key={itemKey}>
+                            <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden border shadow-lg">
+                              <Image
+                                src={placeholderImages[itemKey].url}
+                                alt={`${category.name} Image`}
+                                data-ai-hint={placeholderImages[itemKey].aiHint}
+                                width={placeholderImages[itemKey].width}
+                                height={placeholderImages[itemKey].height}
+                                className="object-cover w-full h-full"
+                              />
+                            </div>
+                          </CarouselItem>
+                        )
                       ))}
                     </CarouselContent>
                     <CarouselPrevious className="left-2" />
