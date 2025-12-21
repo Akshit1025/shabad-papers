@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import Image from 'next/image';
@@ -27,7 +27,7 @@ import { useParams } from 'next/navigation';
  */
 async function fetchCategory(slug) {
   try {
-    const q = query(collection(db, "categories"), where("slug", "==", slug));
+    const q = query(collection(db, "categories"), where("slug", "==", slug), where("visible", "==", true));
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) {
       console.log("No such category!");
@@ -38,6 +38,37 @@ async function fetchCategory(slug) {
     console.error("Error fetching category:", error);
     return null;
   }
+}
+
+/**
+ * Fetches sub-products for a given category slug.
+ * @param {string} categorySlug - The slug of the parent category.
+ * @returns {Promise<Array<object>>} A promise that resolves to an array of product objects.
+ */
+async function fetchProducts(categorySlug) {
+  try {
+    const q = query(collection(db, "products"), where("categorySlug", "==", categorySlug), orderBy("name", "asc"));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return [];
+  }
+}
+
+/**
+ * A helper to get an image source, preferring direct URLs over placeholder keys.
+ * @param {string} imageIdentifier - A URL or a key from placeholder-images.json.
+ * @returns {{url: string, width: number, height: number, aiHint: string}|null}
+ */
+function getImageSource(imageIdentifier) {
+  if (!imageIdentifier) return null;
+  if (imageIdentifier.startsWith('http')) {
+    // It's a direct URL, but we don't have width/height.
+    // For simplicity, we'll use some defaults. For production, these should be stored with the URL.
+    return { url: imageIdentifier, width: 800, height: 600, aiHint: 'product image' };
+  }
+  return placeholderImages[imageIdentifier] || null;
 }
 
 /**
@@ -61,6 +92,7 @@ export default function CategoryDetailPage() {
   const slug = params.slug;
 
   const [category, setCategory] = useState(null);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const plugin = React.useRef(
@@ -69,13 +101,19 @@ export default function CategoryDetailPage() {
 
   useEffect(() => {
     if (slug) {
-      const loadCategory = async () => {
+      const loadData = async () => {
         setLoading(true);
         const fetchedCategory = await fetchCategory(slug);
         setCategory(fetchedCategory);
+
+        if (fetchedCategory && fetchedCategory.hasSubProducts) {
+            const fetchedProducts = await fetchProducts(slug);
+            setProducts(fetchedProducts);
+        }
+
         setLoading(false);
       };
-      loadCategory();
+      loadData();
     }
   }, [slug]);
 
@@ -112,6 +150,7 @@ export default function CategoryDetailPage() {
   }
 
   const hasCarousel = Array.isArray(category.media) && category.media.length > 0;
+  const singleImageSrc = getImageSource(category.image || (category.media && category.media[0]));
 
   return (
     <div className="flex flex-col min-h-dvh bg-background">
@@ -142,7 +181,7 @@ export default function CategoryDetailPage() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.7 }}
               >
-                {hasCarousel ? (
+                {hasCarousel && category.slug !== 'food-grade-papers' ? (
                   <Carousel
                     className="w-full"
                     opts={{ loop: true }}
@@ -151,35 +190,36 @@ export default function CategoryDetailPage() {
                     onMouseLeave={plugin.current.reset}
                   >
                     <CarouselContent>
-                      {category.media.map((itemKey) => (
-                        placeholderImages[itemKey] && (
-                          <CarouselItem key={itemKey}>
+                      {category.media.map((itemIdentifier) => {
+                        const imageSrc = getImageSource(itemIdentifier);
+                        return imageSrc && (
+                          <CarouselItem key={itemIdentifier}>
                             <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden border shadow-lg">
                               <Image
-                                src={placeholderImages[itemKey].url}
+                                src={imageSrc.url}
                                 alt={`${category.name} Image`}
-                                data-ai-hint={placeholderImages[itemKey].aiHint}
-                                width={placeholderImages[itemKey].width}
-                                height={placeholderImages[itemKey].height}
+                                data-ai-hint={imageSrc.aiHint}
+                                width={imageSrc.width}
+                                height={imageSrc.height}
                                 className="object-cover w-full h-full"
                               />
                             </div>
                           </CarouselItem>
                         )
-                      ))}
+                      })}
                     </CarouselContent>
                     <CarouselPrevious className="left-2" />
                     <CarouselNext className="right-2" />
                   </Carousel>
                 ) : (
-                  placeholderImages[category.image] && (
+                  singleImageSrc && (
                     <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden border shadow-lg">
                       <Image
-                        src={placeholderImages[category.image].url}
+                        src={singleImageSrc.url}
                         alt={`${category.name} Image`}
-                        data-ai-hint={placeholderImages[category.image].aiHint}
-                        width={placeholderImages[category.image].width}
-                        height={placeholderImages[category.image].height}
+                        data-ai-hint={singleImageSrc.aiHint}
+                        width={singleImageSrc.width}
+                        height={singleImageSrc.height}
                         className="object-cover w-full h-full"
                       />
                     </div>
@@ -239,7 +279,7 @@ export default function CategoryDetailPage() {
               </motion.div>
             </div>
 
-            {category.hasSubProducts && Array.isArray(category.subProducts) && category.subProducts.length > 0 && (
+            {category.hasSubProducts && products.length > 0 && (
               <div className="mt-16 md:mt-24">
                 <motion.div
                   className="max-w-3xl mx-auto text-center mb-12"
@@ -261,41 +301,44 @@ export default function CategoryDetailPage() {
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{ staggerChildren: 0.2 }}
                 >
-                  {category.subProducts.map((product, index) => (
-                    <motion.div
-                      key={product.name}
-                      variants={{
-                        hidden: { opacity: 0, y: 50 },
-                        visible: { opacity: 1, y: 0 }
-                      }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                    >
-                      <Link href={`/products/${product.slug}`} className="block h-full">
-                        <div className="group bg-card h-full rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-border/20 flex flex-col">
-                          {placeholderImages[product.image] && (
-                            <div className="relative w-full h-56">
-                              <Image
-                                src={placeholderImages[product.image].url}
-                                alt={product.name}
-                                data-ai-hint={placeholderImages[product.image].aiHint}
-                                width={placeholderImages[product.image].width}
-                                height={placeholderImages[product.image].height}
-                                className="object-cover w-full h-full"
-                              />
+                  {products.map((product, index) => {
+                    const productImageSrc = getImageSource(product.image);
+                    return (
+                        <motion.div
+                          key={product.slug}
+                          variants={{
+                            hidden: { opacity: 0, y: 50 },
+                            visible: { opacity: 1, y: 0 }
+                          }}
+                          transition={{ duration: 0.5, delay: index * 0.1 }}
+                        >
+                          <Link href={`/products/${product.slug}`} className="block h-full">
+                            <div className="group bg-card h-full rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-border/20 flex flex-col">
+                              {productImageSrc && (
+                                <div className="relative w-full h-56">
+                                  <Image
+                                    src={productImageSrc.url}
+                                    alt={product.name}
+                                    data-ai-hint={productImageSrc.aiHint}
+                                    width={productImageSrc.width}
+                                    height={productImageSrc.height}
+                                    className="object-cover w-full h-full"
+                                  />
+                                </div>
+                              )}
+                              <div className="p-6 flex flex-col flex-grow">
+                                <h3 className="text-xl font-headline font-bold mb-2 text-foreground">
+                                  {product.name}
+                                </h3>
+                                <p className="text-muted-foreground text-sm flex-grow">
+                                  {product.description}
+                                </p>
+                              </div>
                             </div>
-                          )}
-                          <div className="p-6 flex flex-col flex-grow">
-                            <h3 className="text-xl font-headline font-bold mb-2 text-foreground">
-                              {product.name}
-                            </h3>
-                            <p className="text-muted-foreground text-sm flex-grow">
-                              {product.description}
-                            </p>
-                          </div>
-                        </div>
-                      </Link>
-                    </motion.div>
-                  ))}
+                          </Link>
+                        </motion.div>
+                    );
+                  })}
                 </motion.div>
               </div>
             )}
