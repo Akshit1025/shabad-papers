@@ -48,9 +48,10 @@ export function ProductHero({ title, subtitle }) {
  * @param {string} props.description - The product description.
  * @param {object} props.image - The image object from placeholder-images.json or a direct URL.
  * @param {string} props.categorySlug - The slug of the parent category.
+ * @param {string} props.formDefinitionId - The ID for the form definition.
  * @returns {JSX.Element} The rendered content section.
  */
-export function ProductContent({ productName, description, image, categorySlug }) {
+export function ProductContent({ productName, description, image, categorySlug, formDefinitionId }) {
   return (
     <section className="py-16 md:py-24 bg-background">
       <div className="container max-w-5xl px-4">
@@ -116,7 +117,7 @@ export function ProductContent({ productName, description, image, categorySlug }
               View All Categories
             </Link>
           </Button>
-          <ProductInquiryDialog productName={productName} />
+          <ProductInquiryDialog productName={productName} formDefinitionId={formDefinitionId} />
         </motion.div>
       </div>
     </section>

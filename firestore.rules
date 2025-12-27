@@ -14,5 +14,11 @@ service cloud.firestore {
       allow read: if true;
       allow write: if false; // Disallow public writes
     }
+
+    // Allow public read access to form definitions
+    match /formDefinitions/{formId} {
+      allow read: if true;
+      allow write: if false; // Disallow public writes
+    }
   }
 }

@@ -316,7 +316,10 @@ const CategoryDetailView = ({ category, products }) => {
               View All Categories
             </Link>
           </Button>
-          <ProductInquiryDialog productName={category.name} />
+          <ProductInquiryDialog 
+            productName={category.name} 
+            formDefinitionId={category.slug}
+          />
         </motion.div>
       </div>
     </section>
@@ -340,6 +343,7 @@ const ProductDetailView = ({ product }) => {
                 description={description}
                 image={imageSrc}
                 categorySlug={product.categorySlug}
+                formDefinitionId={product.categorySlug}
             />
         </>
     );

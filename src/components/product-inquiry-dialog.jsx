@@ -1,14 +1,10 @@
 /**
  * @fileOverview A dialog component containing a form for product inquiries.
- * This component is reusable for different products.
+ * This component is reusable and renders a dynamic form based on a definition from Firestore.
  */
 "use client";
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { submitInquiry } from "@/app/actions";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,68 +15,124 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { Send } from "lucide-react";
+import { DynamicInquiryForm } from "@/components/dynamic-inquiry-form";
+import { Loader, Send, AlertCircle } from "lucide-react";
+import { db } from "@/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
-const formSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email address." }),
-  message: z.string().min(10, { message: "Message must be at least 10 characters." }),
-  product: z.string(),
-});
+
+/**
+ * Fetches a form definition from Firestore.
+ * @param {string} formId - The ID of the form definition to fetch (usually the category slug).
+ * @returns {Promise<object|null>} The form definition object or null if not found.
+ */
+async function fetchFormDefinition(formId) {
+    if (!formId) return null;
+    try {
+        const docRef = doc(db, "formDefinitions", formId);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            return docSnap.data();
+        } else {
+            console.warn(`No form definition found for ID: ${formId}`);
+            return null;
+        }
+    } catch (error) {
+        console.error("Error fetching form definition:", error);
+        return null;
+    }
+}
+
 
 /**
  * A dialog with a form for making a product inquiry.
  * @param {object} props - Component props.
  * @param {string} props.productName - The name of the product for the inquiry.
+ * @param {string} props.formDefinitionId - The ID to fetch the form definition from Firestore.
  * @returns {JSX.Element} The rendered dialog component.
  */
-export function ProductInquiryDialog({ productName }) {
-  const [loading, setLoading] = useState(false);
+export function ProductInquiryDialog({ productName, formDefinitionId }) {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [formDefinition, setFormDefinition] = useState(null);
+  const [error, setError] = useState(null);
   const { toast } = useToast();
 
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      message: `I'd like to inquire about ${productName}.`,
-      product: productName,
-    },
-  });
+  useEffect(() => {
+    if (open && !formDefinition) {
+      const loadDefinition = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+          let definition = await fetchFormDefinition(formDefinitionId);
+          if (!definition) {
+             // Fallback to a default form definition if none is found
+             console.log(`No specific form for ${formDefinitionId}, falling back to default.`);
+             definition = await fetchFormDefinition('default');
+             if (!definition) {
+                throw new Error("Default form definition could not be loaded.");
+             }
+          }
 
-  async function onSubmit(values) {
-    setLoading(true);
-    try {
-      const response = await submitInquiry(values);
-      if (response.success) {
-        toast({
-          title: "Inquiry Sent!",
-          description: "Thank you for your message. We'll be in touch soon.",
-        });
-        form.reset();
-        setOpen(false);
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: response.error || "Failed to send inquiry.",
-        });
-      }
-    } catch (e) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "An unexpected error occurred. Please try again.",
-      });
-    } finally {
-      setLoading(false);
+          // Pre-fill the product name if a 'product' field exists
+          const productField = definition.fields.find(f => f.name === 'product');
+          if(productField) {
+            productField.defaultValue = productName;
+          }
+          const messageField = definition.fields.find(f => f.name === 'message');
+          if (messageField && !messageField.defaultValue) {
+             messageField.defaultValue = `I'd like to inquire about ${productName}.`;
+          }
+
+          setFormDefinition(definition);
+        } catch(e) {
+          setError(e.message || "Could not load the inquiry form.");
+          toast({
+              variant: "destructive",
+              title: "Error",
+              description: e.message || "Failed to load inquiry form.",
+          });
+        } finally {
+            setLoading(false);
+        }
+      };
+      loadDefinition();
     }
+  }, [open, formDefinitionId, productName, toast, formDefinition]);
+
+
+  const renderContent = () => {
+    if (loading) {
+        return (
+            <div className="flex flex-col items-center justify-center p-8 gap-4">
+                <Loader className="h-8 w-8 animate-spin text-primary" />
+                <p className="text-muted-foreground">Loading Form...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+         return (
+            <div className="flex flex-col items-center justify-center p-8 gap-4 text-destructive">
+                <AlertCircle className="h-8 w-8" />
+                <p className="text-center">{error}</p>
+                <Button variant="outline" onClick={() => setOpen(false)}>Close</Button>
+            </div>
+        );
+    }
+    
+    if (formDefinition) {
+        return (
+            <div className="pt-4">
+                <DynamicInquiryForm 
+                    formDefinition={formDefinition} 
+                    onFormSubmit={() => setOpen(false)}
+                />
+            </div>
+        );
+    }
+
+    return null;
   }
 
   return (
@@ -93,60 +145,12 @@ export function ProductInquiryDialog({ productName }) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Inquire about {productName}</DialogTitle>
+          <DialogTitle>{formDefinition?.title || `Inquire about ${productName}`}</DialogTitle>
           <DialogDescription>
-            Fill out the form below and we'll get back to you as soon as possible.
+            {formDefinition?.description || "Fill out the form and we'll get back to you soon."}
           </DialogDescription>
         </DialogHeader>
-        <div className="pt-4">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Your Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="John Doe" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Your Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="john.doe@example.com" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="message"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Your Message</FormLabel>
-                    <FormControl>
-                      <Textarea className="min-h-[100px]" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" disabled={loading} className="w-full">
-                {loading && <FontAwesomeIcon icon={faSpinner} className="mr-2 h-4 w-4 animate-spin" />}
-                Send Inquiry
-              </Button>
-            </form>
-          </Form>
-        </div>
+        {renderContent()}
       </DialogContent>
     </Dialog>
   );
