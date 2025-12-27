@@ -330,8 +330,13 @@ const CategoryDetailView = ({ category, products }) => {
  * Renders the UI for a Product.
  */
 const ProductDetailView = ({ product }) => {
-    const imageSrc = getImageSource(product.image);
     const description = product.longDescription || product.description;
+    
+    // Create an array of image sources from the 'media' field, or fallback to 'image'.
+    const mediaItems = (Array.isArray(product.media) && product.media.length > 0)
+        ? product.media.map(getImageSource).filter(Boolean)
+        : (product.image ? [getImageSource(product.image)].filter(Boolean) : []);
+
     return (
         <>
             <ProductHero 
@@ -341,7 +346,7 @@ const ProductDetailView = ({ product }) => {
             <ProductContent
                 productName={product.name}
                 description={description}
-                image={imageSrc}
+                media={mediaItems}
                 categorySlug={product.categorySlug}
                 formDefinitionId={product.categorySlug}
             />

@@ -3,12 +3,15 @@
  */
 "use client";
 
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Grid3X3, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ProductInquiryDialog } from '@/components/product-inquiry-dialog';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import Autoplay from "embla-carousel-autoplay";
 
 /**
  * A styled hero section for a product page.
@@ -46,36 +49,70 @@ export function ProductHero({ title, subtitle }) {
  * @param {object} props - Component props.
  * @param {string} props.productName - The name of the product.
  * @param {string} props.description - The product description.
- * @param {object} props.image - The image object from placeholder-images.json or a direct URL.
+ * @param {Array<object>} props.media - An array of image objects.
  * @param {string} props.categorySlug - The slug of the parent category.
  * @param {string} props.formDefinitionId - The ID for the form definition.
  * @returns {JSX.Element} The rendered content section.
  */
-export function ProductContent({ productName, description, image, categorySlug, formDefinitionId }) {
+export function ProductContent({ productName, description, media, categorySlug, formDefinitionId }) {
+  const plugin = React.useRef(
+    Autoplay({ delay: 2500, stopOnInteraction: true })
+  );
+
+  const hasCarousel = Array.isArray(media) && media.length > 1;
+  const singleImageSrc = Array.isArray(media) && media.length === 1 ? media[0] : null;
+
   return (
     <section className="py-16 md:py-24 bg-background">
       <div className="container max-w-5xl px-4">
         {/* Main Content Grid */}
         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
-          {/* Left Column: Image */}
+          {/* Left Column: Image/Carousel */}
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
-           {image && (
-             <div className="rounded-lg overflow-hidden border shadow-lg">
+           {hasCarousel ? (
+              <Carousel
+                className="w-full"
+                opts={{ loop: true }}
+                plugins={[plugin.current]}
+                onMouseEnter={plugin.current.stop}
+                onMouseLeave={plugin.current.reset}
+              >
+                <CarouselContent>
+                  {media.map((image, index) => (
+                    <CarouselItem key={`${image.url}-${index}`}>
+                      <div className="aspect-w-4 aspect-h-3 rounded-lg overflow-hidden border shadow-lg">
+                        <Image
+                          src={image.url}
+                          alt={`${productName} Image ${index + 1}`}
+                          data-ai-hint={image.aiHint}
+                          width={image.width}
+                          height={image.height}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-2" />
+                <CarouselNext className="right-2" />
+              </Carousel>
+           ) : singleImageSrc ? (
+             <div className="rounded-lg overflow-hidden border shadow-lg aspect-w-4 aspect-h-3">
                 <Image
-                    src={image.url}
+                    src={singleImageSrc.url}
                     alt={`${productName} Image`}
-                    data-ai-hint={image.aiHint}
-                    width={image.width}
-                    height={image.height}
+                    data-ai-hint={singleImageSrc.aiHint}
+                    width={singleImageSrc.width}
+                    height={singleImageSrc.height}
                     className="object-cover w-full h-full"
                 />
              </div>
-            )}
+           ) : null}
           </motion.div>
 
           {/* Right Column: Description */}
