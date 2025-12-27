@@ -181,7 +181,7 @@ export default function CategoryDetailPage() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.7 }}
               >
-                {hasCarousel && category.slug !== 'food-grade-papers' ? (
+                {hasCarousel ? (
                   <Carousel
                     className="w-full"
                     opts={{ loop: true }}
