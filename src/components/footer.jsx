@@ -90,9 +90,9 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-border/40">
-        <div className="container py-4 flex flex-col sm:flex-row justify-between items-center text-sm text-muted-foreground space-y-2 sm:space-y-0">
+        <div className="container py-4 flex flex-col sm:flex-row justify-between items-center text-center sm:text-left text-sm text-muted-foreground space-y-4 sm:space-y-0">
             <p>&copy; {currentYear} {companyInfo.tradeName}. All Rights Reserved.</p>
-            <div className="flex items-center gap-x-4">
+            <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2">
                 <Link href="#" className="hover:text-primary transition-colors">Privacy Policy</Link>
                 <Link href="#" className="hover:text-primary transition-colors">Terms & Conditions</Link>
                 <p className="flex items-center gap-1">
