@@ -47,7 +47,7 @@ async function fetchCategory(slug) {
  */
 async function fetchProducts(categorySlug) {
   try {
-    const q = query(collection(db, "products"), where("categorySlug", "==", categorySlug), orderBy("name", "asc"));
+    const q = query(collection(db, "products"), where("categorySlug", "==", categorySlug), orderBy("order", "asc"));
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   } catch (error) {
