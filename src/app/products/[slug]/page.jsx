@@ -151,10 +151,10 @@ const CategoryDetailView = ({ category, products }) => {
                 onMouseLeave={plugin.current.reset}
               >
                 <CarouselContent>
-                  {category.media.map((itemIdentifier) => {
+                  {category.media.map((itemIdentifier, index) => {
                     const imageSrc = getImageSource(itemIdentifier);
                     return imageSrc && (
-                      <CarouselItem key={itemIdentifier}>
+                      <CarouselItem key={`${itemIdentifier}-${index}`}>
                         <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden border shadow-lg">
                           <Image
                             src={imageSrc.url}
