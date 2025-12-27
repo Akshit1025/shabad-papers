@@ -88,7 +88,9 @@ function getImageSource(imageIdentifier) {
     // For simplicity, we'll use some defaults. For production, these should be stored with the URL.
     return { url: imageIdentifier, width: 800, height: 600, aiHint: 'product image' };
   }
-  return placeholderImages[imageIdentifier] || null;
+  const placeholder = placeholderImages[imageIdentifier];
+  if (!placeholder) return null;
+  return placeholder;
 }
 
 /**
@@ -326,15 +328,16 @@ const CategoryDetailView = ({ category, products }) => {
  */
 const ProductDetailView = ({ product }) => {
     const imageSrc = getImageSource(product.image);
+    const description = product.longDescription || product.description;
     return (
         <>
             <ProductHero 
               title={product.name} 
-              subtitle={product.longDescription || product.description} 
+              subtitle={product.description} 
             />
             <ProductContent
                 productName={product.name}
-                description={product.description}
+                description={description}
                 image={imageSrc}
                 categorySlug={product.categorySlug}
             />
