@@ -39,8 +39,8 @@ function buildSchema(fields) {
     }
 
     if (field.required) {
-      if (field.type === 'email') {
-        schema = schema.min(1, { message: "This field is required." });
+      if (field.type === 'email' || (field.type === 'text' && !field.minLength)) {
+        schema = schema.min(1, { message: field.errorMessage || "This field is required." });
       } else {
         schema = schema.min(field.minLength || 1, { message: field.errorMessage || "This field is required." });
       }
