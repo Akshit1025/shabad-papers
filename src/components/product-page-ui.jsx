@@ -9,7 +9,6 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Grid3X3, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ProductInquiryDialog } from '@/components/product-inquiry-dialog';
-import placeholderImages from '@/lib/placeholder-images.json';
 
 /**
  * A styled hero section for a product page.
@@ -47,10 +46,11 @@ export function ProductHero({ title, subtitle }) {
  * @param {object} props - Component props.
  * @param {string} props.productName - The name of the product.
  * @param {string} props.description - The product description.
- * @param {object} props.image - The image object from placeholder-images.json.
+ * @param {object} props.image - The image object from placeholder-images.json or a direct URL.
+ * @param {string} props.categorySlug - The slug of the parent category.
  * @returns {JSX.Element} The rendered content section.
  */
-export function ProductContent({ productName, description, image }) {
+export function ProductContent({ productName, description, image, categorySlug }) {
   return (
     <section className="py-16 md:py-24 bg-background">
       <div className="container max-w-5xl px-4">
@@ -63,16 +63,18 @@ export function ProductContent({ productName, description, image }) {
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
-            <div className="rounded-lg overflow-hidden border shadow-lg">
-              <Image
-                src={image.url}
-                alt={`${productName} Image`}
-                data-ai-hint={image.aiHint}
-                width={image.width}
-                height={image.height}
-                className="object-cover w-full h-full"
-              />
-            </div>
+           {image && (
+             <div className="rounded-lg overflow-hidden border shadow-lg">
+                <Image
+                    src={image.url}
+                    alt={`${productName} Image`}
+                    data-ai-hint={image.aiHint}
+                    width={image.width}
+                    height={image.height}
+                    className="object-cover w-full h-full"
+                />
+             </div>
+            )}
           </motion.div>
 
           {/* Right Column: Description */}
@@ -100,12 +102,14 @@ export function ProductContent({ productName, description, image }) {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          <Button asChild size="lg" variant="outline">
-            <Link href="/products/food-grade-papers">
-              <ArrowLeft className="mr-2 h-5 w-5" />
-              Back to Food Grade Papers
-            </Link>
-          </Button>
+          {categorySlug && (
+            <Button asChild size="lg" variant="outline">
+              <Link href={`/products/${categorySlug}`}>
+                <ArrowLeft className="mr-2 h-5 w-5" />
+                Back to Parent Category
+              </Link>
+            </Button>
+          )}
           <Button asChild size="lg" variant="outline">
             <Link href="/products">
               <Grid3X3 className="mr-2 h-5 w-5" />
