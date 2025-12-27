@@ -8,6 +8,7 @@ import { Footer } from '@/components/footer';
 import { Hero } from '@/components/sections/hero';
 import { About } from '@/components/sections/about';
 import { CoreStrengths } from '@/components/sections/core-strengths';
+import { OurProducts } from '@/components/sections/our-products';
 
 /**
  * Renders the Home page.
@@ -21,6 +22,7 @@ export default function HomePage() {
         <Hero />
         <About />
         <CoreStrengths />
+        <OurProducts />
       </main>
       <Footer />
     </div>
