@@ -12,16 +12,12 @@ const inquirySchema = z.object({
     email: z.string().email(),
     message: z.string(),
     product: z.string().optional(),
-});
+    // Allow any other fields that might come from dynamic forms
+}).passthrough();
 
 /**
- * Submits a user inquiry from the contact form.
- * In a real application, this would handle sending an email or saving to a database.
+ * Submits a user inquiry from the contact form to Web3Forms.
  * @param {object} input - The user's inquiry data.
- * @param {string} input.name - The user's name.
- * @param {string} input.email - The user's email.
- * @param {string} input.message - The user's message.
- * @param {string} [input.product] - The product being inquired about.
  * @returns {Promise<{success: boolean, error?: string}>} An object indicating success or failure.
  */
 export async function submitInquiry(input) {
@@ -30,9 +26,40 @@ export async function submitInquiry(input) {
         return { success: false, error: "Invalid input." };
     }
 
-    // In a real application, you would send an email, save to a database, etc.
-    // For this example, we'll just log it to the console.
-    console.log("New inquiry received:", parsedInput.data);
+    const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
+    if (!accessKey) {
+        console.error("Web3Forms Access Key is not set in environment variables.");
+        return { success: false, error: "Server configuration error: cannot send email." };
+    }
 
-    return { success: true };
+    const formData = {
+        ...parsedInput.data,
+        access_key: accessKey,
+        subject: `New Inquiry from ${parsedInput.data.name}`,
+        from_name: "Shabad Papers Website",
+    };
+
+    try {
+        const response = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            console.log("Inquiry successfully sent via Web3Forms:", result);
+            return { success: true };
+        } else {
+            console.error("Web3Forms API Error:", result.message);
+            return { success: false, error: result.message || "An error occurred while sending the form." };
+        }
+    } catch (error) {
+        console.error("Failed to send inquiry via Web3Forms:", error);
+        return { success: false, error: "Could not connect to the form submission service." };
+    }
 }
