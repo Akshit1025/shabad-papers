@@ -13,6 +13,9 @@ config.autoAddCss = false
 export const metadata = {
   title: "Shabad Papers Official",
   description: "Your trusted partner in paper trading and wholesale supply. Discover quality paper solutions with Shabad Papers LLP.",
+  icons: {
+    icon: '/images/sp-logo.png',
+  },
 };
 
 /**
