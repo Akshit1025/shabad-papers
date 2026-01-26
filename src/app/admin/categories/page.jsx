@@ -12,13 +12,13 @@ import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Loader, PlusCircle } from 'lucide-react';
 import { CategoriesTable } from '@/components/admin/categories-table';
-import { CategoryFormDialog } from '@/components/admin/category-form-dialog';
+import { CategoryForm } from '@/components/admin/category-form';
 import { DeleteCategoryAlert } from '@/components/admin/delete-category-alert';
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [categoryToDelete, setCategoryToDelete] = useState(null);
@@ -45,12 +45,12 @@ export default function CategoriesPage() {
 
   const handleCreate = () => {
     setSelectedCategory(null);
-    setIsFormOpen(true);
+    setShowForm(true);
   };
 
   const handleEdit = (category) => {
     setSelectedCategory(category);
-    setIsFormOpen(true);
+    setShowForm(true);
   };
 
   const handleDelete = (category) => {
@@ -59,7 +59,7 @@ export default function CategoriesPage() {
   };
   
   const handleFormClose = () => {
-      setIsFormOpen(false);
+      setShowForm(false);
       setSelectedCategory(null);
   }
 
@@ -67,7 +67,7 @@ export default function CategoriesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Manage Categories</h1>
-        <Button onClick={handleCreate}>
+        <Button onClick={handleCreate} disabled={showForm}>
           <PlusCircle className="mr-2 h-4 w-4" />
           Create Category
         </Button>
@@ -85,11 +85,12 @@ export default function CategoriesPage() {
         />
       )}
       
-      <CategoryFormDialog
-        isOpen={isFormOpen}
-        onClose={handleFormClose}
-        category={selectedCategory}
-      />
+      {showForm && (
+        <CategoryForm
+            onClose={handleFormClose}
+            category={selectedCategory}
+        />
+      )}
 
       <DeleteCategoryAlert
         isOpen={isAlertOpen}

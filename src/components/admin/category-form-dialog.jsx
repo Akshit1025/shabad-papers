@@ -7,14 +7,7 @@ import * as z from 'zod';
 import { useToast } from '@/hooks/use-toast';
 import { db } from '@/lib/firebase';
 import { doc, addDoc, setDoc, collection, serverTimestamp } from 'firebase/firestore';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter
-} from '@/components/ui/dialog';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -36,11 +29,10 @@ const formSchema = z.object({
   applications: z.array(z.string()).optional(),
 });
 
-export function CategoryFormDialog({ isOpen, onClose, category }) {
+export function CategoryForm({ onClose, category }) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const isEditMode = !!category;
-  const formId = "category-form";
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -60,7 +52,7 @@ export function CategoryFormDialog({ isOpen, onClose, category }) {
   });
   
   useEffect(() => {
-    if (isEditMode && isOpen) {
+    if (isEditMode) {
       form.reset({
         name: category.name || '',
         slug: category.slug || '',
@@ -70,12 +62,11 @@ export function CategoryFormDialog({ isOpen, onClose, category }) {
         visible: category.visible !== undefined ? category.visible : true,
         hasSubProducts: category.hasSubProducts !== undefined ? category.hasSubProducts : false,
         image: category.image || '',
-        // Make sure array fields are not undefined
         media: category.media || [], 
         benefits: category.benefits || [],
         applications: category.applications || [],
       });
-    } else if (!isEditMode && isOpen) {
+    } else {
       form.reset({
         name: '',
         slug: '',
@@ -90,7 +81,7 @@ export function CategoryFormDialog({ isOpen, onClose, category }) {
         applications: [],
       });
     }
-  }, [category, isEditMode, isOpen, form]);
+  }, [category, isEditMode, form]);
 
   const onSubmit = async (values) => {
     setLoading(true);
@@ -138,185 +129,183 @@ export function CategoryFormDialog({ isOpen, onClose, category }) {
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-2xl">
-        <DialogHeader>
-          <DialogTitle>{isEditMode ? 'Edit Category' : 'Create New Category'}</DialogTitle>
-          <DialogDescription>
-            {isEditMode ? 'Update the details of this category.' : 'Fill in the details to create a new category.'}
-          </DialogDescription>
-        </DialogHeader>
-        <div className="max-h-[65vh] overflow-y-auto pr-6">
-            <Form {...form}>
-            <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Category Name</FormLabel>
-                    <FormControl>
-                        <Input placeholder="e.g., Carbonless Paper" {...field} onChange={handleNameChange} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
-                <FormField
-                control={form.control}
-                name="slug"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Slug</FormLabel>
-                    <FormControl>
-                        <Input placeholder="e.g., carbonless-paper" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
-                <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Short Description</FormLabel>
-                    <FormControl>
-                        <Textarea placeholder="A brief summary for the category card." {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
-                <FormField
-                control={form.control}
-                name="longDescription"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Long Description (Optional)</FormLabel>
-                    <FormControl>
-                        <Textarea placeholder="A detailed description for the category page." {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
-                <FormField
-                control={form.control}
-                name="order"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Display Order</FormLabel>
-                    <FormControl>
-                        <Input type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
-                <FormField
-                control={form.control}
-                name="image"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Card Image Key</FormLabel>
-                    <FormControl>
-                        <Input placeholder="Key from placeholder-images.json" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
-                <FormField
-                control={form.control}
-                name="media"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Carousel Media Keys (comma-separated)</FormLabel>
-                    <FormControl>
-                        <Input placeholder="key1, key2, key3" defaultValue={Array.isArray(field.value) ? field.value.join(', ') : ''} onChange={handleStringToArray('media')} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
-                <FormField
-                control={form.control}
-                name="benefits"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Benefits (comma-separated)</FormLabel>
-                    <FormControl>
-                        <Input placeholder="Benefit one, Benefit two" defaultValue={Array.isArray(field.value) ? field.value.join(', ') : ''} onChange={handleStringToArray('benefits')} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
-                <FormField
-                control={form.control}
-                name="applications"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Applications (comma-separated)</FormLabel>
-                    <FormControl>
-                        <Input placeholder="App one, App two" defaultValue={Array.isArray(field.value) ? field.value.join(', ') : ''} onChange={handleStringToArray('applications')} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
-                <div className='flex gap-8'>
+    <Card className="mt-6">
+        <CardHeader>
+            <CardTitle>{isEditMode ? 'Edit Category' : 'Create New Category'}</CardTitle>
+            <CardDescription>
+                {isEditMode ? 'Update the details of this category.' : 'Fill in the details to create a new category.'}
+            </CardDescription>
+        </CardHeader>
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+                <CardContent className="space-y-4">
                     <FormField
                     control={form.control}
-                    name="visible"
+                    name="name"
                     render={({ field }) => (
-                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1">
-                        <div className="space-y-0.5">
-                            <FormLabel>Visible</FormLabel>
-                            <FormMessage />
-                        </div>
+                        <FormItem>
+                        <FormLabel>Category Name</FormLabel>
                         <FormControl>
-                            <Switch
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                            />
+                            <Input placeholder="e.g., Carbonless Paper" {...field} onChange={handleNameChange} />
                         </FormControl>
+                        <FormMessage />
                         </FormItem>
                     )}
                     />
                     <FormField
                     control={form.control}
-                    name="hasSubProducts"
+                    name="slug"
                     render={({ field }) => (
-                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1">
-                        <div className="space-y-0.5">
-                            <FormLabel>Has Sub-Products</FormLabel>
-                            <FormMessage />
-                        </div>
+                        <FormItem>
+                        <FormLabel>Slug</FormLabel>
                         <FormControl>
-                            <Switch
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                            />
+                            <Input placeholder="e.g., carbonless-paper" {...field} />
                         </FormControl>
+                        <FormMessage />
                         </FormItem>
                     )}
                     />
-                </div>
+                    <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Short Description</FormLabel>
+                        <FormControl>
+                            <Textarea placeholder="A brief summary for the category card." {...field} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="longDescription"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Long Description (Optional)</FormLabel>
+                        <FormControl>
+                            <Textarea placeholder="A detailed description for the category page." {...field} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="order"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Display Order</FormLabel>
+                        <FormControl>
+                            <Input type="number" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="image"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Card Image Key</FormLabel>
+                        <FormControl>
+                            <Input placeholder="Key from placeholder-images.json" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="media"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Carousel Media Keys (comma-separated)</FormLabel>
+                        <FormControl>
+                            <Input placeholder="key1, key2, key3" defaultValue={Array.isArray(field.value) ? field.value.join(', ') : ''} onChange={handleStringToArray('media')} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="benefits"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Benefits (comma-separated)</FormLabel>
+                        <FormControl>
+                            <Input placeholder="Benefit one, Benefit two" defaultValue={Array.isArray(field.value) ? field.value.join(', ') : ''} onChange={handleStringToArray('benefits')} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="applications"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Applications (comma-separated)</FormLabel>
+                        <FormControl>
+                            <Input placeholder="App one, App two" defaultValue={Array.isArray(field.value) ? field.value.join(', ') : ''} onChange={handleStringToArray('applications')} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <div className='flex gap-8'>
+                        <FormField
+                        control={form.control}
+                        name="visible"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1">
+                            <div className="space-y-0.5">
+                                <FormLabel>Visible</FormLabel>
+                                <FormMessage />
+                            </div>
+                            <FormControl>
+                                <Switch
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                                />
+                            </FormControl>
+                            </FormItem>
+                        )}
+                        />
+                        <FormField
+                        control={form.control}
+                        name="hasSubProducts"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1">
+                            <div className="space-y-0.5">
+                                <FormLabel>Has Sub-Products</FormLabel>
+                                <FormMessage />
+                            </div>
+                            <FormControl>
+                                <Switch
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                                />
+                            </FormControl>
+                            </FormItem>
+                        )}
+                        />
+                    </div>
+                </CardContent>
+                <CardFooter className="flex justify-end gap-2">
+                    <Button type="button" variant="outline" onClick={onClose} disabled={loading}>
+                    Cancel
+                    </Button>
+                    <Button type="submit" disabled={loading}>
+                    {loading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
+                    {isEditMode ? 'Save Changes' : 'Create Category'}
+                    </Button>
+                </CardFooter>
             </form>
-            </Form>
-        </div>
-        <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose} disabled={loading}>
-            Cancel
-            </Button>
-            <Button type="submit" form={formId} disabled={loading}>
-            {loading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
-            {isEditMode ? 'Save Changes' : 'Create Category'}
-            </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </Form>
+    </Card>
   );
 }
