@@ -148,12 +148,12 @@ export function CategoryForm({ onClose, category }) {
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <CardContent className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <FormField
                             control={form.control}
                             name="name"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className="md:col-span-2">
                                     <FormLabel>Category Name</FormLabel>
                                     <FormControl>
                                         <Input placeholder="e.g., Carbonless Paper" {...field} />
@@ -164,9 +164,22 @@ export function CategoryForm({ onClose, category }) {
                         />
                         <FormField
                             control={form.control}
-                            name="slug"
+                            name="order"
                             render={({ field }) => (
                                 <FormItem>
+                                    <FormLabel>Display Order</FormLabel>
+                                    <FormControl>
+                                        <Input type="number" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                         <FormField
+                            control={form.control}
+                            name="slug"
+                            render={({ field }) => (
+                                <FormItem className="md:col-span-3">
                                     <FormLabel>Slug</FormLabel>
                                     <FormControl>
                                         <Input placeholder="e.g., carbonless-paper" {...field} />
@@ -203,21 +216,9 @@ export function CategoryForm({ onClose, category }) {
                         )}
                     />
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <FormField
-                            control={form.control}
-                            name="order"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Display Order</FormLabel>
-                                    <FormControl>
-                                        <Input type="number" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
+                    <div className="space-y-4 rounded-lg border p-4">
+                        <h3 className="text-lg font-medium">Main Image</h3>
+                         <FormField
                             control={form.control}
                             name="image"
                             render={({ field }) => (
@@ -230,12 +231,24 @@ export function CategoryForm({ onClose, category }) {
                                 </FormItem>
                             )}
                         />
-                    </div>
-
-                    <div className="space-y-4 rounded-lg border p-4">
-                        <h3 className="text-lg font-medium">Category Details</h3>
                         <div className="space-y-2">
-                            <FormLabel>Carousel Media URLs (Images & Videos)</FormLabel>
+                             <p className="text-sm text-muted-foreground">
+                                Alternatively, upload an image. File upload is not yet functional.
+                            </p>
+                            <div className="flex items-center justify-center w-full">
+                                <div className="flex flex-col items-center justify-center pt-5 pb-6 w-full border-2 border-dashed rounded-lg cursor-not-allowed bg-muted/50">
+                                    <UploadCloud className="w-10 h-10 mb-4 text-muted-foreground" />
+                                    <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                                    <p className="text-xs text-muted-foreground">Main card image (JPG, PNG, etc.)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div className="space-y-4 rounded-lg border p-4">
+                        <h3 className="text-lg font-medium">Carousel Media</h3>
+                        <div className="space-y-2">
+                            <FormLabel>Media URLs (Images & Videos)</FormLabel>
                             {mediaFields.map((field, index) => (
                                 <FormField
                                     key={field.id}
@@ -261,6 +274,22 @@ export function CategoryForm({ onClose, category }) {
                                 Add Media URL
                             </Button>
                         </div>
+                         <div className="space-y-2">
+                             <p className="text-sm text-muted-foreground">
+                                Alternatively, upload media. File upload is not yet functional.
+                            </p>
+                            <div className="flex items-center justify-center w-full">
+                                <div className="flex flex-col items-center justify-center pt-5 pb-6 w-full border-2 border-dashed rounded-lg cursor-not-allowed bg-muted/50">
+                                    <UploadCloud className="w-10 h-10 mb-4 text-muted-foreground" />
+                                    <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                                    <p className="text-xs text-muted-foreground">Images or Videos for the carousel</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="space-y-4 rounded-lg border p-4">
+                        <h3 className="text-lg font-medium">Additional Details</h3>
                         <div className="space-y-2">
                             <FormLabel>Benefits</FormLabel>
                             {benefitFields.map((field, index) => (
@@ -317,20 +346,6 @@ export function CategoryForm({ onClose, category }) {
                         </div>
                     </div>
                     
-                    <div className="space-y-4 rounded-lg border p-4 bg-muted/20">
-                        <h3 className="text-lg font-medium">Upload Media</h3>
-                        <p className="text-sm text-muted-foreground">
-                            File upload functionality will be added in a future step. For now, please use direct URLs in the fields above.
-                        </p>
-                        <div className="flex items-center justify-center w-full">
-                            <div className="flex flex-col items-center justify-center pt-5 pb-6 w-full border-2 border-dashed rounded-lg cursor-not-allowed bg-muted/50">
-                                <UploadCloud className="w-10 h-10 mb-4 text-muted-foreground" />
-                                <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                                <p className="text-xs text-muted-foreground">Images or Videos</p>
-                            </div>
-                        </div>
-                    </div>
-
                     <div className='flex gap-8'>
                         <FormField
                             control={form.control}
