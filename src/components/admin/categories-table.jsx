@@ -1,17 +1,8 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, ImageOff, Trash2 } from "lucide-react";
 import Image from "next/image";
-import placeholderImages from '@/lib/placeholder-images.json';
-
-function getImageSource(imageIdentifier) {
-  if (!imageIdentifier) return null;
-  if (imageIdentifier.startsWith('http')) {
-    return { url: imageIdentifier };
-  }
-  return placeholderImages[imageIdentifier] || null;
-}
 
 export function CategoriesTable({ categories, onEdit, onDelete }) {
   return (
@@ -30,20 +21,21 @@ export function CategoriesTable({ categories, onEdit, onDelete }) {
         <TableBody>
           {categories.length > 0 ? (
             categories.map(category => {
-              const imageSrc = getImageSource(category.image);
               return (
                 <TableRow key={category.id}>
                   <TableCell>
-                    {imageSrc ? (
+                    {category.image ? (
                         <Image 
-                            src={imageSrc.url}
+                            src={category.image}
                             alt={category.name}
                             width={50}
                             height={50}
-                            className="rounded-md object-cover"
+                            className="rounded-md object-cover w-[50px] h-[50px]"
                         />
                     ) : (
-                        <div className="w-[50px] h-[50px] bg-secondary rounded-md" />
+                        <div className="w-[50px] h-[50px] bg-secondary rounded-md flex items-center justify-center">
+                            <ImageOff className="h-5 w-5 text-muted-foreground" />
+                        </div>
                     )}
                   </TableCell>
                   <TableCell className="font-medium">{category.name}</TableCell>

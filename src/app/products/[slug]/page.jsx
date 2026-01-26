@@ -15,7 +15,6 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, CheckCircle2, Loader, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import placeholderImages from '@/lib/placeholder-images.json';
 import { ProductInquiryDialog } from '@/components/product-inquiry-dialog';
 import { ProductHero, ProductContent } from '@/components/product-page-ui';
 import Autoplay from "embla-carousel-autoplay";
@@ -77,20 +76,15 @@ async function fetchSubProducts(categorySlug) {
 }
 
 /**
- * A helper to get an image source, preferring direct URLs over placeholder keys.
- * @param {string} imageIdentifier - A URL or a key from placeholder-images.json.
+ * A helper to get an image source from a URL.
+ * @param {string} url - A direct URL to an image.
  * @returns {{url: string, width: number, height: number, aiHint: string}|null}
  */
-function getImageSource(imageIdentifier) {
-  if (!imageIdentifier) return null;
-  if (imageIdentifier.startsWith('http')) {
-    // It's a direct URL, but we don't have width/height.
-    // For simplicity, we'll use some defaults. For production, these should be stored with the URL.
-    return { url: imageIdentifier, width: 800, height: 600, aiHint: 'product image' };
-  }
-  const placeholder = placeholderImages[imageIdentifier];
-  if (!placeholder) return null;
-  return placeholder;
+function getImageSource(url) {
+  if (!url || !url.startsWith('http')) return null;
+  // Using default width/height as we don't store them.
+  // Next/Image can often handle this, but it's good practice to provide dimensions.
+  return { url, width: 800, height: 600, aiHint: 'product image' };
 }
 
 /**
@@ -151,10 +145,10 @@ const CategoryDetailView = ({ category, products }) => {
                 onMouseLeave={plugin.current.reset}
               >
                 <CarouselContent>
-                  {category.media.map((itemIdentifier, index) => {
-                    const imageSrc = getImageSource(itemIdentifier);
+                  {category.media.map((itemUrl, index) => {
+                    const imageSrc = getImageSource(itemUrl);
                     return imageSrc && (
-                      <CarouselItem key={`${itemIdentifier}-${index}`}>
+                      <CarouselItem key={`${itemUrl}-${index}`}>
                         <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden border shadow-lg">
                           <Image
                             src={imageSrc.url}

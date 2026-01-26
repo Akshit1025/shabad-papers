@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useToast } from '@/hooks/use-toast';
@@ -13,7 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { Loader } from 'lucide-react';
+import { Loader, PlusCircle, Trash2, UploadCloud } from 'lucide-react';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -23,10 +23,10 @@ const formSchema = z.object({
   order: z.coerce.number().int().min(0, { message: 'Order must be a positive number.' }),
   visible: z.boolean().default(true),
   hasSubProducts: z.boolean().default(false),
-  image: z.string().optional(),
-  media: z.array(z.string()).optional(),
-  benefits: z.array(z.string()).optional(),
-  applications: z.array(z.string()).optional(),
+  image: z.string().url({ message: "Please enter a valid URL." }).optional().or(z.literal('')),
+  media: z.array(z.object({ value: z.string().url({ message: "Please enter a valid URL." }) })),
+  benefits: z.array(z.object({ value: z.string().min(1, "Benefit cannot be empty.") })),
+  applications: z.array(z.object({ value: z.string().min(1, "Application cannot be empty.") })),
 });
 
 export function CategoryForm({ onClose, category }) {
@@ -51,19 +51,21 @@ export function CategoryForm({ onClose, category }) {
     },
   });
   
-  const { watch, setValue, getValues, reset } = form;
+  const { control, watch, setValue, getValues, reset } = form;
+
+  const { fields: mediaFields, append: appendMedia, remove: removeMedia } = useFieldArray({ control, name: "media" });
+  const { fields: benefitFields, append: appendBenefit, remove: removeBenefit } = useFieldArray({ control, name: "benefits" });
+  const { fields: applicationFields, append: appendApplication, remove: removeApplication } = useFieldArray({ control, name: "applications" });
+
   const watchedName = watch('name');
 
-  // Effect to auto-generate slug from name
   useEffect(() => {
-    // Only auto-generate slug if creating a new category or if the slug is empty
     if (watchedName && (!isEditMode || !getValues('slug'))) {
       const slug = watchedName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
       setValue('slug', slug, { shouldValidate: true });
     }
   }, [watchedName, isEditMode, setValue, getValues]);
   
-  // Effect to reset form when category prop changes
   useEffect(() => {
     if (isEditMode && category) {
       reset({
@@ -75,9 +77,9 @@ export function CategoryForm({ onClose, category }) {
         visible: category.visible !== undefined ? category.visible : true,
         hasSubProducts: category.hasSubProducts !== undefined ? category.hasSubProducts : false,
         image: category.image || '',
-        media: category.media || [], 
-        benefits: category.benefits || [],
-        applications: category.applications || [],
+        media: category.media?.map(m => ({ value: m })) || [], 
+        benefits: category.benefits?.map(b => ({ value: b })) || [],
+        applications: category.applications?.map(a => ({ value: a })) || [],
       });
     } else {
       reset({
@@ -97,18 +99,26 @@ export function CategoryForm({ onClose, category }) {
   }, [category, isEditMode, reset]);
 
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (data) => {
     setLoading(true);
+    
+    const valuesToSave = {
+      ...data,
+      media: data.media.map(m => m.value),
+      benefits: data.benefits.map(b => b.value),
+      applications: data.applications.map(a => a.value),
+    };
+
     try {
       if (isEditMode) {
         const categoryRef = doc(db, 'categories', category.id);
-        await setDoc(categoryRef, { ...values, updatedAt: serverTimestamp() }, { merge: true });
+        await setDoc(categoryRef, { ...valuesToSave, updatedAt: serverTimestamp() }, { merge: true });
         toast({
           title: 'Success',
           description: 'Category updated successfully.',
         });
       } else {
-        await addDoc(collection(db, 'categories'), { ...values, createdAt: serverTimestamp() });
+        await addDoc(collection(db, 'categories'), { ...valuesToSave, createdAt: serverTimestamp() });
         toast({
           title: 'Success',
           description: 'Category created successfully.',
@@ -127,13 +137,6 @@ export function CategoryForm({ onClose, category }) {
     }
   };
 
-  const handleStringToArrayChange = (fieldOnChange) => (e) => {
-    const value = e.target.value;
-    const arr = value ? value.split(',').map(item => item.trim()).filter(Boolean) : [];
-    fieldOnChange(arr);
-  };
-
-
   return (
     <Card className="mt-6">
         <CardHeader>
@@ -144,182 +147,107 @@ export function CategoryForm({ onClose, category }) {
         </CardHeader>
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-                <CardContent className="space-y-4">
-                    <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Category Name</FormLabel>
-                        <FormControl>
-                            <Input placeholder="e.g., Carbonless Paper" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                    />
-                    <FormField
-                    control={form.control}
-                    name="slug"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Slug</FormLabel>
-                        <FormControl>
-                            <Input placeholder="e.g., carbonless-paper" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                    />
-                    <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Short Description</FormLabel>
-                        <FormControl>
-                            <Textarea placeholder="A brief summary for the category card." {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                    />
-                    <FormField
-                    control={form.control}
-                    name="longDescription"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Long Description (Optional)</FormLabel>
-                        <FormControl>
-                            <Textarea placeholder="A detailed description for the category page." {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                    />
-                    <FormField
-                    control={form.control}
-                    name="order"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Display Order</FormLabel>
-                        <FormControl>
-                            <Input type="number" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                    />
-                    <FormField
-                    control={form.control}
-                    name="image"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Card Image Key</FormLabel>
-                        <FormControl>
-                            <Input placeholder="Key from placeholder-images.json" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                    />
-                    <FormField
-                    control={form.control}
-                    name="media"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Carousel Media Keys (comma-separated)</FormLabel>
-                        <FormControl>
-                             <Input
-                                placeholder="key1, key2, key3"
-                                value={Array.isArray(field.value) ? field.value.join(', ') : ''}
-                                onChange={handleStringToArrayChange(field.onChange)}
-                                onBlur={field.onBlur}
-                                ref={field.ref}
-                                name={field.name}
-                             />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                    />
-                    <FormField
-                    control={form.control}
-                    name="benefits"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Benefits (comma-separated)</FormLabel>
-                        <FormControl>
-                            <Input
-                                placeholder="Benefit one, Benefit two"
-                                value={Array.isArray(field.value) ? field.value.join(', ') : ''}
-                                onChange={handleStringToArrayChange(field.onChange)}
-                                onBlur={field.onBlur}
-                                ref={field.ref}
-                                name={field.name}
-                            />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                    />
-                    <FormField
-                    control={form.control}
-                    name="applications"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Applications (comma-separated)</FormLabel>
-                        <FormControl>
-                             <Input
-                                placeholder="App one, App two"
-                                value={Array.isArray(field.value) ? field.value.join(', ') : ''}
-                                onChange={handleStringToArrayChange(field.onChange)}
-                                onBlur={field.onBlur}
-                                ref={field.ref}
-                                name={field.name}
-                            />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                    />
+                <CardContent className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField control={form.control} name="name" render={({ field }) => ( <FormItem> <FormLabel>Category Name</FormLabel> <FormControl> <Input placeholder="e.g., Carbonless Paper" {...field} /> </FormControl> <FormMessage /> </FormItem> )}/>
+                        <FormField control={form.control} name="slug" render={({ field }) => ( <FormItem> <FormLabel>Slug</FormLabel> <FormControl> <Input placeholder="e.g., carbonless-paper" {...field} /> </FormControl> <FormMessage /> </FormItem> )}/>
+                    </div>
+                    <FormField control={form.control} name="description" render={({ field }) => ( <FormItem> <FormLabel>Short Description</FormLabel> <FormControl> <Textarea placeholder="A brief summary for the category card." {...field} /> </FormControl> <FormMessage /> </FormItem> )}/>
+                    <FormField control={form.control} name="longDescription" render={({ field }) => ( <FormItem> <FormLabel>Long Description (Optional)</FormLabel> <FormControl> <Textarea placeholder="A detailed description for the category page." {...field} rows={5} /> </FormControl> <FormMessage /> </FormItem> )}/>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField control={form.control} name="order" render={({ field }) => ( <FormItem> <FormLabel>Display Order</FormLabel> <FormControl> <Input type="number" {...field} /> </FormControl> <FormMessage /> </FormItem> )}/>
+                        <FormField control={form.control} name="image" render={({ field }) => ( <FormItem> <FormLabel>Card Image URL</FormLabel> <FormControl> <Input placeholder="https://example.com/image.jpg" {...field} /> </FormControl> <FormMessage /> </FormItem> )}/>
+                    </div>
+
+                    <div className="space-y-4 rounded-lg border p-4">
+                        <h3 className="text-lg font-medium">Category Details</h3>
+                        <div className="space-y-2">
+                            <FormLabel>Carousel Media URLs (Images & Videos)</FormLabel>
+                            {mediaFields.map((field, index) => (
+                                <FormField key={field.id} control={form.control} name={`media.${index}.value`} render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex items-center gap-2">
+                                            <FormControl>
+                                                <Input placeholder="https://example.com/media.jpg" {...field} />
+                                            </FormControl>
+                                            <Button type="button" variant="destructive" size="icon" onClick={() => removeMedia(index)}>
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        </div>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}/>
+                            ))}
+                            <Button type="button" variant="outline" size="sm" onClick={() => appendMedia({ value: '' })}>
+                                <PlusCircle className="mr-2 h-4 w-4" />
+                                Add Media URL
+                            </Button>
+                        </div>
+                        <div className="space-y-2">
+                            <FormLabel>Benefits</FormLabel>
+                            {benefitFields.map((field, index) => (
+                                <FormField key={field.id} control={form.control} name={`benefits.${index}.value`} render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex items-center gap-2">
+                                            <FormControl>
+                                                <Input placeholder="e.g., High durability" {...field} />
+                                            </FormControl>
+                                            <Button type="button" variant="destructive" size="icon" onClick={() => removeBenefit(index)}>
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        </div>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}/>
+                            ))}
+                            <Button type="button" variant="outline" size="sm" onClick={() => appendBenefit({ value: '' })}>
+                                <PlusCircle className="mr-2 h-4 w-4" />
+                                Add Benefit
+                            </Button>
+                        </div>
+                        <div className="space-y-2">
+                            <FormLabel>Applications</FormLabel>
+                            {applicationFields.map((field, index) => (
+                                <FormField key={field.id} control={form.control} name={`applications.${index}.value`} render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex items-center gap-2">
+                                            <FormControl>
+                                                <Input placeholder="e.g., Food packaging" {...field} />
+                                            </FormControl>
+                                            <Button type="button" variant="destructive" size="icon" onClick={() => removeApplication(index)}>
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        </div>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}/>
+                            ))}
+                             <Button type="button" variant="outline" size="sm" onClick={() => appendApplication({ value: '' })}>
+                                <PlusCircle className="mr-2 h-4 w-4" />
+                                Add Application
+                            </Button>
+                        </div>
+                    </div>
+                    
+                    <div className="space-y-4 rounded-lg border p-4 bg-muted/20">
+                        <h3 className="text-lg font-medium">Upload Media</h3>
+                        <p className="text-sm text-muted-foreground">
+                            File upload functionality will be added in a future step. For now, please use direct URLs in the fields above.
+                        </p>
+                        <div className="flex items-center justify-center w-full">
+                            <div className="flex flex-col items-center justify-center pt-5 pb-6 w-full border-2 border-dashed rounded-lg cursor-not-allowed bg-muted/50">
+                                <UploadCloud className="w-10 h-10 mb-4 text-muted-foreground" />
+                                <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                                <p className="text-xs text-muted-foreground">Images or Videos</p>
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div className='flex gap-8'>
-                        <FormField
-                        control={form.control}
-                        name="visible"
-                        render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1">
-                            <div className="space-y-0.5">
-                                <FormLabel>Visible</FormLabel>
-                                <FormMessage />
-                            </div>
-                            <FormControl>
-                                <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                                />
-                            </FormControl>
-                            </FormItem>
-                        )}
-                        />
-                        <FormField
-                        control={form.control}
-                        name="hasSubProducts"
-                        render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1">
-                            <div className="space-y-0.5">
-                                <FormLabel>Has Sub-Products</FormLabel>
-                                <FormMessage />
-                            </div>
-                            <FormControl>
-                                <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                                />
-                            </FormControl>
-                            </FormItem>
-                        )}
-                        />
+                        <FormField control={form.control} name="visible" render={({ field }) => ( <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1"> <div className="space-y-0.5"> <FormLabel>Visible</FormLabel> <FormMessage /> </div> <FormControl> <Switch checked={field.value} onCheckedChange={field.onChange} /> </FormControl> </FormItem> )}/>
+                        <FormField control={form.control} name="hasSubProducts" render={({ field }) => ( <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1"> <div className="space-y-0.5"> <FormLabel>Has Sub-Products</FormLabel> <FormMessage /> </div> <FormControl> <Switch checked={field.value} onCheckedChange={field.onChange} /> </FormControl> </FormItem> )}/>
                     </div>
                 </CardContent>
                 <CardFooter className="flex justify-end gap-2">

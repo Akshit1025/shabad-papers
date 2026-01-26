@@ -11,7 +11,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight, Loader } from 'lucide-react';
-import placeholderImages from '@/lib/placeholder-images.json';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 
@@ -36,18 +35,13 @@ async function fetchCategories() {
 }
 
 /**
- * A helper to get an image source, preferring direct URLs over placeholder keys.
- * @param {string} imageIdentifier - A URL or a key from placeholder-images.json.
+ * A helper to get an image source from a URL.
+ * @param {string} url - A direct URL to an image.
  * @returns {{url: string, width: number, height: number, aiHint: string}|null}
  */
-function getImageSource(imageIdentifier) {
-  if (!imageIdentifier) return null;
-  if (imageIdentifier.startsWith('http')) {
-    // It's a direct URL, but we don't have width/height.
-    // For simplicity, we'll use some defaults. For production, these should be stored with the URL.
-    return { url: imageIdentifier, width: 600, height: 400, aiHint: 'product category' };
-  }
-  return placeholderImages[imageIdentifier] || null;
+function getImageSource(url) {
+  if (!url || !url.startsWith('http')) return null;
+  return { url, width: 600, height: 400, aiHint: 'product category' };
 }
 
 
