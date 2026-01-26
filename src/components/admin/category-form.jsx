@@ -149,15 +149,87 @@ export function CategoryForm({ onClose, category }) {
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <CardContent className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <FormField control={form.control} name="name" render={({ field }) => ( <FormItem> <FormLabel>Category Name</FormLabel> <FormControl> <Input placeholder="e.g., Carbonless Paper" {...field} /> </FormControl> <FormMessage /> </FormItem> )}/>
-                        <FormField control={form.control} name="slug" render={({ field }) => ( <FormItem> <FormLabel>Slug</FormLabel> <FormControl> <Input placeholder="e.g., carbonless-paper" {...field} /> </FormControl> <FormMessage /> </FormItem> )}/>
+                        <FormField
+                            control={form.control}
+                            name="name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Category Name</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="e.g., Carbonless Paper" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="slug"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Slug</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="e.g., carbonless-paper" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                     </div>
-                    <FormField control={form.control} name="description" render={({ field }) => ( <FormItem> <FormLabel>Short Description</FormLabel> <FormControl> <Textarea placeholder="A brief summary for the category card." {...field} /> </FormControl> <FormMessage /> </FormItem> )}/>
-                    <FormField control={form.control} name="longDescription" render={({ field }) => ( <FormItem> <FormLabel>Long Description (Optional)</FormLabel> <FormControl> <Textarea placeholder="A detailed description for the category page." {...field} rows={5} /> </FormControl> <FormMessage /> </FormItem> )}/>
+                    <FormField
+                        control={form.control}
+                        name="description"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Short Description</FormLabel>
+                                <FormControl>
+                                    <Textarea placeholder="A brief summary for the category card." {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="longDescription"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Long Description (Optional)</FormLabel>
+                                <FormControl>
+                                    <Textarea placeholder="A detailed description for the category page." {...field} rows={5} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <FormField control={form.control} name="order" render={({ field }) => ( <FormItem> <FormLabel>Display Order</FormLabel> <FormControl> <Input type="number" {...field} /> </FormControl> <FormMessage /> </FormItem> )}/>
-                        <FormField control={form.control} name="image" render={({ field }) => ( <FormItem> <FormLabel>Card Image URL</FormLabel> <FormControl> <Input placeholder="https://example.com/image.jpg" {...field} /> </FormControl> <FormMessage /> </FormItem> )}/>
+                        <FormField
+                            control={form.control}
+                            name="order"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Display Order</FormLabel>
+                                    <FormControl>
+                                        <Input type="number" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="image"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Card Image URL</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="https://example.com/image.jpg" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                     </div>
 
                     <div className="space-y-4 rounded-lg border p-4">
@@ -165,19 +237,24 @@ export function CategoryForm({ onClose, category }) {
                         <div className="space-y-2">
                             <FormLabel>Carousel Media URLs (Images & Videos)</FormLabel>
                             {mediaFields.map((field, index) => (
-                                <FormField key={field.id} control={form.control} name={`media.${index}.value`} render={({ field }) => (
-                                    <FormItem>
-                                        <div className="flex items-center gap-2">
-                                            <FormControl>
-                                                <Input placeholder="https://example.com/media.jpg" {...field} />
-                                            </FormControl>
-                                            <Button type="button" variant="destructive" size="icon" onClick={() => removeMedia(index)}>
-                                                <Trash2 className="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}/>
+                                <FormField
+                                    key={field.id}
+                                    control={form.control}
+                                    name={`media.${index}.value`}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <div className="flex items-center gap-2">
+                                                <FormControl>
+                                                    <Input placeholder="https://example.com/media.jpg" {...field} />
+                                                </FormControl>
+                                                <Button type="button" variant="destructive" size="icon" onClick={() => removeMedia(index)}>
+                                                    <Trash2 className="h-4 w-4" />
+                                                </Button>
+                                            </div>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                             ))}
                             <Button type="button" variant="outline" size="sm" onClick={() => appendMedia({ value: '' })}>
                                 <PlusCircle className="mr-2 h-4 w-4" />
@@ -187,19 +264,24 @@ export function CategoryForm({ onClose, category }) {
                         <div className="space-y-2">
                             <FormLabel>Benefits</FormLabel>
                             {benefitFields.map((field, index) => (
-                                <FormField key={field.id} control={form.control} name={`benefits.${index}.value`} render={({ field }) => (
-                                    <FormItem>
-                                        <div className="flex items-center gap-2">
-                                            <FormControl>
-                                                <Input placeholder="e.g., High durability" {...field} />
-                                            </FormControl>
-                                            <Button type="button" variant="destructive" size="icon" onClick={() => removeBenefit(index)}>
-                                                <Trash2 className="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}/>
+                                <FormField
+                                    key={field.id}
+                                    control={form.control}
+                                    name={`benefits.${index}.value`}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <div className="flex items-center gap-2">
+                                                <FormControl>
+                                                    <Input placeholder="e.g., High durability" {...field} />
+                                                </FormControl>
+                                                <Button type="button" variant="destructive" size="icon" onClick={() => removeBenefit(index)}>
+                                                    <Trash2 className="h-4 w-4" />
+                                                </Button>
+                                            </div>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                             ))}
                             <Button type="button" variant="outline" size="sm" onClick={() => appendBenefit({ value: '' })}>
                                 <PlusCircle className="mr-2 h-4 w-4" />
@@ -209,19 +291,24 @@ export function CategoryForm({ onClose, category }) {
                         <div className="space-y-2">
                             <FormLabel>Applications</FormLabel>
                             {applicationFields.map((field, index) => (
-                                <FormField key={field.id} control={form.control} name={`applications.${index}.value`} render={({ field }) => (
-                                    <FormItem>
-                                        <div className="flex items-center gap-2">
-                                            <FormControl>
-                                                <Input placeholder="e.g., Food packaging" {...field} />
-                                            </FormControl>
-                                            <Button type="button" variant="destructive" size="icon" onClick={() => removeApplication(index)}>
-                                                <Trash2 className="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}/>
+                                <FormField
+                                    key={field.id}
+                                    control={form.control}
+                                    name={`applications.${index}.value`}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <div className="flex items-center gap-2">
+                                                <FormControl>
+                                                    <Input placeholder="e.g., Food packaging" {...field} />
+                                                </FormControl>
+                                                <Button type="button" variant="destructive" size="icon" onClick={() => removeApplication(index)}>
+                                                    <Trash2 className="h-4 w-4" />
+                                                </Button>
+                                            </div>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                             ))}
                              <Button type="button" variant="outline" size="sm" onClick={() => appendApplication({ value: '' })}>
                                 <PlusCircle className="mr-2 h-4 w-4" />
@@ -244,10 +331,43 @@ export function CategoryForm({ onClose, category }) {
                         </div>
                     </div>
 
-
                     <div className='flex gap-8'>
-                        <FormField control={form.control} name="visible" render={({ field }) => ( <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1"> <div className="space-y-0.5"> <FormLabel>Visible</FormLabel> <FormMessage /> </div> <FormControl> <Switch checked={field.value} onCheckedChange={field.onChange} /> </FormControl> </FormItem> )}/>
-                        <FormField control={form.control} name="hasSubProducts" render={({ field }) => ( <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1"> <div className="space-y-0.5"> <FormLabel>Has Sub-Products</FormLabel> <FormMessage /> </div> <FormControl> <Switch checked={field.value} onCheckedChange={field.onChange} /> </FormControl> </FormItem> )}/>
+                        <FormField
+                            control={form.control}
+                            name="visible"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1">
+                                    <div className="space-y-0.5">
+                                        <FormLabel>Visible</FormLabel>
+                                        <FormMessage />
+                                    </div>
+                                    <FormControl>
+                                        <Switch
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="hasSubProducts"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1">
+                                    <div className="space-y-0.5">
+                                        <FormLabel>Has Sub-Products</FormLabel>
+                                        <FormMessage />
+                                    </div>
+                                    <FormControl>
+                                        <Switch
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
                     </div>
                 </CardContent>
                 <CardFooter className="flex justify-end gap-2">
