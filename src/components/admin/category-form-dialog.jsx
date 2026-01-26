@@ -40,6 +40,7 @@ export function CategoryFormDialog({ isOpen, onClose, category }) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const isEditMode = !!category;
+  const formId = "category-form";
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -145,175 +146,176 @@ export function CategoryFormDialog({ isOpen, onClose, category }) {
             {isEditMode ? 'Update the details of this category.' : 'Fill in the details to create a new category.'}
           </DialogDescription>
         </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 max-h-[70vh] overflow-y-auto pr-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Category Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., Carbonless Paper" {...field} onChange={handleNameChange} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="slug"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Slug</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., carbonless-paper" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-             <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Short Description</FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="A brief summary for the category card." {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-             <FormField
-              control={form.control}
-              name="longDescription"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Long Description (Optional)</FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="A detailed description for the category page." {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-             <FormField
-              control={form.control}
-              name="order"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Display Order</FormLabel>
-                  <FormControl>
-                    <Input type="number" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-             <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Card Image Key</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Key from placeholder-images.json" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="media"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Carousel Media Keys (comma-separated)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="key1, key2, key3" defaultValue={Array.isArray(field.value) ? field.value.join(', ') : ''} onChange={handleStringToArray('media')} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-             <FormField
-              control={form.control}
-              name="benefits"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Benefits (comma-separated)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Benefit one, Benefit two" defaultValue={Array.isArray(field.value) ? field.value.join(', ') : ''} onChange={handleStringToArray('benefits')} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="applications"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Applications (comma-separated)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="App one, App two" defaultValue={Array.isArray(field.value) ? field.value.join(', ') : ''} onChange={handleStringToArray('applications')} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className='flex gap-8'>
+        <div className="max-h-[65vh] overflow-y-auto pr-6">
+            <Form {...form}>
+            <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
-                  control={form.control}
-                  name="visible"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1">
-                      <div className="space-y-0.5">
-                        <FormLabel>Visible</FormLabel>
-                        <FormMessage />
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Category Name</FormLabel>
+                    <FormControl>
+                        <Input placeholder="e.g., Carbonless Paper" {...field} onChange={handleNameChange} />
+                    </FormControl>
+                    <FormMessage />
                     </FormItem>
-                  )}
+                )}
                 />
                 <FormField
-                  control={form.control}
-                  name="hasSubProducts"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1">
-                      <div className="space-y-0.5">
-                        <FormLabel>Has Sub-Products</FormLabel>
-                        <FormMessage />
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
+                control={form.control}
+                name="slug"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Slug</FormLabel>
+                    <FormControl>
+                        <Input placeholder="e.g., carbonless-paper" {...field} />
+                    </FormControl>
+                    <FormMessage />
                     </FormItem>
-                  )}
+                )}
                 />
-            </div>
-
-            <DialogFooter>
-              <Button type="button" variant="outline" onClick={onClose} disabled={loading}>
-                Cancel
-              </Button>
-              <Button type="submit" disabled={loading}>
-                {loading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
-                {isEditMode ? 'Save Changes' : 'Create Category'}
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
+                <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Short Description</FormLabel>
+                    <FormControl>
+                        <Textarea placeholder="A brief summary for the category card." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <FormField
+                control={form.control}
+                name="longDescription"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Long Description (Optional)</FormLabel>
+                    <FormControl>
+                        <Textarea placeholder="A detailed description for the category page." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <FormField
+                control={form.control}
+                name="order"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Display Order</FormLabel>
+                    <FormControl>
+                        <Input type="number" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Card Image Key</FormLabel>
+                    <FormControl>
+                        <Input placeholder="Key from placeholder-images.json" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <FormField
+                control={form.control}
+                name="media"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Carousel Media Keys (comma-separated)</FormLabel>
+                    <FormControl>
+                        <Input placeholder="key1, key2, key3" defaultValue={Array.isArray(field.value) ? field.value.join(', ') : ''} onChange={handleStringToArray('media')} />
+                    </FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <FormField
+                control={form.control}
+                name="benefits"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Benefits (comma-separated)</FormLabel>
+                    <FormControl>
+                        <Input placeholder="Benefit one, Benefit two" defaultValue={Array.isArray(field.value) ? field.value.join(', ') : ''} onChange={handleStringToArray('benefits')} />
+                    </FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <FormField
+                control={form.control}
+                name="applications"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Applications (comma-separated)</FormLabel>
+                    <FormControl>
+                        <Input placeholder="App one, App two" defaultValue={Array.isArray(field.value) ? field.value.join(', ') : ''} onChange={handleStringToArray('applications')} />
+                    </FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <div className='flex gap-8'>
+                    <FormField
+                    control={form.control}
+                    name="visible"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1">
+                        <div className="space-y-0.5">
+                            <FormLabel>Visible</FormLabel>
+                            <FormMessage />
+                        </div>
+                        <FormControl>
+                            <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            />
+                        </FormControl>
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="hasSubProducts"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1">
+                        <div className="space-y-0.5">
+                            <FormLabel>Has Sub-Products</FormLabel>
+                            <FormMessage />
+                        </div>
+                        <FormControl>
+                            <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            />
+                        </FormControl>
+                        </FormItem>
+                    )}
+                    />
+                </div>
+            </form>
+            </Form>
+        </div>
+        <DialogFooter>
+            <Button type="button" variant="outline" onClick={onClose} disabled={loading}>
+            Cancel
+            </Button>
+            <Button type="submit" form={formId} disabled={loading}>
+            {loading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
+            {isEditMode ? 'Save Changes' : 'Create Category'}
+            </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
