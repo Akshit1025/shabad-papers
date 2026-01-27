@@ -187,7 +187,7 @@ export function ProductForm({ onClose, product, categories }) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {categories.map(category => (
+                        {categories.filter(category => category.hasSubProducts).map(category => (
                           <SelectItem key={category.id} value={category.slug}>
                             {category.name}
                           </SelectItem>
