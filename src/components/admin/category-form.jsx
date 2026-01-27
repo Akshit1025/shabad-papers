@@ -58,6 +58,7 @@ export function CategoryForm({ onClose, category }) {
   const { fields: applicationFields, append: appendApplication, remove: removeApplication } = useFieldArray({ control, name: "applications" });
 
   const watchedName = watch('name');
+  const hasSubProducts = watch('hasSubProducts');
 
   useEffect(() => {
     if (watchedName && (!isEditMode || !getValues('slug'))) {
@@ -150,7 +151,7 @@ export function CategoryForm({ onClose, category }) {
                 <CardContent className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <FormField
-                            control={form.control}
+                            control={control}
                             name="name"
                             render={({ field }) => (
                                 <FormItem className="md:col-span-2">
@@ -163,7 +164,7 @@ export function CategoryForm({ onClose, category }) {
                             )}
                         />
                         <FormField
-                            control={form.control}
+                            control={control}
                             name="order"
                             render={({ field }) => (
                                 <FormItem>
@@ -176,7 +177,7 @@ export function CategoryForm({ onClose, category }) {
                             )}
                         />
                          <FormField
-                            control={form.control}
+                            control={control}
                             name="slug"
                             render={({ field }) => (
                                 <FormItem className="md:col-span-3">
@@ -190,7 +191,7 @@ export function CategoryForm({ onClose, category }) {
                         />
                     </div>
                     <FormField
-                        control={form.control}
+                        control={control}
                         name="description"
                         render={({ field }) => (
                             <FormItem>
@@ -202,24 +203,26 @@ export function CategoryForm({ onClose, category }) {
                             </FormItem>
                         )}
                     />
-                    <FormField
-                        control={form.control}
-                        name="longDescription"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Long Description (Optional)</FormLabel>
-                                <FormControl>
-                                    <Textarea placeholder="A detailed description for the category page." {...field} rows={5} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                     {!hasSubProducts && (
+                        <FormField
+                            control={control}
+                            name="longDescription"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Long Description (Optional)</FormLabel>
+                                    <FormControl>
+                                        <Textarea placeholder="A detailed description for the category page." {...field} rows={5} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    )}
                     
                     <div className="space-y-4 rounded-lg border p-4">
                         <h3 className="text-lg font-medium">Main Image</h3>
                          <FormField
-                            control={form.control}
+                            control={control}
                             name="image"
                             render={({ field }) => (
                                 <FormItem>
@@ -245,110 +248,114 @@ export function CategoryForm({ onClose, category }) {
                         </div>
                     </div>
                     
-                    <div className="space-y-4 rounded-lg border p-4">
-                        <h3 className="text-lg font-medium">Carousel Media</h3>
-                        <div className="space-y-2">
-                            <FormLabel>Media URLs (Images & Videos)</FormLabel>
-                            {mediaFields.map((field, index) => (
-                                <FormField
-                                    key={field.id}
-                                    control={form.control}
-                                    name={`media.${index}.value`}
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <div className="flex items-center gap-2">
-                                                <FormControl>
-                                                    <Input placeholder="https://example.com/media.jpg" {...field} />
-                                                </FormControl>
-                                                <Button type="button" variant="destructive" size="icon" onClick={() => removeMedia(index)}>
-                                                    <Trash2 className="h-4 w-4" />
-                                                </Button>
-                                            </div>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            ))}
-                            <Button type="button" variant="outline" size="sm" onClick={() => appendMedia({ value: '' })}>
-                                <PlusCircle className="mr-2 h-4 w-4" />
-                                Add Media URL
-                            </Button>
-                        </div>
-                         <div className="space-y-2">
-                             <p className="text-sm text-muted-foreground">
-                                Alternatively, upload media. File upload is not yet functional.
-                            </p>
-                            <div className="flex items-center justify-center w-full">
-                                <div className="flex flex-col items-center justify-center pt-5 pb-6 w-full border-2 border-dashed rounded-lg cursor-not-allowed bg-muted/50">
-                                    <UploadCloud className="w-10 h-10 mb-4 text-muted-foreground" />
-                                    <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                                    <p className="text-xs text-muted-foreground">Images or Videos for the carousel</p>
+                    {!hasSubProducts && (
+                        <>
+                            <div className="space-y-4 rounded-lg border p-4">
+                                <h3 className="text-lg font-medium">Carousel Media</h3>
+                                <div className="space-y-2">
+                                    <FormLabel>Media URLs (Images & Videos)</FormLabel>
+                                    {mediaFields.map((field, index) => (
+                                        <FormField
+                                            key={field.id}
+                                            control={control}
+                                            name={`media.${index}.value`}
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <div className="flex items-center gap-2">
+                                                        <FormControl>
+                                                            <Input placeholder="https://example.com/media.jpg" {...field} />
+                                                        </FormControl>
+                                                        <Button type="button" variant="destructive" size="icon" onClick={() => removeMedia(index)}>
+                                                            <Trash2 className="h-4 w-4" />
+                                                        </Button>
+                                                    </div>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    ))}
+                                    <Button type="button" variant="outline" size="sm" onClick={() => appendMedia({ value: '' })}>
+                                        <PlusCircle className="mr-2 h-4 w-4" />
+                                        Add Media URL
+                                    </Button>
+                                </div>
+                                <div className="space-y-2">
+                                    <p className="text-sm text-muted-foreground">
+                                        Alternatively, upload media. File upload is not yet functional.
+                                    </p>
+                                    <div className="flex items-center justify-center w-full">
+                                        <div className="flex flex-col items-center justify-center pt-5 pb-6 w-full border-2 border-dashed rounded-lg cursor-not-allowed bg-muted/50">
+                                            <UploadCloud className="w-10 h-10 mb-4 text-muted-foreground" />
+                                            <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                                            <p className="text-xs text-muted-foreground">Images or Videos for the carousel</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div className="space-y-4 rounded-lg border p-4">
-                        <h3 className="text-lg font-medium">Additional Details</h3>
-                        <div className="space-y-2">
-                            <FormLabel>Benefits</FormLabel>
-                            {benefitFields.map((field, index) => (
-                                <FormField
-                                    key={field.id}
-                                    control={form.control}
-                                    name={`benefits.${index}.value`}
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <div className="flex items-center gap-2">
-                                                <FormControl>
-                                                    <Input placeholder="e.g., High durability" {...field} />
-                                                </FormControl>
-                                                <Button type="button" variant="destructive" size="icon" onClick={() => removeBenefit(index)}>
-                                                    <Trash2 className="h-4 w-4" />
-                                                </Button>
-                                            </div>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            ))}
-                            <Button type="button" variant="outline" size="sm" onClick={() => appendBenefit({ value: '' })}>
-                                <PlusCircle className="mr-2 h-4 w-4" />
-                                Add Benefit
-                            </Button>
-                        </div>
-                        <div className="space-y-2">
-                            <FormLabel>Applications</FormLabel>
-                            {applicationFields.map((field, index) => (
-                                <FormField
-                                    key={field.id}
-                                    control={form.control}
-                                    name={`applications.${index}.value`}
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <div className="flex items-center gap-2">
-                                                <FormControl>
-                                                    <Input placeholder="e.g., Food packaging" {...field} />
-                                                </FormControl>
-                                                <Button type="button" variant="destructive" size="icon" onClick={() => removeApplication(index)}>
-                                                    <Trash2 className="h-4 w-4" />
-                                                </Button>
-                                            </div>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            ))}
-                             <Button type="button" variant="outline" size="sm" onClick={() => appendApplication({ value: '' })}>
-                                <PlusCircle className="mr-2 h-4 w-4" />
-                                Add Application
-                            </Button>
-                        </div>
-                    </div>
+                            <div className="space-y-4 rounded-lg border p-4">
+                                <h3 className="text-lg font-medium">Additional Details</h3>
+                                <div className="space-y-2">
+                                    <FormLabel>Benefits</FormLabel>
+                                    {benefitFields.map((field, index) => (
+                                        <FormField
+                                            key={field.id}
+                                            control={control}
+                                            name={`benefits.${index}.value`}
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <div className="flex items-center gap-2">
+                                                        <FormControl>
+                                                            <Input placeholder="e.g., High durability" {...field} />
+                                                        </FormControl>
+                                                        <Button type="button" variant="destructive" size="icon" onClick={() => removeBenefit(index)}>
+                                                            <Trash2 className="h-4 w-4" />
+                                                        </Button>
+                                                    </div>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    ))}
+                                    <Button type="button" variant="outline" size="sm" onClick={() => appendBenefit({ value: '' })}>
+                                        <PlusCircle className="mr-2 h-4 w-4" />
+                                        Add Benefit
+                                    </Button>
+                                </div>
+                                <div className="space-y-2">
+                                    <FormLabel>Applications</FormLabel>
+                                    {applicationFields.map((field, index) => (
+                                        <FormField
+                                            key={field.id}
+                                            control={control}
+                                            name={`applications.${index}.value`}
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <div className="flex items-center gap-2">
+                                                        <FormControl>
+                                                            <Input placeholder="e.g., Food packaging" {...field} />
+                                                        </FormControl>
+                                                        <Button type="button" variant="destructive" size="icon" onClick={() => removeApplication(index)}>
+                                                            <Trash2 className="h-4 w-4" />
+                                                        </Button>
+                                                    </div>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    ))}
+                                    <Button type="button" variant="outline" size="sm" onClick={() => appendApplication({ value: '' })}>
+                                        <PlusCircle className="mr-2 h-4 w-4" />
+                                        Add Application
+                                    </Button>
+                                </div>
+                            </div>
+                        </>
+                    )}
                     
                     <div className='flex gap-8'>
                         <FormField
-                            control={form.control}
+                            control={control}
                             name="visible"
                             render={({ field }) => (
                                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1">
@@ -366,7 +373,7 @@ export function CategoryForm({ onClose, category }) {
                             )}
                         />
                         <FormField
-                            control={form.control}
+                            control={control}
                             name="hasSubProducts"
                             render={({ field }) => (
                                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm flex-1">
