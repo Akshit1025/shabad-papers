@@ -203,21 +203,19 @@ export function CategoryForm({ onClose, category }) {
                             </FormItem>
                         )}
                     />
-                     {!hasSubProducts && (
-                        <FormField
-                            control={control}
-                            name="longDescription"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Long Description (Optional)</FormLabel>
-                                    <FormControl>
-                                        <Textarea placeholder="A detailed description for the category page." {...field} rows={5} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    )}
+                    <FormField
+                        control={control}
+                        name="longDescription"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Long Description (Optional)</FormLabel>
+                                <FormControl>
+                                    <Textarea placeholder="A detailed description for the category page." {...field} rows={5} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                     
                     <div className="space-y-4 rounded-lg border p-4">
                         <h3 className="text-lg font-medium">Main Image</h3>
