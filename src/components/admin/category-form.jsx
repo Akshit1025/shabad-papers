@@ -7,6 +7,7 @@ import * as z from 'zod';
 import { useToast } from '@/hooks/use-toast';
 import { db } from '@/lib/firebase';
 import { doc, addDoc, setDoc, collection, serverTimestamp } from 'firebase/firestore';
+import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -226,9 +227,20 @@ export function CategoryForm({ onClose, category }) {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Card Image URL</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="https://example.com/image.jpg" {...field} />
-                                    </FormControl>
+                                    <div className="flex items-center gap-4">
+                                        <FormControl>
+                                            <Input placeholder="https://example.com/image.jpg" {...field} />
+                                        </FormControl>
+                                        {field.value && (
+                                            <Image
+                                                src={field.value}
+                                                alt="Image preview"
+                                                width={64}
+                                                height={64}
+                                                className="h-16 w-16 rounded-md border object-cover"
+                                            />
+                                        )}
+                                    </div>
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -240,9 +252,9 @@ export function CategoryForm({ onClose, category }) {
                             <h3 className="text-lg font-medium">Carousel Media</h3>
                             <div className="space-y-2">
                                 <FormLabel>Media URLs (Images & Videos)</FormLabel>
-                                {mediaFields.map((field, index) => (
+                                {mediaFields.map((item, index) => (
                                     <FormField
-                                        key={field.id}
+                                        key={item.id}
                                         control={control}
                                         name={`media.${index}.value`}
                                         render={({ field }) => (
@@ -251,6 +263,15 @@ export function CategoryForm({ onClose, category }) {
                                                     <FormControl>
                                                         <Input placeholder="https://example.com/media.jpg" {...field} />
                                                     </FormControl>
+                                                    {field.value && (
+                                                        <Image
+                                                            src={field.value}
+                                                            alt={`Media preview ${index + 1}`}
+                                                            width={40}
+                                                            height={40}
+                                                            className="h-10 w-10 rounded-md border object-cover"
+                                                        />
+                                                    )}
                                                     <Button type="button" variant="destructive" size="icon" onClick={() => removeMedia(index)}>
                                                         <Trash2 className="h-4 w-4" />
                                                     </Button>
