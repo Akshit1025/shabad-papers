@@ -9,13 +9,14 @@ import { usePathname, useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
-import { LayoutDashboard, ShoppingCart, List, FileText, LogOut } from 'lucide-react';
+import { LayoutDashboard, ShoppingCart, List, FileText, LogOut, Image as ImageIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
     { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/admin/categories', label: 'Categories', icon: List },
     { href: '/admin/products', label: 'Products', icon: ShoppingCart },
+    { href: '/admin/media', label: 'Media', icon: ImageIcon },
     { href: '/admin/forms', label: 'Forms', icon: FileText },
 ];
 
@@ -43,7 +44,10 @@ export function AdminSidebar() {
             <nav className="flex-1 p-4 space-y-2">
                 {navItems.map((item) => {
                     const Icon = item.icon;
-                    const isActive = pathname === item.href || (pathname.startsWith(item.href) && item.href !== '/admin/dashboard');
+                    const isActive = item.href === '/admin/dashboard' 
+                      ? pathname === item.href 
+                      : pathname.startsWith(item.href);
+                    
                     return (
                         <Link
                             key={item.href}

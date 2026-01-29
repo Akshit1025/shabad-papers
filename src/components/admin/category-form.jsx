@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useToast } from '@/hooks/use-toast';
 import { db } from '@/lib/firebase';
-import { doc, addDoc, setDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { doc, addDoc, setDoc, collection, serverTimestamp, query, orderBy, onSnapshot } from 'firebase/firestore';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Loader, PlusCircle, Trash2 } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -24,14 +25,15 @@ const formSchema = z.object({
   order: z.coerce.number().int().min(0, { message: 'Order must be a positive number.' }),
   visible: z.boolean().default(true),
   hasSubProducts: z.boolean().default(false),
-  image: z.string().url({ message: "Please enter a valid URL." }).optional().or(z.literal('')),
-  media: z.array(z.object({ value: z.string().url({ message: "Please enter a valid URL." }) })),
+  image: z.string().url({ message: "Please select a valid image." }).optional().or(z.literal('')),
+  media: z.array(z.object({ value: z.string().url({ message: "Please select a valid media item." }) })),
   benefits: z.array(z.object({ value: z.string().min(1, "Benefit cannot be empty.") })),
   applications: z.array(z.object({ value: z.string().min(1, "Application cannot be empty.") })),
 });
 
 export function CategoryForm({ onClose, category }) {
   const [loading, setLoading] = useState(false);
+  const [mediaAssets, setMediaAssets] = useState([]);
   const { toast } = useToast();
   const isEditMode = !!category;
 
@@ -59,7 +61,18 @@ export function CategoryForm({ onClose, category }) {
   const { fields: applicationFields, append: appendApplication, remove: removeApplication } = useFieldArray({ control, name: "applications" });
 
   const watchedName = watch('name');
+  const watchedImage = watch('image');
+  const watchedMedia = watch('media');
   const hasSubProducts = watch('hasSubProducts');
+
+  useEffect(() => {
+    const q = query(collection(db, 'media'), orderBy('name', 'asc'));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const mediaData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setMediaAssets(mediaData);
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (watchedName && (!isEditMode || !getValues('slug'))) {
@@ -205,19 +218,21 @@ export function CategoryForm({ onClose, category }) {
                         )}
                     />
                     
-                    <FormField
-                        control={control}
-                        name="longDescription"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Long Description (Optional)</FormLabel>
-                                <FormControl>
-                                    <Textarea placeholder="A detailed description for the category page." {...field} rows={5} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                    {!hasSubProducts &&
+                        <FormField
+                            control={control}
+                            name="longDescription"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Long Description (Optional)</FormLabel>
+                                    <FormControl>
+                                        <Textarea placeholder="A detailed description for the category page." {...field} rows={5} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    }
                     
                     <div className="space-y-4 rounded-lg border p-4">
                         <h3 className="text-lg font-medium">Main Image</h3>
@@ -226,14 +241,25 @@ export function CategoryForm({ onClose, category }) {
                             name="image"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Card Image URL</FormLabel>
+                                    <FormLabel>Card Image</FormLabel>
                                     <div className="flex items-center gap-4">
-                                        <FormControl>
-                                            <Input placeholder="https://example.com/image.jpg" {...field} />
-                                        </FormControl>
-                                        {field.value && (
+                                        <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select an image" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {mediaAssets.map(asset => (
+                                                <SelectItem key={asset.id} value={asset.url}>
+                                                    {asset.name}
+                                                </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        {watchedImage && (
                                             <Image
-                                                src={field.value}
+                                                src={watchedImage}
                                                 alt="Image preview"
                                                 width={64}
                                                 height={64}
@@ -251,7 +277,7 @@ export function CategoryForm({ onClose, category }) {
                         <div className="space-y-4 rounded-lg border p-4">
                             <h3 className="text-lg font-medium">Carousel Media</h3>
                             <div className="space-y-2">
-                                <FormLabel>Media URLs (Images & Videos)</FormLabel>
+                                <FormLabel>Media Items (Images & Videos)</FormLabel>
                                 {mediaFields.map((item, index) => (
                                     <FormField
                                         key={item.id}
@@ -260,12 +286,24 @@ export function CategoryForm({ onClose, category }) {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <div className="flex items-center gap-2">
-                                                    <FormControl>
-                                                        <Input placeholder="https://example.com/media.jpg" {...field} />
-                                                    </FormControl>
-                                                    {field.value && (
+                                                    <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
+                                                        <FormControl>
+                                                            <SelectTrigger>
+                                                                <SelectValue placeholder="Select a media item" />
+                                                            </SelectTrigger>
+                                                        </FormControl>
+                                                        <SelectContent>
+                                                            {mediaAssets.map(asset => (
+                                                            <SelectItem key={asset.id} value={asset.url}>
+                                                                {asset.name}
+                                                            </SelectItem>
+                                                            ))}
+                                                        </SelectContent>
+                                                    </Select>
+                                                    
+                                                    {watchedMedia?.[index]?.value && (
                                                         <Image
-                                                            src={field.value}
+                                                            src={watchedMedia[index].value}
                                                             alt={`Media preview ${index + 1}`}
                                                             width={40}
                                                             height={40}
@@ -283,7 +321,7 @@ export function CategoryForm({ onClose, category }) {
                                 ))}
                                 <Button type="button" variant="outline" size="sm" onClick={() => appendMedia({ value: '' })}>
                                     <PlusCircle className="mr-2 h-4 w-4" />
-                                    Add Media URL
+                                    Add Media Item
                                 </Button>
                             </div>
                         </div>
