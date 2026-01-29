@@ -85,14 +85,13 @@ export function ProductContent({ productName, description, media, categorySlug, 
                 <CarouselContent>
                   {media.map((image, index) => (
                     <CarouselItem key={`${image.url}-${index}`}>
-                      <div className="aspect-w-4 aspect-h-3 rounded-lg overflow-hidden border shadow-lg">
+                      <div className="relative aspect-w-4 aspect-h-3 rounded-lg overflow-hidden border shadow-lg">
                         <Image
                           src={image.url}
                           alt={`${productName} Image ${index + 1}`}
                           data-ai-hint={image.aiHint}
-                          width={image.width}
-                          height={image.height}
-                          className="object-cover w-full h-full"
+                          fill
+                          className="object-cover"
                         />
                       </div>
                     </CarouselItem>
@@ -102,14 +101,13 @@ export function ProductContent({ productName, description, media, categorySlug, 
                 <CarouselNext className="right-2" />
               </Carousel>
            ) : singleImageSrc ? (
-             <div className="rounded-lg overflow-hidden border shadow-lg aspect-w-4 aspect-h-3">
+             <div className="relative rounded-lg overflow-hidden border shadow-lg aspect-w-4 aspect-h-3">
                 <Image
                     src={singleImageSrc.url}
                     alt={`${productName} Image`}
                     data-ai-hint={singleImageSrc.aiHint}
-                    width={singleImageSrc.width}
-                    height={singleImageSrc.height}
-                    className="object-cover w-full h-full"
+                    fill
+                    className="object-cover"
                 />
              </div>
            ) : null}

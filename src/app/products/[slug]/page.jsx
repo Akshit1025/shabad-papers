@@ -149,14 +149,13 @@ const CategoryDetailView = ({ category, products }) => {
                     const imageSrc = getImageSource(itemUrl);
                     return imageSrc && (
                       <CarouselItem key={`${itemUrl}-${index}`}>
-                        <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden border shadow-lg">
+                        <div className="relative aspect-w-16 aspect-h-9 rounded-lg overflow-hidden border shadow-lg">
                           <Image
                             src={imageSrc.url}
                             alt={`${category.name} Image`}
                             data-ai-hint={imageSrc.aiHint}
-                            width={imageSrc.width}
-                            height={imageSrc.height}
-                            className="object-cover w-full h-full"
+                            fill
+                            className="object-cover"
                           />
                         </div>
                       </CarouselItem>
@@ -168,14 +167,13 @@ const CategoryDetailView = ({ category, products }) => {
               </Carousel>
             ) : (
               singleImageSrc && (
-                <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden border shadow-lg">
+                <div className="relative aspect-w-16 aspect-h-9 rounded-lg overflow-hidden border shadow-lg">
                   <Image
                     src={singleImageSrc.url}
                     alt={`${category.name} Image`}
                     data-ai-hint={singleImageSrc.aiHint}
-                    width={singleImageSrc.width}
-                    height={singleImageSrc.height}
-                    className="object-cover w-full h-full"
+                    fill
+                    className="object-cover"
                   />
                 </div>
               )
@@ -275,9 +273,8 @@ const CategoryDetailView = ({ category, products }) => {
                                 src={productImageSrc.url}
                                 alt={product.name}
                                 data-ai-hint={productImageSrc.aiHint}
-                                width={productImageSrc.width}
-                                height={productImageSrc.height}
-                                className="object-cover w-full h-full"
+                                fill
+                                className="object-cover"
                               />
                             </div>
                           )}

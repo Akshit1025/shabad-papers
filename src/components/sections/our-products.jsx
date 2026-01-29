@@ -109,9 +109,8 @@ export function OurProducts() {
                               src={imageSrc.url}
                               alt={category.name}
                               data-ai-hint={imageSrc.aiHint}
-                              width={imageSrc.width}
-                              height={imageSrc.height}
-                              className="object-cover w-full h-full"
+                              fill
+                              className="object-cover"
                             />
                           )}
                         </div>
