@@ -14,7 +14,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Loader, PlusCircle, Trash2, UploadCloud } from 'lucide-react';
+import { Loader, PlusCircle, Trash2 } from 'lucide-react';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -242,18 +242,6 @@ export function ProductForm({ onClose, product, categories }) {
                   </FormItem>
                 )}
               />
-              <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">
-                  Alternatively, upload an image. File upload is not yet functional.
-                </p>
-                <div className="flex items-center justify-center w-full">
-                  <div className="flex flex-col items-center justify-center pt-5 pb-6 w-full border-2 border-dashed rounded-lg cursor-not-allowed bg-muted/50">
-                    <UploadCloud className="w-10 h-10 mb-4 text-muted-foreground" />
-                    <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                    <p className="text-xs text-muted-foreground">Main card image (JPG, PNG, etc.)</p>
-                  </div>
-                </div>
-              </div>
             </div>
 
             <div className="space-y-4 rounded-lg border p-4">
@@ -284,18 +272,6 @@ export function ProductForm({ onClose, product, categories }) {
                   <PlusCircle className="mr-2 h-4 w-4" />
                   Add Media URL
                 </Button>
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">
-                  Alternatively, upload media. File upload is not yet functional.
-                </p>
-                <div className="flex items-center justify-center w-full">
-                  <div className="flex flex-col items-center justify-center pt-5 pb-6 w-full border-2 border-dashed rounded-lg cursor-not-allowed bg-muted/50">
-                    <UploadCloud className="w-10 h-10 mb-4 text-muted-foreground" />
-                    <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                    <p className="text-xs text-muted-foreground">Images or Videos for the carousel</p>
-                  </div>
-                </div>
               </div>
             </div>
           </CardContent>
