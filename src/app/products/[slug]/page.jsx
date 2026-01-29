@@ -149,7 +149,7 @@ const CategoryDetailView = ({ category, products }) => {
                     const imageSrc = getImageSource(itemUrl);
                     return imageSrc && (
                       <CarouselItem key={`${itemUrl}-${index}`}>
-                        <div className="relative aspect-w-16 aspect-h-9 rounded-lg overflow-hidden border shadow-lg">
+                        <div className="relative aspect-[16/9] rounded-lg overflow-hidden border shadow-lg">
                           <Image
                             src={imageSrc.url}
                             alt={`${category.name} Image`}
@@ -162,12 +162,12 @@ const CategoryDetailView = ({ category, products }) => {
                     )
                   })}
                 </CarouselContent>
-                <CarouselPrevious className="left-2" />
-                <CarouselNext className="right-2" />
+                <CarouselPrevious />
+                <CarouselNext />
               </Carousel>
             ) : (
               singleImageSrc && (
-                <div className="relative aspect-w-16 aspect-h-9 rounded-lg overflow-hidden border shadow-lg">
+                <div className="relative aspect-[16/9] rounded-lg overflow-hidden border shadow-lg">
                   <Image
                     src={singleImageSrc.url}
                     alt={`${category.name} Image`}
