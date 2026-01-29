@@ -89,7 +89,7 @@ export function ProductContent({ productName, description, media, categorySlug, 
                 opts={{ loop: true }}
                 plugins={[plugin.current]}
                 onMouseEnter={plugin.current.stop}
-                onMouseLeave={plugin.current.reset}
+                onMouseLeave={plugin.current.play}
               >
                 <CarouselContent>
                   {media.map((item, index) => {
