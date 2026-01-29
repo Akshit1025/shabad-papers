@@ -10,6 +10,13 @@ import { db } from '@/lib/firebase';
 import { useToast } from '@/hooks/use-toast';
 
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 import { Loader, PlusCircle } from 'lucide-react';
 import { MediaTable } from '@/components/admin/media-table';
 import { MediaForm } from '@/components/admin/media-form';
@@ -18,7 +25,7 @@ import { DeleteMediaAlert } from '@/components/admin/delete-media-alert';
 export default function MediaPage() {
   const [media, setMedia] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [mediaToDelete, setMediaToDelete] = useState(null);
@@ -45,12 +52,12 @@ export default function MediaPage() {
 
   const handleCreate = () => {
     setSelectedMedia(null);
-    setShowForm(true);
+    setIsFormOpen(true);
   };
 
   const handleEdit = (mediaItem) => {
     setSelectedMedia(mediaItem);
-    setShowForm(true);
+    setIsFormOpen(true);
   };
 
   const handleDelete = (mediaItem) => {
@@ -58,16 +65,18 @@ export default function MediaPage() {
     setIsAlertOpen(true);
   };
   
-  const handleFormClose = () => {
-      setShowForm(false);
+  const handleFormOpenChange = (open) => {
+    setIsFormOpen(open);
+    if (!open) {
       setSelectedMedia(null);
-  }
+    }
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Manage Media</h1>
-        <Button onClick={handleCreate} disabled={showForm}>
+        <Button onClick={handleCreate}>
           <PlusCircle className="mr-2 h-4 w-4" />
           Add Media
         </Button>
@@ -85,12 +94,20 @@ export default function MediaPage() {
         />
       )}
       
-      {showForm && (
-        <MediaForm
-            onClose={handleFormClose}
-            mediaItem={selectedMedia}
-        />
-      )}
+      <Dialog open={isFormOpen} onOpenChange={handleFormOpenChange}>
+        <DialogContent className="sm:max-w-[525px]">
+          <DialogHeader>
+            <DialogTitle>{selectedMedia ? 'Edit Media' : 'Add New Media'}</DialogTitle>
+            <DialogDescription>
+                {selectedMedia ? 'Update the details of this media item.' : 'Fill in the details to add a new media item.'}
+            </DialogDescription>
+          </DialogHeader>
+          <MediaForm
+              onClose={() => handleFormOpenChange(false)}
+              mediaItem={selectedMedia}
+          />
+        </DialogContent>
+      </Dialog>
 
       <DeleteMediaAlert
         isOpen={isAlertOpen}

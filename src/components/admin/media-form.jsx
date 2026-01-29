@@ -8,7 +8,6 @@ import { useToast } from '@/hooks/use-toast';
 import { db } from '@/lib/firebase';
 import { doc, addDoc, setDoc, collection, serverTimestamp } from 'firebase/firestore';
 import Image from 'next/image';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -36,7 +35,7 @@ export function MediaForm({ onClose, mediaItem }) {
   const watchedUrl = watch('url');
 
   useEffect(() => {
-    if (isEditMode) {
+    if (isEditMode && mediaItem) {
       reset({
         name: mediaItem.name || '',
         url: mediaItem.url || '',
@@ -80,65 +79,57 @@ export function MediaForm({ onClose, mediaItem }) {
   };
 
   return (
-    <Card className="mt-6">
-        <CardHeader>
-            <CardTitle>{isEditMode ? 'Edit Media' : 'Add New Media'}</CardTitle>
-            <CardDescription>
-                {isEditMode ? 'Update the details of this media item.' : 'Fill in the details to add a new media item.'}
-            </CardDescription>
-        </CardHeader>
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-                <CardContent className="space-y-4">
-                    <FormField
-                      control={control}
-                      name="name"
-                      render={({ field }) => (
-                          <FormItem>
-                          <FormLabel>Media Name</FormLabel>
-                          <FormControl>
-                              <Input placeholder="e.g., Carbonless Paper Stack" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                          </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={control}
-                      name="url"
-                      render={({ field }) => (
-                          <FormItem>
-                          <FormLabel>Media URL</FormLabel>
-                          <div className="flex items-center gap-4">
-                            <FormControl>
-                                <Input placeholder="https://example.com/image.jpg" {...field} />
-                            </FormControl>
-                            {watchedUrl && (
-                                <Image
-                                    src={watchedUrl}
-                                    alt="Image preview"
-                                    width={64}
-                                    height={64}
-                                    className="h-16 w-16 rounded-md border object-cover"
-                                />
-                            )}
-                          </div>
-                          <FormMessage />
-                          </FormItem>
-                      )}
-                    />
-                </CardContent>
-                <CardFooter className="flex justify-end gap-2">
-                    <Button type="button" variant="outline" onClick={onClose} disabled={loading}>
-                    Cancel
-                    </Button>
-                    <Button type="submit" disabled={loading}>
-                    {loading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
-                    {isEditMode ? 'Save Changes' : 'Add Media'}
-                    </Button>
-                </CardFooter>
-            </form>
-        </Form>
-    </Card>
+    <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <div className="space-y-4">
+                <FormField
+                  control={control}
+                  name="name"
+                  render={({ field }) => (
+                      <FormItem>
+                      <FormLabel>Media Name</FormLabel>
+                      <FormControl>
+                          <Input placeholder="e.g., Carbonless Paper Stack" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                      </FormItem>
+                  )}
+                />
+                <FormField
+                  control={control}
+                  name="url"
+                  render={({ field }) => (
+                      <FormItem>
+                      <FormLabel>Media URL</FormLabel>
+                      <div className="flex items-start gap-4">
+                        <FormControl>
+                            <Input placeholder="https://example.com/image.jpg" {...field} />
+                        </FormControl>
+                        {watchedUrl && (
+                            <Image
+                                src={watchedUrl}
+                                alt="Image preview"
+                                width={64}
+                                height={64}
+                                className="h-16 w-16 rounded-md border object-cover"
+                            />
+                        )}
+                      </div>
+                      <FormMessage />
+                      </FormItem>
+                  )}
+                />
+            </div>
+            <div className="flex justify-end gap-2 pt-2">
+                <Button type="button" variant="outline" onClick={onClose} disabled={loading}>
+                Cancel
+                </Button>
+                <Button type="submit" disabled={loading}>
+                {loading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
+                {isEditMode ? 'Save Changes' : 'Add Media'}
+                </Button>
+            </div>
+        </form>
+    </Form>
   );
 }
