@@ -43,6 +43,15 @@ export function ProductHero({ title, subtitle }) {
   );
 }
 
+/**
+ * Checks if a URL is for a video file.
+ * @param {string} url - The URL to check.
+ * @returns {boolean} True if the URL is a video.
+ */
+const isVideoUrl = (url) => {
+    if (typeof url !== 'string') return false;
+    return url.match(/\.(mp4|webm|ogg)(\?.*)?$/i);
+};
 
 /**
  * The main content section for a product page.
@@ -60,7 +69,7 @@ export function ProductContent({ productName, description, media, categorySlug, 
   );
 
   const hasCarousel = Array.isArray(media) && media.length > 1;
-  const singleImageSrc = Array.isArray(media) && media.length === 1 ? media[0] : null;
+  const singleMediaItem = Array.isArray(media) && media.length === 1 ? media[0] : null;
 
   return (
     <section className="py-16 md:py-24 bg-background">
@@ -83,32 +92,59 @@ export function ProductContent({ productName, description, media, categorySlug, 
                 onMouseLeave={plugin.current.reset}
               >
                 <CarouselContent>
-                  {media.map((image, index) => (
-                    <CarouselItem key={`${image.url}-${index}`}>
-                      <div className="relative aspect-[4/3] rounded-lg overflow-hidden border shadow-lg">
-                        <Image
-                          src={image.url}
-                          alt={`${productName} Image ${index + 1}`}
-                          data-ai-hint={image.aiHint}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    </CarouselItem>
-                  ))}
+                  {media.map((item, index) => {
+                    const isVideo = isVideoUrl(item.url);
+                    return (
+                        <CarouselItem key={`${item.url}-${index}`}>
+                            <div className="relative aspect-[4/3] rounded-lg overflow-hidden border shadow-lg bg-black">
+                                {isVideo ? (
+                                    <video
+                                        src={item.url}
+                                        autoPlay
+                                        muted
+                                        loop
+                                        playsInline
+                                        controls={false}
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <Image
+                                        src={item.url}
+                                        alt={`${productName} Image ${index + 1}`}
+                                        data-ai-hint={item.aiHint}
+                                        fill
+                                        className="object-cover"
+                                    />
+                                )}
+                            </div>
+                        </CarouselItem>
+                    )
+                  })}
                 </CarouselContent>
                 <CarouselPrevious />
                 <CarouselNext />
               </Carousel>
-           ) : singleImageSrc ? (
-             <div className="relative rounded-lg overflow-hidden border shadow-lg aspect-[4/3]">
-                <Image
-                    src={singleImageSrc.url}
-                    alt={`${productName} Image`}
-                    data-ai-hint={singleImageSrc.aiHint}
-                    fill
-                    className="object-cover"
-                />
+           ) : singleMediaItem ? (
+             <div className="relative rounded-lg overflow-hidden border shadow-lg aspect-[4/3] bg-black">
+                {isVideoUrl(singleMediaItem.url) ? (
+                    <video
+                        src={singleMediaItem.url}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        controls={false}
+                        className="w-full h-full object-cover"
+                    />
+                ) : (
+                    <Image
+                        src={singleMediaItem.url}
+                        alt={`${productName} Image`}
+                        data-ai-hint={singleMediaItem.aiHint}
+                        fill
+                        className="object-cover"
+                    />
+                )}
              </div>
            ) : null}
           </motion.div>

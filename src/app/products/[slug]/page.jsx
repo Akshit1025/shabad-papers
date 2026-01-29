@@ -88,6 +88,16 @@ function getImageSource(url) {
 }
 
 /**
+ * Checks if a URL is for a video file.
+ * @param {string} url - The URL to check.
+ * @returns {boolean} True if the URL is a video.
+ */
+const isVideoUrl = (url) => {
+    if (typeof url !== 'string') return false;
+    return url.match(/\.(mp4|webm|ogg)(\?.*)?$/i);
+};
+
+/**
  * Renders a placeholder for missing content.
  * @param {string} message - The message to display.
  * @returns {JSX.Element}
@@ -108,6 +118,8 @@ const CategoryDetailView = ({ category, products }) => {
   );
   
   const hasCarousel = Array.isArray(category.media) && category.media.length > 0;
+  const singleImageUrl = category.image || (category.media && category.media[0]);
+  const isSingleMediaVideo = isVideoUrl(singleImageUrl);
   const singleImageSrc = getImageSource(category.image || (category.media && category.media[0]));
 
   return (
@@ -146,17 +158,29 @@ const CategoryDetailView = ({ category, products }) => {
               >
                 <CarouselContent>
                   {category.media.map((itemUrl, index) => {
-                    const imageSrc = getImageSource(itemUrl);
-                    return imageSrc && (
+                    const isVideo = isVideoUrl(itemUrl);
+                    return (
                       <CarouselItem key={`${itemUrl}-${index}`}>
-                        <div className="relative aspect-[16/9] rounded-lg overflow-hidden border shadow-lg">
-                          <Image
-                            src={imageSrc.url}
-                            alt={`${category.name} Image`}
-                            data-ai-hint={imageSrc.aiHint}
-                            fill
-                            className="object-cover"
-                          />
+                        <div className="relative aspect-[16/9] rounded-lg overflow-hidden border shadow-lg bg-black">
+                          {isVideo ? (
+                             <video
+                                src={itemUrl}
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                controls={false}
+                                className="w-full h-full object-cover"
+                              />
+                          ) : (
+                            <Image
+                              src={itemUrl}
+                              alt={`${category.name} Image ${index + 1}`}
+                              data-ai-hint="product image"
+                              fill
+                              className="object-cover"
+                            />
+                          )}
                         </div>
                       </CarouselItem>
                     )
@@ -167,14 +191,26 @@ const CategoryDetailView = ({ category, products }) => {
               </Carousel>
             ) : (
               singleImageSrc && (
-                <div className="relative aspect-[16/9] rounded-lg overflow-hidden border shadow-lg">
-                  <Image
-                    src={singleImageSrc.url}
-                    alt={`${category.name} Image`}
-                    data-ai-hint={singleImageSrc.aiHint}
-                    fill
-                    className="object-cover"
-                  />
+                <div className="relative aspect-[16/9] rounded-lg overflow-hidden border shadow-lg bg-black">
+                  {isSingleMediaVideo ? (
+                     <video
+                        src={singleImageSrc.url}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        controls={false}
+                        className="w-full h-full object-cover"
+                      />
+                  ) : (
+                    <Image
+                      src={singleImageSrc.url}
+                      alt={`${category.name} Image`}
+                      data-ai-hint={singleImageSrc.aiHint}
+                      fill
+                      className="object-cover"
+                    />
+                  )}
                 </div>
               )
             )}
@@ -268,7 +304,7 @@ const CategoryDetailView = ({ category, products }) => {
                       <Link href={`/products/${product.slug}`} className="block h-full">
                         <div className="group bg-card h-full rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-border/20 flex flex-col">
                           {productImageSrc && (
-                            <div className="relative w-full h-56">
+                            <div className="relative w-full aspect-[4/3]">
                               <Image
                                 src={productImageSrc.url}
                                 alt={product.name}

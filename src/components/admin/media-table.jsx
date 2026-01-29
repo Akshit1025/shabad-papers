@@ -3,6 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Edit, ImageOff, Trash2 } from "lucide-react";
 import Image from "next/image";
 
+const isVideoUrl = (url) => {
+    if (typeof url !== 'string') return false;
+    return url.match(/\.(mp4|webm|ogg)(\?.*)?$/i);
+};
+
 export function MediaTable({ media, onEdit, onDelete }) {
   return (
     <div className="rounded-lg border bg-card">
@@ -18,10 +23,21 @@ export function MediaTable({ media, onEdit, onDelete }) {
         <TableBody>
           {media.length > 0 ? (
             media.map(mediaItem => {
+              const isVideo = isVideoUrl(mediaItem.url);
               return (
                 <TableRow key={mediaItem.id}>
                   <TableCell>
                     {mediaItem.url ? (
+                      isVideo ? (
+                        <video
+                          src={mediaItem.url}
+                          muted
+                          autoPlay
+                          loop
+                          playsInline
+                          className="rounded-md object-cover w-[50px] h-[50px] bg-black"
+                        />
+                      ) : (
                         <Image 
                             src={mediaItem.url}
                             alt={mediaItem.name}
@@ -29,6 +45,7 @@ export function MediaTable({ media, onEdit, onDelete }) {
                             height={50}
                             className="rounded-md object-cover w-[50px] h-[50px]"
                         />
+                      )
                     ) : (
                         <div className="w-[50px] h-[50px] bg-secondary rounded-md flex items-center justify-center">
                             <ImageOff className="h-5 w-5 text-muted-foreground" />

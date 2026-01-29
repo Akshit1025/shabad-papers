@@ -18,6 +18,11 @@ const formSchema = z.object({
   url: z.string().url({ message: "Please enter a valid URL." }),
 });
 
+const isVideoUrl = (url) => {
+    if (typeof url !== 'string') return false;
+    return url.match(/\.(mp4|webm|ogg)(\?.*)?$/i);
+};
+
 export function MediaForm({ onClose, mediaItem }) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -33,6 +38,7 @@ export function MediaForm({ onClose, mediaItem }) {
   
   const { control, reset, watch } = form;
   const watchedUrl = watch('url');
+  const isVideo = isVideoUrl(watchedUrl);
 
   useEffect(() => {
     if (isEditMode && mediaItem) {
@@ -106,13 +112,25 @@ export function MediaForm({ onClose, mediaItem }) {
                             <Input placeholder="https://example.com/image.jpg" {...field} />
                         </FormControl>
                         {watchedUrl && (
-                            <Image
-                                src={watchedUrl}
-                                alt="Image preview"
-                                width={64}
-                                height={64}
-                                className="h-16 w-16 rounded-md border object-cover"
-                            />
+                            isVideo ? (
+                                <video
+                                    src={watchedUrl}
+                                    muted
+                                    autoPlay
+                                    loop
+                                    playsInline
+                                    className="h-16 w-16 rounded-md border object-cover bg-black"
+                                />
+                            ) : (
+                                <Image
+                                    src={watchedUrl}
+                                    alt="Image preview"
+                                    width={64}
+                                    height={64}
+                                    className="h-16 w-16 rounded-md border object-cover"
+                                    onError={(e) => e.target.style.display = 'none'}
+                                />
+                            )
                         )}
                       </div>
                       <FormMessage />
