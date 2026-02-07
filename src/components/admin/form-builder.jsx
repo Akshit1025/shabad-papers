@@ -18,7 +18,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Loader, PlusCircle, Trash2 } from 'lucide-react';
+import { Loader, PlusCircle, Trash2, Info } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const optionSchema = z.object({
   value: z.string().min(1, { message: "Option value cannot be empty." }),
@@ -132,6 +133,8 @@ export function FormBuilder({ onClose, formDefinition }) {
         ...formDefinition,
         fields: (formDefinition.fields || []).map(field => ({
           ...field,
+          placeholder: field.placeholder || '',
+          errorMessage: field.errorMessage || '',
           info: field.info || '',
           options: Array.isArray(field.options) ? field.options.map(opt => ({ value: opt })) : [],
         })),
@@ -141,7 +144,7 @@ export function FormBuilder({ onClose, formDefinition }) {
         id: '',
         title: '',
         description: '',
-        fields: [{ name: 'name', label: 'Your Name', type: 'text', required: true, placeholder: 'John Doe', options: [], info: '' }],
+        fields: [{ name: 'name', label: 'Your Name', type: 'text', required: true, placeholder: 'John Doe', options: [], info: '', errorMessage: '' }],
       });
     }
   }, [formDefinition, isEditMode, reset]);
@@ -364,7 +367,7 @@ export function FormBuilder({ onClose, formDefinition }) {
               </div>
                {errors.fields?.root && <p className="text-sm font-medium text-destructive">{errors.fields.root.message}</p>}
                {errors.fields && !errors.fields.root && <p className="text-sm font-medium text-destructive">There are errors in the form fields above.</p>}
-              <Button type="button" variant="outline" onClick={() => append({ name: '', label: '', type: 'text', required: false, placeholder: '', options: [] })}>
+              <Button type="button" variant="outline" onClick={() => append({ name: '', label: '', type: 'text', required: false, placeholder: '', options: [], errorMessage: '', info: '' })}>
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Add Field
               </Button>
