@@ -43,12 +43,12 @@ export function AdminSidebar() {
     return (
         <>
             <SidebarHeader>
-                <div className="flex h-14 items-center justify-between border-b p-4">
+                <div className="flex h-20 items-center justify-center border-b border-border/20 px-4 relative">
                      <Link href="/admin/dashboard" className="flex items-center gap-2 font-headline text-xl font-bold text-primary overflow-hidden">
-                        <Image src="/images/sp-logo-no-bg.png" alt="Shabad Papers Logo" width={30} height={30} />
-                        <span className="whitespace-nowrap group-data-[collapsible=icon]:hidden">Admin Panel</span>
+                        <Image src="/images/sp-logo-no-bg.png" alt="Shabad Papers Logo" width={40} height={40} />
+                        <span className="whitespace-nowrap group-data-[collapsible=icon]:hidden">Shabad Papers</span>
                     </Link>
-                    <SidebarTrigger />
+                    <SidebarTrigger className="absolute right-4 group-data-[collapsible=icon]:hidden" />
                 </div>
             </SidebarHeader>
             <SidebarContent>
