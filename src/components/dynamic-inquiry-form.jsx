@@ -90,15 +90,21 @@ function buildSchema(fields) {
  */
 const MultiSelectDropdown = ({ field, formField, form }) => {
     const options = Array.isArray(field.options) ? field.options : [];
-    // Defensively ensure selectedValues is always an array to prevent errors.
-    const selectedValues = Array.isArray(formField.value) ? formField.value : [];
+    // Defensive check to handle if a string is passed by mistake.
+    const selectedValues = Array.isArray(formField.value) 
+        ? formField.value 
+        : (formField.value ? [formField.value] : []);
 
     const getTriggerText = () => {
-        if (selectedValues.length === 0) return field.placeholder || "Select options...";
-        if (selectedValues.length > 2) return `${selectedValues.length} selected`;
-        const selectedLabels = options.filter(opt => selectedValues.includes(opt));
-        return selectedLabels.join(', ');
-    }
+        if (selectedValues.length === 0) {
+            return field.placeholder || "Select options...";
+        }
+        if (selectedValues.length > 2) {
+            return `${selectedValues.length} selected`;
+        }
+        // The selected values are the labels themselves.
+        return selectedValues.join(', ');
+    };
 
     return (
         <DropdownMenu>
