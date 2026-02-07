@@ -53,10 +53,11 @@ function buildSchema(fields) {
             break;
         case 'dropdown':
             if (field.multiple) {
-                schema = z.array(z.string()).default([]);
-                 if (field.required) {
-                    schema = schema.min(1, { message: field.errorMessage || "Please select at least one option." });
+                let arraySchema = z.array(z.string());
+                if (field.required) {
+                    arraySchema = arraySchema.min(1, { message: field.errorMessage || "Please select at least one option." });
                 }
+                schema = arraySchema.default([]);
             } else {
                 schema = z.string();
                 if (field.required) {
