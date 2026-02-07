@@ -30,6 +30,7 @@ const fieldSchema = z.object({
   type: z.enum(['text', 'email', 'textarea', 'number', 'dropdown']),
   placeholder: z.string().optional(),
   required: z.boolean().default(false),
+  multiple: z.boolean().default(false),
   errorMessage: z.string().optional(),
   options: z.array(optionSchema).optional(),
 }).refine(data => {
@@ -278,12 +279,13 @@ export function FormBuilder({ onClose, formDefinition }) {
                           )}
                         />
                     </div>
-                     <div className="col-span-12 md:col-span-3">
+                    <div className="col-span-12 md:col-span-3">
+                      <div className="flex gap-4 h-full items-center">
                         <FormField
                           control={control}
                           name={`fields.${index}.required`}
                           render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 h-full mt-2">
+                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 flex-1">
                               <FormLabel>Required</FormLabel>
                               <FormControl>
                                 <Switch checked={field.value} onCheckedChange={field.onChange} />
@@ -291,6 +293,21 @@ export function FormBuilder({ onClose, formDefinition }) {
                             </FormItem>
                           )}
                         />
+                        {watchedFields[index].type === 'dropdown' && (
+                           <FormField
+                              control={control}
+                              name={`fields.${index}.multiple`}
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 flex-1">
+                                  <FormLabel>Multiple</FormLabel>
+                                  <FormControl>
+                                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                            />
+                        )}
+                      </div>
                     </div>
                     
                     {watchedFields[index].type === 'dropdown' ? (

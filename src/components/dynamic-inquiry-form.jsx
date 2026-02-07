@@ -16,8 +16,14 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faSpinner, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 /**
  * Builds a Zod validation schema from a form definition.
@@ -29,40 +35,107 @@ function buildSchema(fields) {
   fields.forEach(field => {
     let schema;
     switch (field.type) {
-      case 'email':
-        schema = z.string().email({ message: "Please enter a valid email." });
-        break;
-      case 'number':
-        schema = z.coerce.number().min(1, { message: "Must be greater than 0."});
-        break;
-      case 'dropdown':
-      default:
-        schema = z.string();
+        case 'email':
+            schema = z.string().email({ message: "Please enter a valid email." });
+            if (field.required) {
+                schema = schema.min(1, { message: field.errorMessage || "This field is required." });
+            } else {
+                schema = schema.optional().or(z.literal(''));
+            }
+            break;
+        case 'number':
+            schema = z.coerce.number();
+            if (field.required) {
+                schema = schema.min(1, { message: field.errorMessage || "Must be a positive number." });
+            } else {
+                schema = schema.optional();
+            }
+            break;
+        case 'dropdown':
+            if (field.multiple) {
+                schema = z.array(z.string()).default([]);
+                 if (field.required) {
+                    schema = schema.min(1, { message: field.errorMessage || "Please select at least one option." });
+                }
+            } else {
+                schema = z.string();
+                if (field.required) {
+                    schema = schema.min(1, { message: field.errorMessage || "This field is required." });
+                } else {
+                    schema = schema.optional().or(z.literal(''));
+                }
+            }
+            break;
+        case 'text':
+        case 'textarea':
+        default:
+            schema = z.string();
+            if (field.required) {
+                schema = schema.min(1, { message: field.errorMessage || "This field is required." });
+            } else {
+                schema = schema.optional().or(z.literal(''));
+            }
     }
-
-    if (field.required) {
-      if (field.type === 'email' || (field.type === 'text' && !field.minLength) || field.type === 'dropdown') {
-        schema = schema.min(1, { message: field.errorMessage || "This field is required." });
-      } else {
-        schema = schema.min(field.minLength || 1, { message: field.errorMessage || "This field is required." });
-      }
-    } else {
-      schema = schema.optional();
-    }
-    
     shape[field.name] = schema;
   });
   return z.object(shape);
 }
+
+/**
+ * Renders a multi-select dropdown component.
+ * @param {object} props - Component props.
+ * @returns {JSX.Element}
+ */
+const MultiSelectDropdown = ({ field, formField, form }) => {
+    const options = Array.isArray(field.options) ? field.options : [];
+    const selectedValues = formField.value || [];
+
+    const getTriggerText = () => {
+        if (selectedValues.length === 0) return field.placeholder || "Select options...";
+        if (selectedValues.length > 2) return `${selectedValues.length} selected`;
+        // Find the labels for the selected values
+        const selectedLabels = options.filter(opt => selectedValues.includes(opt));
+        return selectedLabels.join(', ');
+    }
+
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="w-full justify-between font-normal">
+                    <span className="truncate">{getTriggerText()}</span>
+                    <FontAwesomeIcon icon={faChevronDown} className="h-4 w-4 opacity-50" />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-[var(--radix-select-trigger-width)]">
+                {options.map(option => (
+                    <DropdownMenuCheckboxItem
+                        key={option}
+                        checked={selectedValues.includes(option)}
+                        onCheckedChange={(checked) => {
+                            const currentValues = form.getValues(formField.name) || [];
+                            const newValues = checked
+                                ? [...currentValues, option]
+                                : currentValues.filter(val => val !== option);
+                            form.setValue(formField.name, newValues, { shouldValidate: true });
+                        }}
+                    >
+                        {option}
+                    </DropdownMenuCheckboxItem>
+                ))}
+            </DropdownMenuContent>
+        </DropdownMenu>
+    );
+};
 
 
 /**
  * Renders the appropriate form input based on field type.
  * @param {object} field - The field definition.
  * @param {object} formField - The field object from react-hook-form.
+ * @param {object} form - The form instance from react-hook-form.
  * @returns {JSX.Element}
  */
-const FormInput = ({ field, formField }) => {
+const FormInput = ({ field, formField, form }) => {
     switch (field.type) {
         case 'textarea':
             return <Textarea placeholder={field.placeholder} {...formField} />;
@@ -72,6 +145,9 @@ const FormInput = ({ field, formField }) => {
             return <Input type="number" placeholder={field.placeholder} {...formField} />;
         case 'dropdown':
             const options = Array.isArray(field.options) ? field.options : [];
+            if (field.multiple) {
+                return <MultiSelectDropdown field={field} formField={formField} form={form} />
+            }
             return (
                 <Select onValueChange={formField.onChange} defaultValue={formField.value}>
                     <FormControl>
@@ -105,9 +181,13 @@ export function DynamicInquiryForm({ formDefinition, onFormSubmit }) {
 
   const formSchema = buildSchema(formDefinition.fields);
   
-  // Set up default values, including the product name from the definition
+  // Set up default values from the definition
   const defaultValues = formDefinition.fields.reduce((acc, field) => {
-    acc[field.name] = field.defaultValue || "";
+    if (field.type === 'dropdown' && field.multiple) {
+        acc[field.name] = field.defaultValue || [];
+    } else {
+        acc[field.name] = field.defaultValue || "";
+    }
     return acc;
   }, {});
   
@@ -119,7 +199,15 @@ export function DynamicInquiryForm({ formDefinition, onFormSubmit }) {
   async function onSubmit(values) {
     setLoading(true);
     try {
-      const response = await submitInquiry(values);
+      const valuesToSubmit = { ...values };
+      // Convert array values to comma-separated string for submission
+      Object.keys(valuesToSubmit).forEach(key => {
+        if (Array.isArray(valuesToSubmit[key])) {
+          valuesToSubmit[key] = valuesToSubmit[key].join(', ');
+        }
+      });
+
+      const response = await submitInquiry(valuesToSubmit);
       if(response.success) {
         toast({
             title: "Inquiry Sent!",
@@ -157,7 +245,7 @@ export function DynamicInquiryForm({ formDefinition, onFormSubmit }) {
               <FormItem>
                 <FormLabel>{field.label}</FormLabel>
                 <FormControl>
-                  <FormInput field={field} formField={formField} />
+                  <FormInput field={field} formField={formField} form={form} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
