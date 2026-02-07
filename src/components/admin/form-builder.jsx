@@ -130,7 +130,7 @@ export function FormBuilder({ onClose, formDefinition }) {
     if (isEditMode && formDefinition) {
        reset({
         ...formDefinition,
-        fields: formDefinition.fields.map(field => ({
+        fields: (formDefinition.fields || []).map(field => ({
           ...field,
           info: field.info || '',
           options: Array.isArray(field.options) ? field.options.map(opt => ({ value: opt })) : [],
