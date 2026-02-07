@@ -9,6 +9,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import {
+  useSidebar,
   SidebarHeader,
   SidebarContent,
   SidebarFooter,
@@ -16,8 +17,9 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarTrigger,
+  SidebarSeparator,
 } from '@/components/ui/sidebar';
-import { LayoutDashboard, ShoppingCart, List, FileText, LogOut, Image as ImageIcon } from 'lucide-react';
+import { LayoutDashboard, ShoppingCart, List, FileText, LogOut, Image as ImageIcon, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 
 const navItems = [
     { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -30,6 +32,7 @@ const navItems = [
 export function AdminSidebar() {
     const router = useRouter();
     const pathname = usePathname();
+    const { open } = useSidebar();
 
     const handleLogout = async () => {
         try {
@@ -43,12 +46,11 @@ export function AdminSidebar() {
     return (
         <>
             <SidebarHeader>
-                <div className="flex h-20 items-center justify-center border-b border-border/20 px-4 relative">
-                     <Link href="/admin/dashboard" className="flex items-center gap-2 font-headline text-xl font-bold text-primary overflow-hidden">
+                <div className="flex h-20 items-center border-b border-border/20 relative group-data-[state=expanded]:px-4 group-data-[state=collapsed]:px-2">
+                     <Link href="/admin/dashboard" className="flex items-center gap-2 font-headline text-xl font-bold text-primary overflow-hidden w-full group-data-[state=expanded]:justify-start group-data-[state=collapsed]:justify-center">
                         <Image src="/images/sp-logo-no-bg.png" alt="Shabad Papers Logo" width={40} height={40} />
-                        <span className="whitespace-nowrap group-data-[collapsible=icon]:hidden">Shabad Papers</span>
+                        <span className="whitespace-nowrap group-data-[state=collapsed]:hidden">Shabad Papers</span>
                     </Link>
-                    <SidebarTrigger className="absolute right-4 group-data-[collapsible=icon]:hidden" />
                 </div>
             </SidebarHeader>
             <SidebarContent>
@@ -79,6 +81,17 @@ export function AdminSidebar() {
                             <LogOut />
                             <span>Logout</span>
                         </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+                <SidebarSeparator className="my-1" />
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarTrigger asChild>
+                            <SidebarMenuButton tooltip={open ? "Collapse" : "Expand"}>
+                                {open ? <PanelLeftClose /> : <PanelLeftOpen />}
+                                <span className="group-data-[collapsible=icon]:hidden">{open ? "Collapse" : "Expand"}</span>
+                            </SidebarMenuButton>
+                        </SidebarTrigger>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarFooter>
