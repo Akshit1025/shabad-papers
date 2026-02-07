@@ -7,13 +7,8 @@
 
 import { z } from "zod";
 
-const inquirySchema = z.object({
-    name: z.string(),
-    email: z.string().email(),
-    message: z.string(),
-    product: z.string().optional(),
-    // Allow any other fields that might come from dynamic forms
-}).passthrough();
+// Use a passthrough schema to allow any fields from dynamic forms
+const inquirySchema = z.object({}).passthrough();
 
 /**
  * Submits a user inquiry from the contact form to Web3Forms.
@@ -31,11 +26,13 @@ export async function submitInquiry(input) {
         console.error("Web3Forms Access Key is not set in environment variables.");
         return { success: false, error: "Server configuration error: cannot send email." };
     }
+    
+    const name = parsedInput.data.name || parsedInput.data.fullName || "a visitor";
 
     const formData = {
         ...parsedInput.data,
         access_key: accessKey,
-        subject: `New Inquiry from ${parsedInput.data.name}`,
+        subject: `New Inquiry from ${name}`,
         from_name: "Shabad Papers Website",
     };
 
