@@ -20,6 +20,10 @@ import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader, PlusCircle, Trash2 } from 'lucide-react';
 
+const optionSchema = z.object({
+  value: z.string().min(1, { message: "Option value cannot be empty." }),
+});
+
 const fieldSchema = z.object({
   name: z.string().min(1, 'Name is required').regex(/^[a-zA-Z0-9_]+$/, 'Name must be a valid variable name (letters, numbers, underscore)'),
   label: z.string().min(1, 'Label is required'),
@@ -27,14 +31,14 @@ const fieldSchema = z.object({
   placeholder: z.string().optional(),
   required: z.boolean().default(false),
   errorMessage: z.string().optional(),
-  options: z.string().optional(),
+  options: z.array(optionSchema).optional(),
 }).refine(data => {
     if (data.type === 'dropdown') {
-        return !!data.options && data.options.trim().length > 0;
+        return data.options && data.options.length > 0;
     }
     return true;
 }, {
-    message: 'Options (comma-separated) are required for dropdown fields.',
+    message: 'At least one option is required for dropdown fields.',
     path: ['options'],
 });
 
@@ -44,6 +48,49 @@ const formBuilderSchema = z.object({
   description: z.string().optional(),
   fields: z.array(fieldSchema).min(1, 'At least one field is required.'),
 });
+
+
+function FieldOptions({ fieldIndex, control }) {
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: `fields.${fieldIndex}.options`
+    });
+
+    return (
+        <div className="col-span-12 space-y-3">
+            <FormLabel>Dropdown Options</FormLabel>
+            {fields.map((item, k) => (
+                <FormField
+                    key={item.id}
+                    control={control}
+                    name={`fields.${fieldIndex}.options.${k}.value`}
+                    render={({ field }) => (
+                        <FormItem>
+                            <div className="flex items-center gap-2">
+                                <FormControl>
+                                    <Input placeholder={`Option ${k + 1}`} {...field} />
+                                </FormControl>
+                                <Button type="button" variant="destructive" size="icon" onClick={() => remove(k)}>
+                                    <Trash2 className="h-4 w-4" />
+                                </Button>
+                            </div>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+            ))}
+             <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => append({ value: '' })}
+            >
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Add Option
+            </Button>
+        </div>
+    );
+}
 
 export function FormBuilder({ onClose, formDefinition }) {
   const [loading, setLoading] = useState(false);
@@ -83,7 +130,7 @@ export function FormBuilder({ onClose, formDefinition }) {
         ...formDefinition,
         fields: formDefinition.fields.map(field => ({
           ...field,
-          options: Array.isArray(field.options) ? field.options.join(', ') : '',
+          options: Array.isArray(field.options) ? field.options.map(opt => ({ value: opt })) : [],
         })),
       });
     } else {
@@ -91,7 +138,7 @@ export function FormBuilder({ onClose, formDefinition }) {
         id: '',
         title: '',
         description: '',
-        fields: [{ name: 'name', label: 'Your Name', type: 'text', required: true, placeholder: 'John Doe' }],
+        fields: [{ name: 'name', label: 'Your Name', type: 'text', required: true, placeholder: 'John Doe', options: [] }],
       });
     }
   }, [formDefinition, isEditMode, reset]);
@@ -103,8 +150,8 @@ export function FormBuilder({ onClose, formDefinition }) {
         ...data,
         fields: data.fields.map(field => {
           const newField = { ...field };
-          if (field.type === 'dropdown' && typeof field.options === 'string') {
-            newField.options = field.options.split(',').map(s => s.trim()).filter(Boolean);
+          if (field.type === 'dropdown' && Array.isArray(field.options)) {
+            newField.options = field.options.map(opt => opt.value);
           } else if (field.type !== 'dropdown') {
             delete newField.options;
           }
@@ -245,20 +292,9 @@ export function FormBuilder({ onClose, formDefinition }) {
                           )}
                         />
                     </div>
+                    
                     {watchedFields[index].type === 'dropdown' ? (
-                       <div className="col-span-12 md:col-span-6">
-                            <FormField
-                                control={control}
-                                name={`fields.${index}.options`}
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Dropdown Options</FormLabel>
-                                        <FormControl><Input placeholder="Option 1, Option 2, Option 3" {...field} /></FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
+                       <FieldOptions fieldIndex={index} control={control} />
                     ) : (
                         <div className="col-span-12 md:col-span-6">
                             <FormField
@@ -274,6 +310,7 @@ export function FormBuilder({ onClose, formDefinition }) {
                             />
                         </div>
                     )}
+
                      <div className="col-span-12 md:col-span-6">
                         <FormField
                             control={control}
@@ -294,7 +331,8 @@ export function FormBuilder({ onClose, formDefinition }) {
                 ))}
               </div>
                {errors.fields?.root && <p className="text-sm font-medium text-destructive">{errors.fields.root.message}</p>}
-              <Button type="button" variant="outline" onClick={() => append({ name: '', label: '', type: 'text', required: false, placeholder: '', options: '' })}>
+               {errors.fields && !errors.fields.root && <p className="text-sm font-medium text-destructive">There are errors in the form fields above.</p>}
+              <Button type="button" variant="outline" onClick={() => append({ name: '', label: '', type: 'text', required: false, placeholder: '', options: [] })}>
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Add Field
               </Button>
