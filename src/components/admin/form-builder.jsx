@@ -23,10 +23,19 @@ import { Loader, PlusCircle, Trash2 } from 'lucide-react';
 const fieldSchema = z.object({
   name: z.string().min(1, 'Name is required').regex(/^[a-zA-Z0-9_]+$/, 'Name must be a valid variable name (letters, numbers, underscore)'),
   label: z.string().min(1, 'Label is required'),
-  type: z.enum(['text', 'email', 'textarea', 'number']),
+  type: z.enum(['text', 'email', 'textarea', 'number', 'dropdown']),
   placeholder: z.string().optional(),
   required: z.boolean().default(false),
   errorMessage: z.string().optional(),
+  categorySlugSource: z.string().optional(),
+}).refine(data => {
+    if (data.type === 'dropdown') {
+        return !!data.categorySlugSource && data.categorySlugSource.length > 0;
+    }
+    return true;
+}, {
+    message: 'Category Slug Source is required for dropdown fields.',
+    path: ['categorySlugSource'],
 });
 
 const formBuilderSchema = z.object({
@@ -59,6 +68,7 @@ export function FormBuilder({ onClose, formDefinition }) {
   });
   
   const watchedTitle = watch('title');
+  const watchedFields = watch('fields');
 
   useEffect(() => {
     if (watchedTitle && !isEditMode) {
@@ -194,6 +204,7 @@ export function FormBuilder({ onClose, formDefinition }) {
                                   <SelectItem value="email">Email</SelectItem>
                                   <SelectItem value="textarea">Textarea</SelectItem>
                                   <SelectItem value="number">Number</SelectItem>
+                                  <SelectItem value="dropdown">Dropdown</SelectItem>
                                 </SelectContent>
                               </Select>
                               <FormMessage />
@@ -215,19 +226,35 @@ export function FormBuilder({ onClose, formDefinition }) {
                           )}
                         />
                     </div>
-                    <div className="col-span-12 md:col-span-6">
-                        <FormField
-                            control={control}
-                            name={`fields.${index}.placeholder`}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Placeholder (Optional)</FormLabel>
-                                    <FormControl><Input placeholder="e.g. John Doe" {...field} /></FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
+                    {watchedFields[index].type === 'dropdown' ? (
+                       <div className="col-span-12 md:col-span-6">
+                            <FormField
+                                control={control}
+                                name={`fields.${index}.categorySlugSource`}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Category Slug for Dropdown</FormLabel>
+                                        <FormControl><Input placeholder="e.g., carbonless-paper" {...field} /></FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                    ) : (
+                        <div className="col-span-12 md:col-span-6">
+                            <FormField
+                                control={control}
+                                name={`fields.${index}.placeholder`}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Placeholder (Optional)</FormLabel>
+                                        <FormControl><Input placeholder="e.g. John Doe" {...field} /></FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                    )}
                      <div className="col-span-12 md:col-span-6">
                         <FormField
                             control={control}
@@ -248,7 +275,7 @@ export function FormBuilder({ onClose, formDefinition }) {
                 ))}
               </div>
                {errors.fields?.root && <p className="text-sm font-medium text-destructive">{errors.fields.root.message}</p>}
-              <Button type="button" variant="outline" onClick={() => append({ name: '', label: '', type: 'text', required: false, placeholder: '' })}>
+              <Button type="button" variant="outline" onClick={() => append({ name: '', label: '', type: 'text', required: false, placeholder: '', categorySlugSource: '' })}>
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Add Field
               </Button>

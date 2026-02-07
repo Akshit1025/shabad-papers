@@ -4,17 +4,20 @@
  */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { submitInquiry } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
+import { db } from "@/lib/firebase";
+import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
@@ -34,12 +37,13 @@ function buildSchema(fields) {
       case 'number':
         schema = z.coerce.number().min(1, { message: "Must be greater than 0."});
         break;
+      case 'dropdown':
       default:
         schema = z.string();
     }
 
     if (field.required) {
-      if (field.type === 'email' || (field.type === 'text' && !field.minLength)) {
+      if (field.type === 'email' || (field.type === 'text' && !field.minLength) || field.type === 'dropdown') {
         schema = schema.min(1, { message: field.errorMessage || "This field is required." });
       } else {
         schema = schema.min(field.minLength || 1, { message: field.errorMessage || "This field is required." });
@@ -61,6 +65,28 @@ function buildSchema(fields) {
  * @returns {JSX.Element}
  */
 const FormInput = ({ field, formField }) => {
+    const [options, setOptions] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (field.type === 'dropdown' && field.categorySlugSource) {
+            const fetchProductsForDropdown = async () => {
+                setLoading(true);
+                try {
+                    const q = query(collection(db, "products"), where("categorySlug", "==", field.categorySlugSource), orderBy("name", "asc"));
+                    const querySnapshot = await getDocs(q);
+                    const productOptions = querySnapshot.docs.map(doc => doc.data().name);
+                    setOptions(productOptions);
+                } catch (error) {
+                    console.error("Error fetching products for dropdown:", error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchProductsForDropdown();
+        }
+    }, [field.type, field.categorySlugSource]);
+
     switch (field.type) {
         case 'textarea':
             return <Textarea placeholder={field.placeholder} {...formField} />;
@@ -68,6 +94,21 @@ const FormInput = ({ field, formField }) => {
             return <Input type="email" placeholder={field.placeholder} {...formField} />;
         case 'number':
             return <Input type="number" placeholder={field.placeholder} {...formField} />;
+        case 'dropdown':
+            return (
+                <Select onValueChange={formField.onChange} defaultValue={formField.value}>
+                    <FormControl>
+                        <SelectTrigger disabled={loading}>
+                            <SelectValue placeholder={loading ? "Loading products..." : (field.placeholder || "Select an option")} />
+                        </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                        {options.map(option => (
+                            <SelectItem key={option} value={option}>{option}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            );
         case 'text':
         default:
             return <Input placeholder={field.placeholder} {...formField} />;
