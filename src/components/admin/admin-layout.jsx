@@ -1,16 +1,30 @@
-/**
- * @fileOverview The main UI layout for the authenticated admin panel.
- * It combines the sidebar with the main content area.
- */
-import { AdminSidebar } from '@/components/admin/sidebar';
+'use client';
+import { SidebarProvider, Sidebar, SidebarInset } from "@/components/ui/sidebar";
+import { AdminSidebar } from "@/components/admin/sidebar";
+import React from 'react';
 
 export default function AdminLayout({ children }) {
+  const [open, setOpen] = React.useState(true); // default state
+
+  React.useEffect(() => {
+    const cookie = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('sidebar_state='));
+    if (cookie) {
+      setOpen(cookie.split('=')[1] === 'true');
+    }
+  }, []);
+
   return (
-    <div className="fixed inset-0 flex bg-muted/40">
-      <AdminSidebar />
-      <main className="flex-1 p-6 sm:p-8 overflow-y-auto">
-        {children}
-      </main>
-    </div>
+    <SidebarProvider open={open} onOpenChange={setOpen}>
+      <Sidebar>
+        <AdminSidebar />
+      </Sidebar>
+      <SidebarInset className="bg-muted/40">
+        <main className="h-screen overflow-y-auto p-6 sm:p-8">
+          {children}
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
