@@ -77,7 +77,12 @@ export function ProductInquiryDialog({ productName, formDefinitionId }) {
           // Pre-fill the product name if a 'product' field exists
           const productField = definition.fields.find(f => f.name === 'product');
           if(productField) {
-            productField.defaultValue = productName;
+            // Check if the field is a multi-select dropdown and set value accordingly
+            if (productField.type === 'dropdown' && productField.multiple) {
+                productField.defaultValue = [productName];
+            } else {
+                productField.defaultValue = productName;
+            }
           }
           const messageField = definition.fields.find(f => f.name === 'message');
           if (messageField && !messageField.defaultValue) {

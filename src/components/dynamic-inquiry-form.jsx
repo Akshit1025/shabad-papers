@@ -53,11 +53,12 @@ function buildSchema(fields) {
             break;
         case 'dropdown':
             if (field.multiple) {
-                let arraySchema = z.array(z.string());
+                const arraySchema = z.array(z.string());
                 if (field.required) {
-                    arraySchema = arraySchema.min(1, { message: field.errorMessage || "Please select at least one option." });
+                    schema = arraySchema.min(1, { message: field.errorMessage || "Please select at least one option." });
+                } else {
+                    schema = arraySchema.default([]);
                 }
-                schema = arraySchema.default([]);
             } else {
                 schema = z.string();
                 if (field.required) {
@@ -89,12 +90,12 @@ function buildSchema(fields) {
  */
 const MultiSelectDropdown = ({ field, formField, form }) => {
     const options = Array.isArray(field.options) ? field.options : [];
-    const selectedValues = formField.value || [];
+    // Defensively ensure selectedValues is always an array to prevent errors.
+    const selectedValues = Array.isArray(formField.value) ? formField.value : [];
 
     const getTriggerText = () => {
         if (selectedValues.length === 0) return field.placeholder || "Select options...";
         if (selectedValues.length > 2) return `${selectedValues.length} selected`;
-        // Find the labels for the selected values
         const selectedLabels = options.filter(opt => selectedValues.includes(opt));
         return selectedLabels.join(', ');
     }
@@ -113,10 +114,13 @@ const MultiSelectDropdown = ({ field, formField, form }) => {
                         key={option}
                         checked={selectedValues.includes(option)}
                         onCheckedChange={(checked) => {
-                            const currentValues = form.getValues(formField.name) || [];
+                            // Ensure we're always working with an array.
+                            const currentValues = form.getValues(formField.name);
+                            const currentArray = Array.isArray(currentValues) ? currentValues : [];
+                            
                             const newValues = checked
-                                ? [...currentValues, option]
-                                : currentValues.filter(val => val !== option);
+                                ? [...currentArray, option]
+                                : currentArray.filter(val => val !== option);
                             form.setValue(formField.name, newValues, { shouldValidate: true });
                         }}
                     >
