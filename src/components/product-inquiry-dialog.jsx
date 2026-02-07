@@ -123,7 +123,7 @@ export function ProductInquiryDialog({ productName, formDefinitionId }) {
     
     if (formDefinition) {
         return (
-            <div className="pt-4">
+            <div>
                 <DynamicInquiryForm 
                     formDefinition={formDefinition} 
                     onFormSubmit={() => setOpen(false)}
@@ -143,14 +143,16 @@ export function ProductInquiryDialog({ productName, formDefinitionId }) {
           <Send className="ml-2 h-5 w-5" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-[425px] p-0">
+        <DialogHeader className="p-6 pb-4 border-b">
           <DialogTitle>{formDefinition?.title || `Inquire about ${productName}`}</DialogTitle>
           <DialogDescription>
             {formDefinition?.description || "Fill out the form and we'll get back to you soon."}
           </DialogDescription>
         </DialogHeader>
-        {renderContent()}
+        <div className="p-6 overflow-y-auto max-h-[60vh]">
+            {renderContent()}
+        </div>
       </DialogContent>
     </Dialog>
   );
