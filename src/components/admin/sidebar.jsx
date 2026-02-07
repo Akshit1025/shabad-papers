@@ -16,7 +16,6 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarTrigger,
   SidebarSeparator,
 } from '@/components/ui/sidebar';
 import { LayoutDashboard, ShoppingCart, List, FileText, LogOut, Image as ImageIcon, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
@@ -32,7 +31,7 @@ const navItems = [
 export function AdminSidebar() {
     const router = useRouter();
     const pathname = usePathname();
-    const { open } = useSidebar();
+    const { open, toggleSidebar } = useSidebar();
 
     const handleLogout = async () => {
         try {
@@ -46,9 +45,9 @@ export function AdminSidebar() {
     return (
         <>
             <SidebarHeader>
-                <div className="flex h-20 items-center border-b border-border/20 relative group-data-[state=expanded]:px-4 group-data-[state=collapsed]:px-2">
-                     <Link href="/admin/dashboard" className="flex items-center gap-2 font-headline text-xl font-bold text-primary overflow-hidden w-full group-data-[state=expanded]:justify-start group-data-[state=collapsed]:justify-center">
-                        <Image src="/images/sp-logo-no-bg.png" alt="Shabad Papers Logo" width={40} height={40} />
+                <div className="flex h-20 items-center border-b border-sidebar-border relative group-data-[state=expanded]:px-4 group-data-[state=collapsed]:justify-center group-data-[state=collapsed]:px-2">
+                     <Link href="/admin/dashboard" className="flex items-center gap-2 font-headline text-xl font-bold text-primary overflow-hidden">
+                        <Image src="/images/sp-logo-no-bg.png" alt="Shabad Papers Logo" width={40} height={40} className="transition-transform group-data-[state=collapsed]:scale-90" />
                         <span className="whitespace-nowrap group-data-[state=collapsed]:hidden">Shabad Papers</span>
                     </Link>
                 </div>
@@ -66,7 +65,7 @@ export function AdminSidebar() {
                                 <SidebarMenuButton asChild isActive={isActive} tooltip={item.label}>
                                     <Link href={item.href}>
                                         <Icon />
-                                        <span className="group-data-[collapsible=icon]:hidden">{item.label}</span>
+                                        <span className="group-data-[state=collapsed]:hidden">{item.label}</span>
                                     </Link>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
@@ -79,19 +78,17 @@ export function AdminSidebar() {
                     <SidebarMenuItem>
                         <SidebarMenuButton onClick={handleLogout} tooltip="Logout">
                             <LogOut />
-                            <span className="group-data-[collapsible=icon]:hidden">Logout</span>
+                            <span className="group-data-[state=collapsed]:hidden">Logout</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
                 <SidebarSeparator className="my-1" />
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarTrigger asChild>
-                            <SidebarMenuButton tooltip={open ? "Collapse" : "Expand"}>
-                                {open ? <PanelLeftClose /> : <PanelLeftOpen />}
-                                <span className="group-data-[collapsible=icon]:hidden">{open ? "Collapse" : "Expand"}</span>
-                            </SidebarMenuButton>
-                        </SidebarTrigger>
+                        <SidebarMenuButton onClick={toggleSidebar} tooltip={open ? "Collapse" : "Expand"}>
+                            {open ? <PanelLeftClose /> : <PanelLeftOpen />}
+                            <span className="group-data-[state=collapsed]:hidden">{open ? "Collapse" : "Expand"}</span>
+                        </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarFooter>
