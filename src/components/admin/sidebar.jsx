@@ -66,7 +66,7 @@ export function AdminSidebar() {
                                 <SidebarMenuButton asChild isActive={isActive} tooltip={item.label}>
                                     <Link href={item.href}>
                                         <Icon />
-                                        <span>{item.label}</span>
+                                        <span className="group-data-[collapsible=icon]:hidden">{item.label}</span>
                                     </Link>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
@@ -79,7 +79,7 @@ export function AdminSidebar() {
                     <SidebarMenuItem>
                         <SidebarMenuButton onClick={handleLogout} tooltip="Logout">
                             <LogOut />
-                            <span>Logout</span>
+                            <span className="group-data-[collapsible=icon]:hidden">Logout</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
