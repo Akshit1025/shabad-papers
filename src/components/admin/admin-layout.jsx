@@ -17,13 +17,11 @@ export default function AdminLayout({ children }) {
 
   return (
     <SidebarProvider open={open} onOpenChange={setOpen}>
-      <Sidebar>
+      <Sidebar collapsible="icon">
         <AdminSidebar />
       </Sidebar>
-      <SidebarInset className="bg-muted/40">
-        <main className="h-screen overflow-y-auto p-6 sm:p-8">
-          {children}
-        </main>
+      <SidebarInset className="bg-muted/40 h-screen overflow-y-auto p-6 sm:p-8">
+        {children}
       </SidebarInset>
     </SidebarProvider>
   );
