@@ -4,14 +4,12 @@
  */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { submitInquiry } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
-import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -65,28 +63,6 @@ function buildSchema(fields) {
  * @returns {JSX.Element}
  */
 const FormInput = ({ field, formField }) => {
-    const [options, setOptions] = useState([]);
-    const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        if (field.type === 'dropdown' && field.categorySlugSource) {
-            const fetchProductsForDropdown = async () => {
-                setLoading(true);
-                try {
-                    const q = query(collection(db, "products"), where("categorySlug", "==", field.categorySlugSource), orderBy("name", "asc"));
-                    const querySnapshot = await getDocs(q);
-                    const productOptions = querySnapshot.docs.map(doc => doc.data().name);
-                    setOptions(productOptions);
-                } catch (error) {
-                    console.error("Error fetching products for dropdown:", error);
-                } finally {
-                    setLoading(false);
-                }
-            };
-            fetchProductsForDropdown();
-        }
-    }, [field.type, field.categorySlugSource]);
-
     switch (field.type) {
         case 'textarea':
             return <Textarea placeholder={field.placeholder} {...formField} />;
@@ -95,11 +71,12 @@ const FormInput = ({ field, formField }) => {
         case 'number':
             return <Input type="number" placeholder={field.placeholder} {...formField} />;
         case 'dropdown':
+            const options = Array.isArray(field.options) ? field.options : [];
             return (
                 <Select onValueChange={formField.onChange} defaultValue={formField.value}>
                     <FormControl>
-                        <SelectTrigger disabled={loading}>
-                            <SelectValue placeholder={loading ? "Loading products..." : (field.placeholder || "Select an option")} />
+                        <SelectTrigger>
+                            <SelectValue placeholder={field.placeholder || "Select an option"} />
                         </SelectTrigger>
                     </FormControl>
                     <SelectContent>

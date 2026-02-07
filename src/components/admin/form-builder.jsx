@@ -27,15 +27,15 @@ const fieldSchema = z.object({
   placeholder: z.string().optional(),
   required: z.boolean().default(false),
   errorMessage: z.string().optional(),
-  categorySlugSource: z.string().optional(),
+  options: z.string().optional(),
 }).refine(data => {
     if (data.type === 'dropdown') {
-        return !!data.categorySlugSource && data.categorySlugSource.length > 0;
+        return !!data.options && data.options.trim().length > 0;
     }
     return true;
 }, {
-    message: 'Category Slug Source is required for dropdown fields.',
-    path: ['categorySlugSource'],
+    message: 'Options (comma-separated) are required for dropdown fields.',
+    path: ['options'],
 });
 
 const formBuilderSchema = z.object({
@@ -79,7 +79,13 @@ export function FormBuilder({ onClose, formDefinition }) {
 
   useEffect(() => {
     if (isEditMode && formDefinition) {
-      reset(formDefinition);
+       reset({
+        ...formDefinition,
+        fields: formDefinition.fields.map(field => ({
+          ...field,
+          options: Array.isArray(field.options) ? field.options.join(', ') : '',
+        })),
+      });
     } else {
       reset({
         id: '',
@@ -93,8 +99,21 @@ export function FormBuilder({ onClose, formDefinition }) {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
+      const dataToSave = {
+        ...data,
+        fields: data.fields.map(field => {
+          const newField = { ...field };
+          if (field.type === 'dropdown' && typeof field.options === 'string') {
+            newField.options = field.options.split(',').map(s => s.trim()).filter(Boolean);
+          } else if (field.type !== 'dropdown') {
+            delete newField.options;
+          }
+          return newField;
+        })
+      };
+
       const formRef = doc(db, 'formDefinitions', data.id);
-      await setDoc(formRef, data, { merge: isEditMode });
+      await setDoc(formRef, dataToSave, { merge: isEditMode });
       toast({
         title: 'Success',
         description: `Form definition "${data.title}" saved successfully.`,
@@ -230,11 +249,11 @@ export function FormBuilder({ onClose, formDefinition }) {
                        <div className="col-span-12 md:col-span-6">
                             <FormField
                                 control={control}
-                                name={`fields.${index}.categorySlugSource`}
+                                name={`fields.${index}.options`}
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Category Slug for Dropdown</FormLabel>
-                                        <FormControl><Input placeholder="e.g., carbonless-paper" {...field} /></FormControl>
+                                        <FormLabel>Dropdown Options</FormLabel>
+                                        <FormControl><Input placeholder="Option 1, Option 2, Option 3" {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -275,7 +294,7 @@ export function FormBuilder({ onClose, formDefinition }) {
                 ))}
               </div>
                {errors.fields?.root && <p className="text-sm font-medium text-destructive">{errors.fields.root.message}</p>}
-              <Button type="button" variant="outline" onClick={() => append({ name: '', label: '', type: 'text', required: false, placeholder: '', categorySlugSource: '' })}>
+              <Button type="button" variant="outline" onClick={() => append({ name: '', label: '', type: 'text', required: false, placeholder: '', options: '' })}>
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Add Field
               </Button>
