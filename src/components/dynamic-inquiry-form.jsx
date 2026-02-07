@@ -10,6 +10,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { submitInquiry } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
+import { Info } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -90,10 +92,7 @@ function buildSchema(fields) {
  */
 const MultiSelectDropdown = ({ field, formField, form }) => {
     const options = Array.isArray(field.options) ? field.options : [];
-    // Defensive check to handle if a string is passed by mistake.
-    const selectedValues = Array.isArray(formField.value) 
-        ? formField.value 
-        : (formField.value ? [formField.value] : []);
+    const selectedValues = Array.isArray(formField.value) ? formField.value : [];
 
     const getTriggerText = () => {
         if (selectedValues.length === 0) {
@@ -102,7 +101,6 @@ const MultiSelectDropdown = ({ field, formField, form }) => {
         if (selectedValues.length > 2) {
             return `${selectedValues.length} selected`;
         }
-        // The selected values are the labels themselves.
         return selectedValues.join(', ');
     };
 
@@ -194,8 +192,15 @@ export function DynamicInquiryForm({ formDefinition, onFormSubmit }) {
   
   // Set up default values from the definition
   const defaultValues = formDefinition.fields.reduce((acc, field) => {
+    // Make sure default value for multi-select is an array, even if it's a string initially
     if (field.type === 'dropdown' && field.multiple) {
-        acc[field.name] = field.defaultValue || [];
+        if (Array.isArray(field.defaultValue)) {
+            acc[field.name] = field.defaultValue;
+        } else if (typeof field.defaultValue === 'string' && field.defaultValue) {
+            acc[field.name] = [field.defaultValue];
+        } else {
+            acc[field.name] = [];
+        }
     } else {
         acc[field.name] = field.defaultValue || "";
     }
@@ -254,7 +259,25 @@ export function DynamicInquiryForm({ formDefinition, onFormSubmit }) {
             name={field.name}
             render={({ field: formField }) => (
               <FormItem>
-                <FormLabel>{field.label}</FormLabel>
+                <FormLabel>
+                  <div className="flex items-center gap-2">
+                    <span>{field.label}</span>
+                    {field.info && (
+                        <TooltipProvider delayDuration={100}>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <button type="button" onClick={e => e.preventDefault()}>
+                                        <Info className="h-4 w-4 text-muted-foreground" />
+                                    </button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p className="max-w-xs">{field.info}</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    )}
+                  </div>
+                </FormLabel>
                 <FormControl>
                   <FormInput field={field} formField={formField} form={form} />
                 </FormControl>

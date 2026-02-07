@@ -33,6 +33,7 @@ const fieldSchema = z.object({
   multiple: z.boolean().default(false),
   errorMessage: z.string().optional(),
   options: z.array(optionSchema).optional(),
+  info: z.string().optional(),
 }).refine(data => {
     if (data.type === 'dropdown') {
         return data.options && data.options.length > 0;
@@ -131,6 +132,7 @@ export function FormBuilder({ onClose, formDefinition }) {
         ...formDefinition,
         fields: formDefinition.fields.map(field => ({
           ...field,
+          info: field.info || '',
           options: Array.isArray(field.options) ? field.options.map(opt => ({ value: opt })) : [],
         })),
       });
@@ -139,7 +141,7 @@ export function FormBuilder({ onClose, formDefinition }) {
         id: '',
         title: '',
         description: '',
-        fields: [{ name: 'name', label: 'Your Name', type: 'text', required: true, placeholder: 'John Doe', options: [] }],
+        fields: [{ name: 'name', label: 'Your Name', type: 'text', required: true, placeholder: 'John Doe', options: [], info: '' }],
       });
     }
   }, [formDefinition, isEditMode, reset]);
@@ -336,6 +338,19 @@ export function FormBuilder({ onClose, formDefinition }) {
                                 <FormItem>
                                     <FormLabel>Error Message (Optional)</FormLabel>
                                     <FormControl><Input placeholder="Please enter your name" {...field} /></FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                    <div className="col-span-12 md:col-span-6">
+                        <FormField
+                            control={control}
+                            name={`fields.${index}.info`}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Info Tooltip (Optional)</FormLabel>
+                                    <FormControl><Input placeholder="Help text for the user" {...field} /></FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
