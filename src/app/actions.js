@@ -78,7 +78,7 @@ export async function submitInquiry(input) {
 
     const summaryBoxHtml = `
         <div style="background-color: #1a1512; padding: 35px; border-radius: 12px; margin: 25px 0; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);">
-            <h3 style="color: #d2b48c; margin-top: 0; margin-bottom: 25px; font-size: 18px; font-weight: 600; font-family: 'Segoe UI', sans-serif; border-bottom: 1px solid #d2b48c; padding-bottom: 10px; display: inline-block;">Summary of your inquiry:</h3>
+            <h3 style="color: #d2b48c; margin-top: 0; margin-bottom: 25px; font-size: 18px; font-weight: 600; font-family: 'Segoe UI', sans-serif; border-bottom: 1px solid #d2b48c; padding-bottom: 10px; display: inline-block;">Summary of the inquiry:</h3>
             <table style="width: 100%; border-collapse: collapse;">
                 ${detailsRows}
             </table>
@@ -115,14 +115,21 @@ export async function submitInquiry(input) {
                     
                     ${summaryBoxHtml}
 
-                    ${cleanedUserPhone ? `
                     <div style="text-align: center; margin-top: 35px;">
-                        <p style="font-size: 13px; color: #888; margin-bottom: 15px;">Ready to follow up?</p>
-                        <a href="https://wa.me/${cleanedUserPhone}" style="background-color: #25d366; color: #ffffff; padding: 16px 35px; text-decoration: none; border-radius: 8px; font-weight: 700; display: inline-block; font-size: 15px; box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);">
-                            Reply via WhatsApp
-                        </a>
+                        <p style="font-size: 13px; color: #888; margin-bottom: 20px; font-weight: 600;">Follow up with ${name}:</p>
+                        <div style="margin: 0 auto;">
+                            ${cleanedUserPhone ? `
+                            <a href="https://wa.me/${cleanedUserPhone}" style="background-color: #25d366; color: #ffffff; padding: 14px 25px; text-decoration: none; border-radius: 8px; font-weight: 700; display: inline-block; font-size: 14px; box-shadow: 0 4px 14px rgba(37, 211, 102, 0.2); margin: 5px; min-width: 180px;">
+                                Reply via WhatsApp
+                            </a>
+                            ` : ''}
+                            ${userEmail && userEmail.includes('@') ? `
+                            <a href="mailto:${userEmail}?subject=Re: Your Inquiry - Shabad Papers" style="background-color: #4a3728; color: #ffffff; padding: 14px 25px; text-decoration: none; border-radius: 8px; font-weight: 700; display: inline-block; font-size: 14px; box-shadow: 0 4px 14px rgba(74, 55, 40, 0.2); margin: 5px; min-width: 180px;">
+                                Reply via Email
+                            </a>
+                            ` : ''}
+                        </div>
                     </div>
-                    ` : ''}
                 </div>
                 ${footerHtml}
             </div>
