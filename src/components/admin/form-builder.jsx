@@ -144,7 +144,7 @@ export function FormBuilder({ onClose, formDefinition }) {
         id: '',
         title: '',
         description: '',
-        fields: [{ name: 'name', label: 'Your Name', type: 'text', required: true, placeholder: 'John Doe', options: [], info: '', errorMessage: '' }],
+        fields: [{ name: 'phone', label: 'Phone Number', type: 'phone', required: true, placeholder: '+919876543210', options: [], info: 'Include + and country code', errorMessage: 'Please include country code starting with +' }],
       });
     }
   }, [formDefinition, isEditMode, reset]);
@@ -243,7 +243,7 @@ export function FormBuilder({ onClose, formDefinition }) {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Field Name</FormLabel>
-                                    <FormControl><Input placeholder="customer_name" {...field} /></FormControl>
+                                    <FormControl><Input placeholder="phone" {...field} /></FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -256,7 +256,7 @@ export function FormBuilder({ onClose, formDefinition }) {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Field Label</FormLabel>
-                                    <FormControl><Input placeholder="Your Name" {...field} /></FormControl>
+                                    <FormControl><Input placeholder="Phone Number" {...field} /></FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -326,7 +326,7 @@ export function FormBuilder({ onClose, formDefinition }) {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Placeholder (Optional)</FormLabel>
-                                        <FormControl><Input placeholder={watchedFields[index].type === 'phone' ? '+91 98765 43210' : 'e.g. John Doe'} {...field} /></FormControl>
+                                        <FormControl><Input placeholder={watchedFields[index].type === 'phone' ? '+919876543210' : 'e.g. John Doe'} {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -341,7 +341,7 @@ export function FormBuilder({ onClose, formDefinition }) {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Error Message (Optional)</FormLabel>
-                                    <FormControl><Input placeholder="Please enter your name" {...field} /></FormControl>
+                                    <FormControl><Input placeholder="Include country code starting with +" {...field} /></FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}

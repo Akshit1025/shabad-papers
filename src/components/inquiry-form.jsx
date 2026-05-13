@@ -23,7 +23,9 @@ import { useToast } from "@/hooks/use-toast";
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email({ message: "Please enter a valid email address." }),
-  phone: z.string().min(10, { message: "Please enter a valid phone number with country code (e.g., +91...)" }).regex(/^\+?[1-9]\d{1,14}$/, { message: "Invalid phone format. Include country code (e.g., +91...)" }),
+  phone: z.string()
+    .min(10, { message: "Phone number is too short." })
+    .regex(/^\+[1-9]\d{1,14}$/, { message: "Please include '+' and country code (e.g., +919876543210). No spaces or dashes." }),
   message: z.string().min(10, { message: "Message must be at least 10 characters." }),
 });
 
@@ -113,7 +115,7 @@ export function InquiryForm() {
                 <FormItem>
                   <FormLabel>Phone Number (with country code)</FormLabel>
                   <FormControl>
-                    <Input placeholder="+91 98765 43210" {...field} />
+                    <Input placeholder="+919876543210" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
