@@ -28,7 +28,7 @@ const optionSchema = z.object({
 const fieldSchema = z.object({
   name: z.string().min(1, 'Name is required').regex(/^[a-zA-Z0-9_]+$/, 'Name must be a valid variable name (letters, numbers, underscore)'),
   label: z.string().min(1, 'Label is required'),
-  type: z.enum(['text', 'email', 'textarea', 'number', 'dropdown']),
+  type: z.enum(['text', 'email', 'phone', 'textarea', 'number', 'dropdown']),
   placeholder: z.string().optional(),
   required: z.boolean().default(false),
   multiple: z.boolean().default(false),
@@ -274,6 +274,7 @@ export function FormBuilder({ onClose, formDefinition }) {
                                 <SelectContent>
                                   <SelectItem value="text">Text</SelectItem>
                                   <SelectItem value="email">Email</SelectItem>
+                                  <SelectItem value="phone">Phone</SelectItem>
                                   <SelectItem value="textarea">Textarea</SelectItem>
                                   <SelectItem value="number">Number</SelectItem>
                                   <SelectItem value="dropdown">Dropdown</SelectItem>
@@ -325,7 +326,7 @@ export function FormBuilder({ onClose, formDefinition }) {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Placeholder (Optional)</FormLabel>
-                                        <FormControl><Input placeholder="e.g. John Doe" {...field} /></FormControl>
+                                        <FormControl><Input placeholder={watchedFields[index].type === 'phone' ? '+91 98765 43210' : 'e.g. John Doe'} {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}

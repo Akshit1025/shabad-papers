@@ -45,6 +45,14 @@ function buildSchema(fields) {
                 schema = schema.optional().or(z.literal(''));
             }
             break;
+        case 'phone':
+            schema = z.string().min(10, { message: field.errorMessage || "Please enter a valid phone number with country code." }).regex(/^\+?[1-9]\d{1,14}$/, { message: "Invalid format. Include country code (e.g. +91...)" });
+            if (field.required) {
+                schema = schema.min(1, { message: field.errorMessage || "Phone number is required." });
+            } else {
+                schema = schema.optional().or(z.literal(''));
+            }
+            break;
         case 'number':
             schema = z.coerce.number();
             if (field.required) {
@@ -150,6 +158,8 @@ const FormInput = ({ field, formField, form }) => {
             return <Textarea placeholder={field.placeholder} {...formField} />;
         case 'email':
             return <Input type="email" placeholder={field.placeholder} {...formField} />;
+        case 'phone':
+            return <Input type="tel" placeholder={field.placeholder || "+91 ..."} {...formField} />;
         case 'number':
             return <Input type="number" placeholder={field.placeholder} {...formField} />;
         case 'dropdown':
