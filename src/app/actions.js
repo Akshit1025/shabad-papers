@@ -33,25 +33,34 @@ export async function submitInquiry(input) {
     const data = parsedInput.data;
     const name = data.name || data.fullName || "A Website Visitor";
     
-    // Construct a readable message from all dynamic fields
+    // Construct a readable message from all dynamic fields, ignoring empty ones
     const details = Object.entries(data)
-        .map(([key, value]) => `<b>${key.charAt(0).toUpperCase() + key.slice(1)}:</b> ${value}`)
-        .join('<br>');
+        .filter(([_, value]) => value !== undefined && value !== "")
+        .map(([key, value]) => {
+            const label = key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
+            return `<p style="margin: 5px 0;"><strong>${label}:</strong> ${value}</p>`;
+        })
+        .join('');
 
     const emailPayload = {
         sender: { name: "Shabad Papers Website", email: senderEmail },
         to: [{ email: recipientEmail, name: "Shabad Papers Admin" }],
         subject: `New Inquiry from ${name}`,
         htmlContent: `
-            <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
-                <h2>New Inquiry Received</h2>
-                <p>You have received a new inquiry from your website.</p>
-                <hr style="border: 0; border-top: 1px solid #eee;" />
-                <div style="padding: 20px; background-color: #f9f9f9; border-radius: 8px;">
-                    ${details}
+            <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; border-radius: 10px; overflow: hidden;">
+                <div style="background-color: #4a3728; padding: 20px; text-align: center;">
+                    <h1 style="color: #ffffff; margin: 0; font-size: 24px;">Shabad Papers</h1>
                 </div>
-                <hr style="border: 0; border-top: 1px solid #eee;" />
-                <p style="font-size: 12px; color: #888;">This email was sent automatically from your website contact form.</p>
+                <div style="padding: 30px;">
+                    <h2 style="color: #4a3728; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">New Inquiry Received</h2>
+                    <p>Hello Admin, you have received a new inquiry through the website form.</p>
+                    <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #4a3728;">
+                        ${details}
+                    </div>
+                </div>
+                <div style="background-color: #f4f4f4; padding: 15px; text-align: center; font-size: 12px; color: #777;">
+                    <p>This message was sent automatically from your website's contact system.</p>
+                </div>
             </div>
         `,
         replyTo: data.email ? { email: data.email, name: name } : undefined
@@ -73,10 +82,10 @@ export async function submitInquiry(input) {
         } else {
             const errorData = await response.json();
             console.error("Brevo API Error:", errorData);
-            return { success: false, error: "Failed to send email. please try again later." };
+            return { success: false, error: "Email service rejected the request. Check your API key and verified sender." };
         }
     } catch (error) {
         console.error("Failed to connect to Brevo:", error);
-        return { success: false, error: "Could not connect to the email service." };
+        return { success: false, error: "Could not connect to the email service. Please try again later." };
     }
 }
