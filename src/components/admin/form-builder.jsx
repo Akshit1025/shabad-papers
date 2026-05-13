@@ -18,8 +18,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Loader, PlusCircle, Trash2, Info } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Loader, PlusCircle, Trash2, ArrowUp, ArrowDown } from 'lucide-react';
 
 const optionSchema = z.object({
   value: z.string().min(1, { message: "Option value cannot be empty." }),
@@ -112,7 +111,7 @@ export function FormBuilder({ onClose, formDefinition }) {
 
   const { control, reset, watch, setValue, formState: { errors } } = form;
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, move } = useFieldArray({
     control,
     name: 'fields',
   });
@@ -235,7 +234,7 @@ export function FormBuilder({ onClose, formDefinition }) {
               <h3 className="text-lg font-medium text-foreground">Form Fields</h3>
               <div className="space-y-4">
                 {fields.map((field, index) => (
-                  <div key={field.id} className="grid grid-cols-12 gap-x-4 gap-y-2 rounded-lg border p-4 relative">
+                  <div key={field.id} className="grid grid-cols-12 gap-x-4 gap-y-2 rounded-lg border p-4 relative bg-card shadow-sm">
                     <div className="col-span-12 md:col-span-3">
                         <FormField
                             control={control}
@@ -299,7 +298,7 @@ export function FormBuilder({ onClose, formDefinition }) {
                             </FormItem>
                           )}
                         />
-                        {watchedFields[index].type === 'dropdown' && (
+                        {watchedFields[index]?.type === 'dropdown' && (
                            <FormField
                               control={control}
                               name={`fields.${index}.multiple`}
@@ -316,7 +315,7 @@ export function FormBuilder({ onClose, formDefinition }) {
                       </div>
                     </div>
                     
-                    {watchedFields[index].type === 'dropdown' ? (
+                    {watchedFields[index]?.type === 'dropdown' ? (
                        <FieldOptions fieldIndex={index} control={control} />
                     ) : (
                         <div className="col-span-12 md:col-span-6">
@@ -326,7 +325,7 @@ export function FormBuilder({ onClose, formDefinition }) {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Placeholder (Optional)</FormLabel>
-                                        <FormControl><Input placeholder={watchedFields[index].type === 'phone' ? '+919876543210' : 'e.g. John Doe'} {...field} /></FormControl>
+                                        <FormControl><Input placeholder={watchedFields[index]?.type === 'phone' ? '+919876543210' : 'e.g. John Doe'} {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -360,9 +359,40 @@ export function FormBuilder({ onClose, formDefinition }) {
                             )}
                         />
                     </div>
-                    <Button type="button" variant="destructive" size="icon" className="absolute top-2 right-2 h-7 w-7" onClick={() => remove(index)}>
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                    <div className="absolute top-2 right-2 flex gap-1">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7"
+                        onClick={() => move(index, index - 1)}
+                        disabled={index === 0}
+                        title="Move Up"
+                      >
+                        <ArrowUp className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7"
+                        onClick={() => move(index, index + 1)}
+                        disabled={index === fields.length - 1}
+                        title="Move Down"
+                      >
+                        <ArrowDown className="h-4 w-4" />
+                      </Button>
+                      <Button 
+                        type="button" 
+                        variant="destructive" 
+                        size="icon" 
+                        className="h-7 w-7" 
+                        onClick={() => remove(index)}
+                        title="Delete Field"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
                 ))}
               </div>
