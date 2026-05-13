@@ -23,16 +23,13 @@ export async function submitInquiry(input) {
 
     const apiKey = process.env.BREVO_API_KEY;
     
-    // Defaulting to support@shabadpapers.com as per user setup
-    // This email should be verified as a sender in your Brevo dashboard.
+    // The verified sender email in your Brevo dashboard.
     const senderEmail = process.env.BREVO_SENDER_EMAIL || "support@shabadpapers.com";
     
     // The recipient is the professional support mail which routes via Cloudflare to Gmail.
     const recipientEmail = process.env.CONTACT_RECIPIENT_EMAIL || "support@shabadpapers.com";
     
-    // The reply-to as requested by the user. 
-    // Usually, you'd want this to be the customer's email (data.email) so you can reply directly,
-    // but setting it to the primary gmail as specified.
+    // The primary Gmail address for replies, as requested.
     const replyToEmail = "shabadpapersllp@gmail.com";
 
     if (!apiKey) {
@@ -41,13 +38,13 @@ export async function submitInquiry(input) {
     }
 
     const data = parsedInput.data;
-    const name = data.name || data.fullName || "A Website Visitor";
+    const name = data.name || data.fullName || data.customer_name || "A Website Visitor";
     
     // Construct a readable message from all dynamic fields, ignoring empty ones
     const details = Object.entries(data)
         .filter(([_, value]) => value !== undefined && value !== "")
         .map(([key, value]) => {
-            const label = key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
+            const label = key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1').replace(/_/g, ' ');
             return `<p style="margin: 5px 0;"><strong>${label}:</strong> ${value}</p>`;
         })
         .join('');
@@ -93,7 +90,7 @@ export async function submitInquiry(input) {
         } else {
             const errorData = await response.json();
             console.error("Brevo API Error:", errorData);
-            return { success: false, error: "Email service rejected the request. Check your API key and verified sender." };
+            return { success: false, error: "Email service rejected the request. Please ensure BREVO_SENDER_EMAIL is verified in Brevo." };
         }
     } catch (error) {
         console.error("Failed to connect to Brevo:", error);
